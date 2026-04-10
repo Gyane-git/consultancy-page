@@ -11,10 +11,11 @@ function home() {
     <div className="space-y-0">
       <HeroBanner />
       <Testimonials />
-      <UniPartners />
       <FindUni />
+      <UniPartners />
+      
       <FAQ />
-      <GetInTouch />
+      
     </div>
   )
 }

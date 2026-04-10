@@ -240,21 +240,7 @@ const EducationSidebar = () => {
 
   return (
     <div className="w-72 bg-gradient-to-b from-white to-gray-50 h-full border-r border-gray-200 flex flex-col overflow-hidden shadow-lg">
-      {/* Logo & Brand Section */}
-      <div className="p-6 border-b border-gray-200 bg-white">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
-            <GraduationCap className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              EduConsult
-            </h1>
-            <p className="text-xs text-gray-500">Admin Portal v2.0</p>
-          </div>
-        </div>
-      </div>
-
+     
       {/* Menu Items */}
       <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {menuItems.map((item, index) => (

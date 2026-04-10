@@ -2,44 +2,22 @@
 import { useState } from "react";
 
 const subjects = [
-  "Computer Science",
-  "Business & Management",
-  "Medicine & Health",
-  "Engineering",
-  "Law",
-  "Arts & Design",
-  "Psychology",
-  "Architecture",
-  "Economics",
-  "Education",
+  "Computer Science","Business & Management","Medicine & Health",
+  "Engineering","Law","Arts & Design","Psychology",
+  "Architecture","Economics","Education",
 ];
-
 const courseTypes = [
-  "Undergraduate (Bachelor's)",
-  "Postgraduate (Master's)",
-  "PhD / Doctorate",
-  "Foundation Year",
-  "Diploma / Certificate",
-  "Online / Distance Learning",
-  "Part-time",
+  "Undergraduate (Bachelor's)","Postgraduate (Master's)","PhD / Doctorate",
+  "Foundation Year","Diploma / Certificate","Online / Distance Learning","Part-time",
 ];
-
 const locations = [
-  "United Kingdom",
-  "United States",
-  "Australia",
-  "Canada",
-  "Germany",
-  "Netherlands",
-  "New Zealand",
-  "Ireland",
-  "Singapore",
-  "UAE",
+  "United Kingdom","United States","Australia","Canada","Germany",
+  "Netherlands","New Zealand","Ireland","Singapore","UAE",
 ];
 
 type Tab = "COURSES" | "UNIVERSITIES";
 
-interface SelectDropdownProps {
+interface DropdownProps {
   label: string;
   placeholder: string;
   options: string[];
@@ -47,103 +25,35 @@ interface SelectDropdownProps {
   onChange: (v: string) => void;
 }
 
-function SelectDropdown({ label, placeholder, options, value, onChange }: SelectDropdownProps) {
+function Dropdown({ label, placeholder, options, value, onChange }: DropdownProps) {
   const [open, setOpen] = useState(false);
-
   return (
-    <div className="select-wrap" style={{ position: "relative", flex: 1 }}>
-      <style>{`
-        .select-wrap { min-width: 0; }
-        .select-inner {
-          padding: 14px 20px;
-          cursor: pointer;
-          user-select: none;
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-          height: 100%;
-          justify-content: center;
-        }
-        .select-label {
-          font-size: 11px;
-          font-weight: 600;
-          letter-spacing: 1.5px;
-          text-transform: uppercase;
-          color: rgba(255,255,255,0.45);
-        }
-        .select-value-row {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 10px;
-        }
-        .select-value {
-          font-size: 14px;
-          color: ${value ? "#fff" : "rgba(255,255,255,0.5)"};
-          font-family: 'DM Sans', sans-serif;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .chevron {
-          width: 16px;
-          height: 16px;
-          color: rgba(255,255,255,0.5);
-          flex-shrink: 0;
-          transition: transform 0.2s;
-        }
-        .chevron.open { transform: rotate(180deg); }
-        .dropdown-list {
-          position: absolute;
-          top: calc(100% + 6px);
-          left: 0;
-          right: 0;
-          background: #1a1d2e;
-          border: 1px solid rgba(232,64,92,0.3);
-          border-radius: 10px;
-          overflow: hidden;
-          z-index: 100;
-          box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-          animation: dropIn 0.18s ease;
-        }
-        @keyframes dropIn {
-          from { opacity: 0; transform: translateY(-6px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .dropdown-item {
-          padding: 11px 20px;
-          font-size: 13.5px;
-          color: rgba(255,255,255,0.75);
-          cursor: pointer;
-          transition: background 0.15s, color 0.15s;
-          font-family: 'DM Sans', sans-serif;
-        }
-        .dropdown-item:hover {
-          background: rgba(232,64,92,0.12);
-          color: #fff;
-        }
-        .dropdown-item.selected {
-          color: #e8405c;
-          font-weight: 600;
-        }
-      `}</style>
-      <div className="select-inner" onClick={() => setOpen((o) => !o)}>
-        <span className="select-label">{label}</span>
-        <div className="select-value-row">
-          <span className="select-value">{value || placeholder}</span>
-          <svg className={`chevron ${open ? "open" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <div style={{ position: "relative", flex: 1, minWidth: 0 }}>
+      <div
+        style={{ padding: "14px 20px", cursor: "pointer", userSelect: "none", display: "flex", flexDirection: "column", gap: 4, height: "100%", justifyContent: "center" }}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "#9ca3af" }}>{label}</span>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+          <span style={{ fontSize: 14, color: value ? "#1a1a2e" : "#b0b8c8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontFamily: "'DM Sans',sans-serif" }}>
+            {value || placeholder}
+          </span>
+          <svg style={{ width: 14, height: 14, flexShrink: 0, color: "#c8102e", transition: "transform .2s", transform: open ? "rotate(180deg)" : "none" }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M6 9l6 6 6-6" />
           </svg>
         </div>
       </div>
       {open && (
         <>
-          <div style={{ position: "fixed", inset: 0, zIndex: 99 }} onClick={() => setOpen(false)} />
-          <div className="dropdown-list">
+          <div style={{ position: "fixed", inset: 0, zIndex: 199 }} onClick={() => setOpen(false)} />
+          <div style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, right: 0, background: "#fff", border: "1px solid rgba(200,16,46,.18)", borderRadius: 12, overflow: "hidden", zIndex: 200, boxShadow: "0 16px 48px rgba(0,0,0,.1)" }}>
+            <style>{`@keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}`}</style>
             {options.map((opt) => (
               <div
                 key={opt}
-                className={`dropdown-item ${value === opt ? "selected" : ""}`}
+                style={{ padding: "11px 20px", fontSize: 13, color: value === opt ? "#c8102e" : "#374151", cursor: "pointer", fontWeight: value === opt ? 600 : 400, fontFamily: "'DM Sans',sans-serif", background: "transparent", transition: "background .12s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#fff5f6")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                 onClick={() => { onChange(opt); setOpen(false); }}
               >
                 {opt}
@@ -157,279 +67,165 @@ function SelectDropdown({ label, placeholder, options, value, onChange }: Select
 }
 
 export default function FindUni() {
-  const [activeTab, setActiveTab] = useState<Tab>("COURSES");
+  const [tab, setTab] = useState<Tab>("COURSES");
   const [subject, setSubject] = useState("");
   const [courseType, setCourseType] = useState("");
   const [location, setLocation] = useState("");
 
-  const handleSearch = () => {
-    console.log({ activeTab, subject, courseType, location });
-    // wire up your search/router logic here
-  };
+  const stats = [
+    { value: "250+", label: "Partner Universities" },
+    { value: "40+", label: "Countries" },
+    { value: "10K+", label: "Students Placed" },
+    { value: "98%", label: "Visa Success" },
+  ];
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes blobMove{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.06)}}
+        @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(1.4)}}
 
-        .hero-banner {
-          position: relative;
-          background: #0d0f1c;
-          min-height: 340px;
-          display: flex;
-          align-items: center;
-          overflow: hidden;
-          padding: 60px 64px;
-          font-family: 'DM Sans', sans-serif;
+        .find-hero{
+          position:relative;width:100%;
+          padding:80px 24px 90px;
+          background:linear-gradient(175deg,#f9f7ff 0%,#ffffff 45%,#fff5f6 100%);
+          overflow:hidden;font-family:'DM Sans',sans-serif;text-align:center;
         }
+        .find-blob1{position:absolute;top:-80px;left:-60px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(200,16,46,.06) 0%,transparent 70%);animation:blobMove 9s ease-in-out infinite;pointer-events:none;}
+        .find-blob2{position:absolute;bottom:-80px;right:-60px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.06) 0%,transparent 70%);animation:blobMove 11s ease-in-out infinite reverse;pointer-events:none;}
 
-        /* ——— DECORATIVE ZIGZAG RIGHT ——— */
-        .deco-right {
-          position: absolute;
-          right: -10px;
-          top: 0;
-          bottom: 0;
-          width: 320px;
-          pointer-events: none;
-          overflow: hidden;
-        }
-        .zigzag-svg {
-          width: 100%;
-          height: 100%;
-        }
+        .find-inner{position:relative;z-index:2;max-width:820px;margin:0 auto;}
 
-        /* ——— GLOW ——— */
-        .hero-glow {
-          position: absolute;
-          top: -80px;
-          left: -80px;
-          width: 400px;
-          height: 400px;
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(232,64,92,0.08) 0%, transparent 70%);
-          pointer-events: none;
+        .find-eyebrow{
+          display:inline-flex;align-items:center;gap:8px;
+          font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+          color:#c8102e;background:linear-gradient(135deg,#fff0f2,#fce7ea);
+          border:1px solid rgba(200,16,46,.18);padding:6px 18px;border-radius:50px;
+          margin-bottom:20px;animation:slideUp .5s ease both;
+        }
+        .find-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:#c8102e;animation:pulse 2s infinite;}
+
+        .find-h1{
+          font-family:'Playfair Display',serif;
+          font-size:clamp(1.9rem,4.5vw,3.4rem);font-weight:800;color:#1a1a2e;
+          line-height:1.1;letter-spacing:-1px;margin-bottom:14px;
+          animation:slideUp .55s .05s ease both;
+        }
+        .find-h1 em{font-style:italic;color:#c8102e;}
+
+        .find-sub{
+          font-size:1rem;color:#6b7280;max-width:480px;margin:0 auto 36px;
+          line-height:1.75;font-weight:400;animation:slideUp .55s .1s ease both;
         }
 
-        /* ——— CONTENT ——— */
-        .hero-content {
-          position: relative;
-          z-index: 2;
-          width: 100%;
-          max-width: 900px;
-        }
+        .find-stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:44px;animation:slideUp .55s .12s ease both;}
+        .find-stat-pill{background:#fff;border:1px solid #ebebf0;border-radius:50px;padding:10px 22px;display:flex;align-items:baseline;gap:8px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
 
-        /* ——— HEADLINE ——— */
-        .hero-headline {
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(32px, 5vw, 58px);
-          font-weight: 800;
-          color: #ffffff;
-          line-height: 1.12;
-          letter-spacing: -1.5px;
-          margin-bottom: 32px;
-          animation: slideUp 0.6s ease both;
+        .find-tab-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;animation:slideUp .55s .14s ease both;}
+        .find-tab-btn{
+          padding:9px 22px;border-radius:8px;border:1.5px solid #e2e8f0;
+          background:transparent;color:#6b7280;font-family:'DM Sans',sans-serif;
+          font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+          cursor:pointer;transition:all .2s;
         }
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
+        .find-tab-btn:hover{border-color:#c8102e;color:#c8102e;}
+        .find-tab-btn.active{background:#c8102e;border-color:#c8102e;color:#fff;}
 
-        /* ——— TAB ROW ——— */
-        .tab-row {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 12px;
-          flex-wrap: wrap;
-          gap: 12px;
-          animation: slideUp 0.6s 0.1s ease both;
+        .find-search{
+          display:flex;align-items:stretch;
+          border:1.5px solid #e8eaf0;border-radius:16px;overflow:visible;
+          background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.06),0 0 0 5px rgba(200,16,46,.04);
+          min-height:80px;position:relative;text-align:left;
+          animation:slideUp .55s .18s ease both;
+          transition:border-color .2s,box-shadow .2s;
         }
-        .tabs {
-          display: flex;
-          gap: 8px;
+        .find-search:focus-within{border-color:rgba(200,16,46,.35);box-shadow:0 4px 24px rgba(0,0,0,.07),0 0 0 5px rgba(200,16,46,.07);}
+        .find-divider{width:1px;background:#f0f0f5;flex-shrink:0;margin:16px 0;}
+        .find-search-btn{
+          width:80px;flex-shrink:0;
+          background:linear-gradient(135deg,#c8102e,#9b0c22);
+          border:none;border-radius:0 14px 14px 0;cursor:pointer;
+          display:flex;align-items:center;justify-content:center;
+          color:#fff;transition:filter .2s,transform .15s;
         }
-        .tab-btn {
-          padding: 9px 22px;
-          border-radius: 8px;
-          border: 1.5px solid rgba(255,255,255,0.25);
-          background: transparent;
-          color: rgba(255,255,255,0.6);
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 1.5px;
-          text-transform: uppercase;
-          cursor: pointer;
-          transition: all 0.22s;
-        }
-        .tab-btn:hover {
-          border-color: rgba(255,255,255,0.5);
-          color: #fff;
-        }
-        .tab-btn.active {
-          background: #fff;
-          border-color: #fff;
-          color: #0d0f1c;
-        }
-        .download-btn {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 9px 22px;
-          border-radius: 8px;
-          border: 1.5px solid rgba(255,255,255,0.25);
-          background: transparent;
-          color: rgba(255,255,255,0.75);
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 1.2px;
-          text-transform: uppercase;
-          cursor: pointer;
-          transition: all 0.22s;
-        }
-        .download-btn:hover {
-          border-color: #e8405c;
-          color: #e8405c;
-        }
-        .download-btn svg { width: 14px; height: 14px; }
+        .find-search-btn:hover{filter:brightness(1.08);}
+        .find-search-btn:active{transform:scale(.96);}
 
-        /* ——— SEARCH BAR ——— */
-        .search-bar {
-          display: flex;
-          align-items: stretch;
-          border: 1.5px solid #e8405c;
-          border-radius: 12px;
-          overflow: visible;
-          background: rgba(255,255,255,0.04);
-          animation: slideUp 0.6s 0.2s ease both;
-          min-height: 76px;
-          position: relative;
+        .find-dl-btn{
+          display:inline-flex;align-items:center;gap:8px;
+          margin-top:24px;padding:11px 26px;border-radius:50px;
+          border:1.5px solid #e2e8f0;background:#fff;color:#6b7280;
+          font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;
+          letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+          transition:all .2s;box-shadow:0 2px 10px rgba(0,0,0,.04);
+          animation:slideUp .55s .22s ease both;
         }
-        .search-divider {
-          width: 1px;
-          background: rgba(255,255,255,0.1);
-          flex-shrink: 0;
-          margin: 12px 0;
-        }
-        .search-btn {
-          width: 76px;
-          flex-shrink: 0;
-          background: #e8405c;
-          border: none;
-          border-radius: 0 10px 10px 0;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #fff;
-          transition: background 0.2s, transform 0.15s;
-        }
-        .search-btn:hover { background: #c72e48; }
-        .search-btn:active { transform: scale(0.96); }
-        .search-btn svg { width: 24px; height: 24px; }
+        .find-dl-btn:hover{border-color:#c8102e;color:#c8102e;}
 
-        /* ——— RESPONSIVE ——— */
-        @media (max-width: 768px) {
-          .hero-banner { padding: 48px 24px; min-height: auto; }
-          .search-bar { flex-direction: column; min-height: auto; }
-          .search-divider { width: auto; height: 1px; margin: 0 12px; }
-          .search-btn { width: 100%; height: 56px; border-radius: 0 0 10px 10px; }
-          .deco-right { display: none; }
-          .tab-row { flex-direction: column; align-items: flex-start; }
+        @media(max-width:680px){
+          .find-hero{padding:56px 16px 64px;}
+          .find-search{flex-direction:column;min-height:auto;}
+          .find-divider{width:auto;height:1px;margin:0 14px;}
+          .find-search-btn{width:100%;height:54px;border-radius:0 0 14px 14px;}
         }
       `}</style>
 
-      <section className="hero-banner">
-        <div className="hero-glow" />
+      <section className="find-hero">
+        <div className="find-blob1" />
+        <div className="find-blob2" />
 
-        {/* Decorative zigzag right */}
-        <div className="deco-right">
-          <svg className="zigzag-svg" viewBox="0 0 320 340" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMid slice">
-            {/* Pink filled zigzag */}
-            <path
-              d="M320 0 L220 55 L320 110 L220 165 L320 220 L220 275 L320 340 L320 0Z"
-              fill="#e879b0"
-              opacity="0.9"
-            />
-            {/* Dark overlay chevrons */}
-            <path d="M320 0 L240 50 L320 100" fill="#0d0f1c" opacity="0.85" />
-            <path d="M320 110 L240 160 L320 210" fill="#0d0f1c" opacity="0.85" />
-            <path d="M320 220 L240 270 L320 340" fill="#0d0f1c" opacity="0.85" />
-            {/* Outline-only zigzag behind */}
-            <path
-              d="M290 -10 L190 55 L290 120 L190 185 L290 250 L190 315 L290 380"
-              fill="none"
-              stroke="rgba(232,121,176,0.35)"
-              strokeWidth="1.5"
-            />
-            <path
-              d="M260 -10 L160 55 L260 120 L160 185 L260 250 L160 315 L260 380"
-              fill="none"
-              stroke="rgba(232,121,176,0.18)"
-              strokeWidth="1"
-            />
-          </svg>
-        </div>
+        <div className="find-inner">
+          <div className="find-eyebrow">
+            <span className="find-eyebrow-dot" />
+            Study Abroad Finder
+          </div>
 
-        <div className="hero-content">
-          <h1 className="hero-headline">
-            Find your best-fit university<br />and course
+          <h1 className="find-h1">
+            Find your best-fit<br /><em>university</em> and course
           </h1>
+          <p className="find-sub">
+            Search thousands of courses across 250+ partner universities worldwide and find the perfect match for your goals.
+          </p>
 
-          {/* Tab row */}
-          <div className="tab-row">
-            <div className="tabs">
-              {(["COURSES", "UNIVERSITIES"] as Tab[]).map((tab) => (
-                <button
-                  key={tab}
-                  className={`tab-btn ${activeTab === tab ? "active" : ""}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-            <button className="download-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M12 3v13M7 11l5 5 5-5M5 20h14" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Download Education Guide
-            </button>
+          <div className="find-stats">
+            {stats.map((s) => (
+              <div key={s.label} className="find-stat-pill">
+                <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "#c8102e" }}>{s.value}</span>
+                <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 500 }}>{s.label}</span>
+              </div>
+            ))}
           </div>
 
-          {/* Search bar */}
-          <div className="search-bar">
-            <SelectDropdown
-              label="I'm looking for:"
-              placeholder="Enter subject or course"
-              options={subjects}
-              value={subject}
-              onChange={setSubject}
-            />
-            <div className="search-divider" />
-            <SelectDropdown
-              label="I'm planning to study:"
-              placeholder="Select course type"
-              options={courseTypes}
-              value={courseType}
-              onChange={setCourseType}
-            />
-            <div className="search-divider" />
-            <SelectDropdown
-              label="I want to study in:"
-              placeholder="Select location"
-              options={locations}
-              value={location}
-              onChange={setLocation}
-            />
-            <button className="search-btn" onClick={handleSearch} aria-label="Search">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <div className="find-tab-row">
+            {(["COURSES", "UNIVERSITIES"] as Tab[]).map((t) => (
+              <button key={t} className={`find-tab-btn ${tab === t ? "active" : ""}`} onClick={() => setTab(t)}>
+                {t.charAt(0) + t.slice(1).toLowerCase()}
+              </button>
+            ))}
+          </div>
+
+          <div className="find-search">
+            <Dropdown label="I'm looking for:" placeholder="Enter subject or course" options={subjects} value={subject} onChange={setSubject} />
+            <div className="find-divider" />
+            <Dropdown label="I'm planning to study:" placeholder="Select course type" options={courseTypes} value={courseType} onChange={setCourseType} />
+            <div className="find-divider" />
+            <Dropdown label="I want to study in:" placeholder="Select location" options={locations} value={location} onChange={setLocation} />
+            <button className="find-search-btn" aria-label="Search">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <circle cx="11" cy="11" r="7" />
-                <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+                <path d="M21 21l-4.35-4.35" />
               </svg>
             </button>
           </div>
+
+          <button className="find-dl-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M12 3v13M7 11l5 5 5-5M5 20h14" />
+            </svg>
+            Download Education Guide
+          </button>
         </div>
       </section>
     </>

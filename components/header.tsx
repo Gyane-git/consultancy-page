@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const NAV_ITEMS = [
   {
@@ -79,7 +80,6 @@ const NAV_ITEMS = [
       { label: "Sydney Office", href: "#" },
     ],
   },
-  
 ];
 
 type NavChild = {
@@ -154,7 +154,13 @@ function FlyoutMenu({
                 fill="currentColor"
                 style={{ opacity: 0.7, marginLeft: 8 }}
               >
-                <path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+                <path
+                  d="M4 2l4 4-4 4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  fill="none"
+                  strokeLinecap="round"
+                />
               </svg>
             )}
           </a>
@@ -364,19 +370,14 @@ export default function TheNextHeader() {
       >
         <div className="header-inner">
           {/* Logo */}
-          <Link href="/" className="logo-area">
-            <svg className="logo-icon" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="23" cy="23" r="23" fill="#fff1f0" />
-              {/* Book pages */}
-              <path d="M12 30 Q23 16 34 30" stroke="#c0392b" strokeWidth="2.2" fill="none" strokeLinecap="round"/>
-              <path d="M23 16 L23 30" stroke="#c0392b" strokeWidth="2.2" strokeLinecap="round"/>
-              {/* Person above */}
-              <circle cx="23" cy="11" r="3.5" fill="#c0392b"/>
-              <path d="M18 20 Q23 15 28 20" stroke="#c0392b" strokeWidth="2" fill="none" strokeLinecap="round"/>
-            </svg>
-            <span className="logo-text">
-              THE<span>NEXT</span>
-            </span>
+          <Link href="/" className="logo-area flex items-center gap-2 mb-10">
+            <Image
+              src="/logo.jpeg"
+              alt="The Next Logo"
+              width={86}
+              height={86}
+              className="object-contain"
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -385,7 +386,9 @@ export default function TheNextHeader() {
               <div
                 key={i}
                 className="nav-item"
-                onMouseEnter={() => item.children ? setOpenMenu(i) : undefined}
+                onMouseEnter={() =>
+                  item.children ? setOpenMenu(i) : undefined
+                }
                 onMouseLeave={() => setOpenMenu(null)}
               >
                 <a
@@ -395,8 +398,17 @@ export default function TheNextHeader() {
                 >
                   {item.label}
                   {item.children && (
-                    <svg className={`caret${openMenu === i ? " open" : ""}`} viewBox="0 0 10 10" fill="none">
-                      <path d="M2 3.5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    <svg
+                      className={`caret${openMenu === i ? " open" : ""}`}
+                      viewBox="0 0 10 10"
+                      fill="none"
+                    >
+                      <path
+                        d="M2 3.5l3 3 3-3"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
                     </svg>
                   )}
                 </a>
@@ -408,7 +420,9 @@ export default function TheNextHeader() {
           </nav>
 
           {/* CTA */}
-          <a href="/free-consultant" className="cta-btn">Book Free Consultation</a>
+          <a href="/free-consultant" className="cta-btn">
+            Book Free Consultation
+          </a>
 
           {/* Hamburger */}
           <button
@@ -418,11 +432,21 @@ export default function TheNextHeader() {
           >
             {mobileOpen ? (
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <path
+                  d="M6 6l12 12M18 6L6 18"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
               </svg>
             ) : (
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <path
+                  d="M4 6h16M4 12h16M4 18h16"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
               </svg>
             )}
           </button>
@@ -435,7 +459,9 @@ export default function TheNextHeader() {
               {item.label}
             </a>
           ))}
-          <a href="#" className="mobile-cta">Meet The Representative</a>
+          <a href="#" className="mobile-cta">
+            Meet The Representative
+          </a>
         </div>
       </header>
     </>
