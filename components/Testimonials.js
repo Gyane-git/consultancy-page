@@ -1,5 +1,6 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
+import Image from "next/image";
 
 const videoTestimonials = [
   {
@@ -130,7 +131,7 @@ function VideoCard({ testimonial, index }) {
       onMouseLeave={() => setHovered(false)}
     >
       <div className="video-thumb-wrap">
-        <img src={testimonial.thumbnail} alt={testimonial.name} className="video-thumb" />
+        <Image src={testimonial.thumbnail} alt={testimonial.name} className="video-thumb" width={400} height={500} />
         <div className={`video-overlay ${hovered ? "hovered" : ""}`} />
         <button className={`play-btn ${hovered ? "hovered" : ""}`} aria-label="Play video">
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -151,7 +152,7 @@ function ReviewCard({ review, index }) {
   return (
     <div className="review-card" style={{ animationDelay: `${index * 100}ms` }}>
       <div className="review-top">
-        <img src={review.avatar} alt={review.name} className="review-avatar" />
+        <Image src={review.avatar} alt={review.name} className="review-avatar" width={52} height={52} />
         <div>
           <p className="review-name">{review.name}</p>
           <p className="review-course">{review.course}</p>
@@ -159,7 +160,7 @@ function ReviewCard({ review, index }) {
         </div>
         <span className="review-date">{review.date}</span>
       </div>
-      <p className="review-text">"{review.review}"</p>
+      <p className="review-text">&ldquo;{review.review}&rdquo;</p>
       <div className="review-footer">
         <span className="verified-badge">✓ Verified Student</span>
       </div>

@@ -69,7 +69,7 @@ const GetInTouch = () => {
             </div>
             
             <h2 className="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Let's Start Your Journey
+              Let&apos;s Start Your Journey
             </h2>
             
             <p className="text-xl text-gray-300 mb-12 leading-relaxed">
@@ -83,9 +83,9 @@ const GetInTouch = () => {
                   <Phone className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-1">Phone</h3>
-                  <p className="text-gray-300">+977 1234 567890</p>
-                  <p className="text-gray-400 text-sm">Mon-Fri, 9am-6pm NPT</p>
+                  <h4 className="font-semibold text-gray-900 mb-1">Phone</h4>
+                  <p className="text-gray-600">+977 1234 567890</p>
+                  <p className="text-sm text-gray-500">Mon-Fri, 9am-6pm NPT</p>
                 </div>
               </div>
 
@@ -96,7 +96,7 @@ const GetInTouch = () => {
                 <div>
                   <h3 className="font-semibold text-lg mb-1">Email</h3>
                   <p className="text-gray-300">info@educonsult.com</p>
-                  <p className="text-gray-400 text-sm">We'll respond within 24 hours</p>
+                  <p className="text-gray-400 text-sm">We&apos;ll respond within 24 hours</p>
                 </div>
               </div>
 
@@ -262,7 +262,7 @@ const GetInTouch = () => {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">Thank You!</h3>
                 <p className="text-gray-600">
-                  We've received your message and will get back to you within 24 hours.
+                  We&apos;ve received your message and will get back to you within 24 hours.
                 </p>
               </div>
             )}

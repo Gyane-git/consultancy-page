@@ -1,6 +1,58 @@
 "use client";
 import React from 'react';
-import Image from 'next/image';
+
+interface LogoRowProps {
+  logos: string[];
+  direction?: 'right' | 'left';
+  speed?: number;
+}
+
+const LogoRow: React.FC<LogoRowProps> = ({ logos, direction = 'right', speed = 30 }) => {
+  return (
+    <div className="relative overflow-hidden w-full py-6">
+      <div
+        className={`flex gap-12 ${
+          direction === 'right' ? 'animate-scroll-right' : 'animate-scroll-left'
+        }`}
+        style={{
+          animationDuration: `${speed}s`,
+        }}
+      >
+        {/* Triple the logos for seamless infinite loop */}
+        {[...logos, ...logos, ...logos].map((logo, index) => (
+          <div
+            key={index}
+            className="flex-shrink-0 w-48 h-28 flex items-center justify-center group"
+          >
+            {/* Placeholder card - Replace with actual images */}
+            <div className="w-full h-full bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center border-2 border-gray-100 group-hover:border-blue-400 group-hover:scale-105">
+              <div className="text-center p-4">
+                <div className="w-16 h-16 mx-auto mb-2 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                  {(index % logos.length) + 1}
+                </div>
+                <span className="text-xs font-medium text-gray-600">
+                  University Logo
+                </span>
+              </div>
+            </div>
+            {/* 
+            Uncomment and use this for actual images:
+            <div className="w-full h-full bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center p-6 border-2 border-gray-100 group-hover:border-blue-400 group-hover:scale-105 grayscale group-hover:grayscale-0">
+              <Image
+                src={logo}
+                alt="University partner logo"
+                width={180}
+                height={100}
+                className="max-w-full max-h-full object-contain"
+              />
+            </div>
+            */}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const UniPartners = () => {
   // Sample university logos - replace with your actual logo paths
@@ -36,53 +88,6 @@ const UniPartners = () => {
     '/logos/roehampton.png',
     '/logos/lancaster-2.png',
   ];
-
-  const LogoRow = ({ logos, direction = 'right', speed = 30 }) => {
-    return (
-      <div className="relative overflow-hidden w-full py-6">
-        <div
-          className={`flex gap-12 ${
-            direction === 'right' ? 'animate-scroll-right' : 'animate-scroll-left'
-          }`}
-          style={{
-            animationDuration: `${speed}s`,
-          }}
-        >
-          {/* Triple the logos for seamless infinite loop */}
-          {[...logos, ...logos, ...logos].map((logo, index) => (
-            <div
-              key={index}
-              className="flex-shrink-0 w-48 h-28 flex items-center justify-center group"
-            >
-              {/* Placeholder card - Replace with actual images */}
-              <div className="w-full h-full bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center border-2 border-gray-100 group-hover:border-blue-400 group-hover:scale-105">
-                <div className="text-center p-4">
-                  <div className="w-16 h-16 mx-auto mb-2 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                    {(index % logos.length) + 1}
-                  </div>
-                  <span className="text-xs font-medium text-gray-600">
-                    University Logo
-                  </span>
-                </div>
-              </div>
-              {/* 
-              Uncomment and use this for actual images:
-              <div className="w-full h-full bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center p-6 border-2 border-gray-100 group-hover:border-blue-400 group-hover:scale-105 grayscale group-hover:grayscale-0">
-                <Image
-                  src={logo}
-                  alt="University partner logo"
-                  width={180}
-                  height={100}
-                  className="max-w-full max-h-full object-contain"
-                />
-              </div>
-              */}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="relative w-full py-24 bg-gradient-to-b from-gray-50 via-white to-blue-50 overflow-hidden">

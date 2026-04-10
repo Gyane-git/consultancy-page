@@ -8,6 +8,7 @@ const images = [
   "https://images.unsplash.com/photo-1491553895911-0055eca6402d",
 ];
 
+
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);
 
@@ -46,7 +47,9 @@ export default function HeroSlider() {
           <div className="absolute -inset-1 bg-gradient-to-r from-red-500 via-pink-500 to-orange-500 rounded-full blur opacity-70"></div>
 
           <button className="relative bg-red-600 px-6 py-3 rounded-full font-semibold text-white hover:bg-red-700 transition shadow-lg">
-            Book Free Counselling
+            
+            Book Free Consultation
+
           </button>
         </div>
       </div>

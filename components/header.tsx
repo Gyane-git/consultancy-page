@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
 const NAV_ITEMS = [
   {
@@ -363,7 +364,7 @@ export default function TheNextHeader() {
       >
         <div className="header-inner">
           {/* Logo */}
-          <a href="/" className="logo-area">
+          <Link href="/" className="logo-area">
             <svg className="logo-icon" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="23" cy="23" r="23" fill="#fff1f0" />
               {/* Book pages */}
@@ -376,7 +377,7 @@ export default function TheNextHeader() {
             <span className="logo-text">
               THE<span>NEXT</span>
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Nav */}
           <nav>
@@ -407,7 +408,7 @@ export default function TheNextHeader() {
           </nav>
 
           {/* CTA */}
-          <a href="#" className="cta-btn">Book Free Consultation</a>
+          <a href="/free-consultant" className="cta-btn">Book Free Consultation</a>
 
           {/* Hamburger */}
           <button

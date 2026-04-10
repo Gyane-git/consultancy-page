@@ -8,7 +8,7 @@ import GetInTouch from '@/components/GetInTouch'
 
 function home() {
   return (
-    <div>
+    <div className="space-y-0">
       <HeroBanner />
       <Testimonials />
       <UniPartners />
