@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-import TheNextHeader from "@/components/header";
-import RafflesFooter from "@/components/footer";
+import LayoutWrapper from "@/components/LayoutWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,33 +14,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TheNext Education Consultancy - Study Abroad Experts",
-  description: "Leading education consultancy in Nepal specializing in study abroad guidance. Get expert counseling for universities in UK, USA, Canada, Australia and more.",
+  title: "Deep Masala",
+  description: "Delight in Every Spice - DeepS Masala",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-screen flex flex-col">
-        
-        {/* Header */}
-        <TheNextHeader />
-
-        {/* Main Content */}
-        <main className="flex-1">
-          {children}
-        </main>
-
-        {/* Footer */}
-        <RafflesFooter />
-
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );
