@@ -412,7 +412,7 @@ export default function StudySyncFooter() {
               <p style={{ fontFamily: "'Nunito Sans',sans-serif", fontSize: 13, color: "#1a0d00" }}>
                 Designed by{" "}
                 <a href="#" style={{ color: "#1a0d00", fontWeight: 800, fontStyle: "italic", textDecoration: "underline" }}>
-                  Bibhuti Solutions
+                  DevMind Solutions
                 </a>
               </p>
             </div>
