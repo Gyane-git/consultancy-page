@@ -6,78 +6,69 @@ import Image from "next/image";
 
 const NAV_ITEMS = [
   {
-    label: "Test Preparation",
-    href: "#",
+    label: "IELTS Prep",
+    href: "/ielts",
     children: [
-      { label: "IELTS", href: "#" },
-      { label: "TOEFL", href: "#" },
-      { label: "PTE", href: "#" },
-      { label: "SAT", href: "#" },
+      { label: "Courses & Coaching", href: "/ielts/courses" },
+      { label: "Mock Tests", href: "/ielts/mock-tests" },
+      { label: "Resources", href: "/ielts/resources" },
     ],
   },
   {
-    label: "Study Abroad",
-    href: "#",
+    label: "Destinations",
+    href: "/destinations",
     active: true,
     children: [
-      {
-        label: "Study in Australia",
-        href: "#",
-        children: [
-          { label: "Universities in Australia", href: "#" },
-          { label: "Courses in Australia", href: "#" },
-          { label: "Student Visa Australia", href: "#" },
-        ],
-      },
-      {
-        label: "Study in New Zealand",
-        href: "#",
-        children: [
-          { label: "Universities in NZ", href: "#" },
-          { label: "Courses in NZ", href: "#" },
-          { label: "Student Visa NZ", href: "#" },
-        ],
-      },
-      { label: "Study in UK", href: "#" },
-      { label: "Study in USA", href: "#" },
-      { label: "Study in Canada", href: "#" },
+      { label: "Australia", href: "/destinations/australia" },
+      { label: "United Kingdom", href: "/destinations/uk" },
+      { label: "United States", href: "/destinations/usa" },
+      { label: "Canada", href: "/destinations/canada" },
+      { label: "Ireland", href: "/destinations/ireland" },
+      { label: "Malta", href: "/destinations/malta" },
+      { label: "Germany", href: "/destinations/germany" },
+      { label: "New Zealand", href: "/destinations/new-zealand" },
+      { label: "Dubai", href: "/destinations/dubai" },
+      { label: "Georgia", href: "/destinations/georgia" },
     ],
   },
-  { label: "Universities", href: "#" },
+  { label: "Universities", href: "/universities" },
   {
     label: "Services",
-    href: "#",
+    href: "/services",
     children: [
-      { label: "Visa Assistance", href: "#" },
-      { label: "Accommodation", href: "#" },
-      { label: "Scholarship Guidance", href: "#" },
+      { label: "Visa Assistance", href: "/services/visa" },
+      { label: "Accommodation", href: "/services/accommodation" },
+      { label: "Scholarship Guidance", href: "/services/scholarships" },
+      { label: "Transport Guidance", href: "/services/transport" },
+      { label: "Pre-departure Support", href: "/services/pre-departure" },
     ],
   },
   {
     label: "Popular Courses",
-    href: "#",
+    href: "/courses",
     children: [
-      { label: "MBA", href: "#" },
-      { label: "Engineering", href: "#" },
-      { label: "Medicine", href: "#" },
+      { label: "MBA", href: "/courses/mba" },
+      { label: "Engineering", href: "/courses/engineering" },
+      { label: "Computer Science", href: "/courses/cs" },
+      { label: "Nursing & Healthcare", href: "/courses/nursing" },
     ],
   },
-  { label: "Blogs", href: "#" },
+  { label: "Blog", href: "/blog" },
   {
     label: "About Us",
-    href: "#",
+    href: "/about",
     children: [
-      { label: "Our Story", href: "#" },
-      { label: "Team", href: "#" },
-      { label: "Careers", href: "#" },
+      { label: "Our Story", href: "/about#story" },
+      { label: "Team", href: "/about#team" },
+      { label: "Careers", href: "/about#careers" },
     ],
   },
   {
-    label: "Contact Us",
-    href: "#",
+    label: "Contact",
+    href: "/contact",
     children: [
-      { label: "Kathmandu Office", href: "#" },
-      { label: "Sydney Office", href: "#" },
+      { label: "Kathmandu Office", href: "/contact#kathmandu" },
+      { label: "Sydney Office", href: "/contact#sydney" },
     ],
   },
 ];
@@ -238,6 +229,8 @@ export default function TheNextHeader() {
           color: #c0392b;
           line-height: 1;
         }
+        .logo-text-block { display:flex; flex-direction:column; }
+        .logo-tagline { font-size: 12px; color: #6b6b6b; font-weight: 500; margin-top: 2px; }
         .logo-text span { color: #1a1a1a; }
 
         nav {
@@ -370,14 +363,18 @@ export default function TheNextHeader() {
       >
         <div className="header-inner">
           {/* Logo */}
-          <Link href="/" className="logo-area flex items-center gap-2 mb-10">
+          <Link href="/" className="logo-area">
             <Image
-              src="/logo.jpeg"
-              alt="The Next Logo"
-              width={86}
-              height={86}
-              className="object-contain"
+              src="/logo1.jpeg"
+              alt="Study Sync logo"
+              width={46}
+              height={46}
+              className="logo-icon object-contain"
             />
+            <div className="logo-text-block">
+              <span className="logo-text">Study<span>Sync</span></span>
+              <span className="logo-tagline">Your Future, Perfectly Synced</span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}
