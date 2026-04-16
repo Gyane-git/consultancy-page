@@ -37,14 +37,15 @@ import {
   PieChart,
   UserPlus,
   Eye,
-  ThumbsUp,
-  AlertCircle
+  
+  Plus,
+  Video,
 } from "lucide-react";
 
 const EducationSidebar = () => {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
     "Student Management": true,
-    "Application Processing": true,
+    "Applications": true,
   });
   const pathname = usePathname();
 
@@ -59,178 +60,21 @@ const EducationSidebar = () => {
     return pathname === path;
   };
 
-  // Updated Menu Structure for Education Consultancy
+  // Trimmed menu: keep main admin sections only
   const menuItems = [
-    { 
-      icon: LayoutDashboard, 
-      label: "Dashboard", 
-      path: "/admin/dashboard",
-      description: "Overview & Analytics"
-    },
-
-    {
-      icon: GraduationCap,
-      label: "Student Management",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "All Students", path: "/admin/students", icon: Users, count: 1284 },
-        { name: "Add New Student", path: "/admin/students/add", icon: UserPlus },
-        { name: "Student Profiles", path: "/admin/students/profiles", icon: Eye },
-        { name: "Student Documents", path: "/admin/students/documents", icon: FileText },
-      ],
-    },
-
-    {
-      icon: FileText,
-      label: "Application Processing",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "All Applications", path: "/admin/applications", icon: FileText, count: 847 },
-        { name: "New Applications", path: "/admin/applications/new", icon: Bell, count: 43 },
-        { name: "Visa Processing", path: "/admin/applications/visa", icon: Clock, count: 156 },
-        { name: "Offer Letters", path: "/admin/applications/offers", icon: CheckCircle, count: 98 },
-        { name: "Documents Review", path: "/admin/applications/documents", icon: Eye },
-      ],
-    },
-
-    {
-      icon: Globe,
-      label: "University Partners",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "All Universities", path: "/admin/universities", icon: Globe, count: 156 },
-        { name: "Add University", path: "/admin/universities/add", icon: Plus },
-        { name: "University Programs", path: "/admin/universities/programs", icon: BookOpen },
-        { name: "Partnership Agreements", path: "/admin/universities/agreements", icon: FileText },
-        { name: "University Rankings", path: "/admin/universities/rankings", icon: TrendingUp },
-      ],
-    },
-
-    {
-      icon: Award,
-      label: "Scholarships",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "All Scholarships", path: "/admin/scholarships", icon: Award, count: 45 },
-        { name: "Add Scholarship", path: "/admin/scholarships/add", icon: Plus },
-        { name: "Scholarship Applications", path: "/admin/scholarships/applications", icon: FileText },
-        { name: "Awarded Scholarships", path: "/admin/scholarships/awarded", icon: CheckCircle, count: 612 },
-        { name: "Scholarship Budget", path: "/admin/scholarships/budget", icon: DollarSign },
-      ],
-    },
-
-    {
-      icon: Calendar,
-      label: "Consultations",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "Upcoming Consultations", path: "/admin/consultations/upcoming", icon: Clock, count: 28 },
-        { name: "Schedule Consultation", path: "/admin/consultations/schedule", icon: Calendar },
-        { name: "Consultation History", path: "/admin/consultations/history", icon: FileText },
-        { name: "Video Consultations", path: "/admin/consultations/video", icon: Video },
-      ],
-    },
-
-    {
-      icon: MessageSquare,
-      label: "Inquiries & Support",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "All Inquiries", path: "/admin/inquiries", icon: MessageSquare, count: 43 },
-        { name: "Support Tickets", path: "/admin/support/tickets", icon: HelpCircle },
-        { name: "Live Chat", path: "/admin/support/chat", icon: MessageSquare },
-        { name: "Email Templates", path: "/admin/support/email-templates", icon: Mail },
-        { name: "FAQs", path: "/admin/support/faqs", icon: HelpCircle },
-      ],
-    },
-
-    {
-      icon: BarChart3,
-      label: "Reports & Analytics",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "Application Reports", path: "/admin/reports/applications", icon: PieChart },
-        { name: "Student Analytics", path: "/admin/reports/students", icon: TrendingUp },
-        { name: "Financial Reports", path: "/admin/reports/financial", icon: DollarSign },
-        { name: "Visa Success Rate", path: "/admin/reports/visa", icon: CheckCircle },
-        { name: "Export Data", path: "/admin/reports/export", icon: Download },
-      ],
-    },
-
-    {
-      icon: UserCog,
-      label: "Staff Management",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "All Staff", path: "/admin/staff", icon: Users, count: 24 },
-        { name: "Add Staff Member", path: "/admin/staff/add", icon: UserPlus },
-        { name: "Roles & Permissions", path: "/admin/staff/roles", icon: Shield },
-        { name: "Activity Logs", path: "/admin/staff/activity", icon: FileText },
-        { name: "Performance Review", path: "/admin/staff/performance", icon: Star },
-      ],
-    },
-
-    {
-      icon: Briefcase,
-      label: "Visa Services",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "Visa Applications", path: "/admin/visa/applications", icon: FileText, count: 156 },
-        { name: "Visa Requirements", path: "/admin/visa/requirements", icon: CheckCircle },
-        { name: "Visa Checklist", path: "/admin/visa/checklist", icon: FileText },
-        { name: "Embassy Appointments", path: "/admin/visa/appointments", icon: Calendar },
-        { name: "Visa Success Stories", path: "/admin/visa/success-stories", icon: ThumbsUp },
-      ],
-    },
-
-    {
-      icon: DollarSign,
-      label: "Payments & Fees",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "Fee Collections", path: "/admin/payments/collections", icon: CreditCard },
-        { name: "Invoices", path: "/admin/payments/invoices", icon: FileText },
-        { name: "Refunds", path: "/admin/payments/refunds", icon: XCircle },
-        { name: "Commission Tracking", path: "/admin/payments/commission", icon: TrendingUp },
-      ],
-    },
-
-    {
-      icon: Mail,
-      label: "Communications",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "Email Campaigns", path: "/admin/communications/emails", icon: Send },
-        { name: "Newsletter", path: "/admin/communications/newsletter", icon: Bell },
-        { name: "SMS Alerts", path: "/admin/communications/sms", icon: Phone },
-        { name: "Notifications", path: "/admin/communications/notifications", icon: Bell },
-      ],
-    },
-
-    {
-      icon: Settings,
-      label: "Settings",
-      path: "#",
-      expandable: true,
-      children: [
-        { name: "General Settings", path: "/admin/settings/general", icon: Settings },
-        { name: "Country Management", path: "/admin/settings/countries", icon: MapPin },
-        { name: "Intake Periods", path: "/admin/settings/intakes", icon: Calendar },
-        { name: "Email Configuration", path: "/admin/settings/email", icon: Mail },
-        { name: "API Integration", path: "/admin/settings/api", icon: Settings },
-      ],
-    },
+    { icon: LayoutDashboard, label: "Dashboard", path: "/admin/dashboard", description: "Overview & Analytics" },
+    { icon: GraduationCap, label: "Students", path: "/admin/students", expandable: true, children: [ { name: "All Students", path: "/admin/students", icon: Users, count: 1284 } ] },
+    { icon: FileText, label: "Applications", path: "/admin/applications", expandable: false, children: [] },
+    { icon: BookOpen, label: "IELTS Prep", path: "/admin/ielts", expandable: false, children: [] },
+    { icon: Globe, label: "Destinations", path: "/admin/destinations", expandable: false, children: [] },
+    { icon: Globe, label: "Universities", path: "/admin/universities", expandable: false, children: [] },
+    { icon: Award, label: "Scholarships", path: "/admin/scholarships", expandable: false, children: [] },
+    { icon: Calendar, label: "Consultations", path: "/admin/consultations", expandable: false, children: [] },
+    { icon: BarChart3, label: "Reports", path: "/admin/reports", expandable: false, children: [] },
+    { icon: UserCog, label: "Staff", path: "/admin/staff", expandable: false, children: [] },
+    { icon: DollarSign, label: "Payments", path: "/admin/payments", expandable: false, children: [] },
+    { icon: Mail, label: "Communications", path: "/admin/communications", expandable: false, children: [] },
+    { icon: Settings, label: "Settings", path: "/admin/settings", expandable: false, children: [] },
   ];
 
   // Helper function to render icons with active state
@@ -240,8 +84,6 @@ const EducationSidebar = () => {
 
   return (
     <div className="w-72 bg-gradient-to-b from-white to-gray-50 h-full border-r border-gray-200 flex flex-col overflow-hidden shadow-lg">
-     
-      {/* Menu Items */}
       <div className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {menuItems.map((item, index) => (
           <div key={index} className="mb-1">
@@ -371,8 +213,6 @@ const EducationSidebar = () => {
   );
 };
 
-// Missing icon components
-const Plus = () => <span className="w-5 h-5 inline-flex items-center justify-center">+</span>;
-const Video = () => <span className="w-5 h-5 inline-flex items-center justify-center">📹</span>;
+// no fallback icons needed; using lucide-react icons
 
 export default EducationSidebar;
