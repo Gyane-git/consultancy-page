@@ -1,8 +1,8 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 interface LogoRowProps {
-  logos: { name: string; abbr: string; country: string; color: string }[];
+  logos: { name: string; abbr: string; country: string; color?: string }[];
   direction?: "right" | "left";
   speed?: number;
 }
@@ -18,13 +18,7 @@ const COLORS = [
   { bg: "#212121", text: "#fff", accent: "#BDBDBD" },
 ];
 
-const LogoCard = ({
-  logo,
-  colorIdx,
-}: {
-  logo: { name: string; abbr: string; country: string };
-  colorIdx: number;
-}) => {
+const LogoCard = ({ logo, colorIdx }: { logo: { name: string; abbr: string; country: string; color?: string }; colorIdx: number }) => {
   const c = COLORS[colorIdx % COLORS.length];
   const [hovered, setHovered] = useState(false);
 
@@ -327,7 +321,7 @@ const UniPartners = () => {
       {/* CTA footer */}
       <div style={{ textAlign: "center", marginTop: "56px", padding: "0 24px" }}>
         <p style={{ fontSize: "0.9rem", color: "#94a3b8", marginBottom: "16px" }}>
-          Can't find your target university?
+          Can&apos;t find your target university?
         </p>
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
