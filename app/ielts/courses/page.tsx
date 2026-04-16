@@ -27,14 +27,17 @@ const COURSES = [
   },
 ];
 
-export default function IELTSCourses() {
-  const [scores, setScores] = React.useState({ listening: "", reading: "", writing: "", speaking: "" });
+type Scores = { listening: string; reading: string; writing: string; speaking: string };
 
-  const calculateBand = () => {
-    const vals = Object.values(scores).map(Number);
-    if (vals.some(isNaN)) return "-";
-    const avg = vals.reduce((a, b) => a + b, 0) / 4;
-    return Math.round(avg * 2) / 2; // IELTS rounds to nearest 0.5
+export default function IELTSCourses() {
+  const [scores, setScores] = React.useState<Scores>({ listening: "", reading: "", writing: "", speaking: "" });
+
+  const calculateBand = (): string | number => {
+    const keys: Array<keyof Scores> = ["listening", "reading", "writing", "speaking"];
+    const vals = keys.map((k) => Number(scores[k]));
+    if (vals.some((v) => isNaN(v))) return "-";
+    const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+    return Math.round(avg * 2) / 2; // round to nearest 0.5
   };
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -152,18 +155,22 @@ export default function IELTSCourses() {
 
         <div className="bg-white shadow-lg rounded-2xl p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {["listening", "reading", "writing", "speaking"].map((key) => (
-              <input
-                key={key}
-                type="number"
-                step="0.5"
-                min="0"
-                max="9"
-                placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
-                value={scores[key]}
-                onChange={(e) => setScores({ ...scores, [key]: e.target.value })}
-                className="border rounded-lg px-3 py-2 w-full"
-              />
+            {(["listening", "reading", "writing", "speaking"] as Array<keyof Scores>).map((key) => (
+              <label key={key} className="flex flex-col">
+                <span className="text-xs text-gray-500 mb-1">{key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                <input
+                  aria-label={`${key} score`}
+                  inputMode="decimal"
+                  type="number"
+                  step={0.5}
+                  min={0}
+                  max={9}
+                  placeholder={key}
+                  value={scores[key]}
+                  onChange={(e) => setScores((prev) => ({ ...prev, [key]: e.target.value }))}
+                  className="border rounded-lg px-3 py-2 w-full"
+                />
+              </label>
             ))}
           </div>
 
