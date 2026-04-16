@@ -145,7 +145,7 @@ function SocialBtn({ href, label, children }: { href: string; label: string; chi
 // ─────────────────────────────────────────────
 // Main Footer
 // ─────────────────────────────────────────────
-export default function RafflesFooter() {
+export default function StudySyncFooter() {
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
 
@@ -153,8 +153,8 @@ export default function RafflesFooter() {
     if (email.trim()) { setDone(true); setEmail(""); setTimeout(() => setDone(false), 3000); }
   };
 
-  const links     = ["Franchise", "Events", "Gallery", "Terms and Conditions", "Site Map", "Contact"];
-  const quickLinks = ["Cost Calculator", "Achievements", "Career", "CSR", "Social Platform"];
+  const links     = ["IELTS Prep", "Destinations", "Services", "Courses", "Universities", "Blog", "About", "Contact"];
+  const quickLinks = ["Apply Now", "Scholarships", "Visa Guide", "Pre-Departure", "Partner Login"];
 
   return (
     <div style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
@@ -255,15 +255,15 @@ export default function RafflesFooter() {
                   fontFamily: "'Nunito Sans', sans-serif", fontSize: 20, fontWeight: 800,
                   color: "#1a0d00", marginBottom: 18, lineHeight: 1.25,
                 }}>
-                  Raffles EduCare Pvt Ltd
+                  Study Sync
                 </h2>
                 <p style={{
                   fontFamily: "'Nunito Sans', sans-serif", fontSize: 13.5, lineHeight: 1.78,
                   color: "#1a0d00", maxWidth: 340,
                 }}>
-                  Raffles Educare Associates Pvt. Ltd., established in 2005, is one of the best educational consultancy
-                  with a successful track record in the overseas education.Over the 15 years of excellence we have 97%
-                  visa success rate along with highest student satisfaction, fulfilling the career dreams of many students.
+                  Study Sync helps students find the right university, visa pathway, and pre-departure support.
+                  We guide applicants through admissions, IELTS prep, visa processing and scholarships with
+                  personalised consulting to make international study smooth and successful.
                 </p>
               </div>
 
@@ -341,7 +341,7 @@ export default function RafflesFooter() {
                 {/* Google Map */}
                 <div style={{ borderRadius: 6, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.18)" }}>
                   <iframe
-                    title="Raffles Educare"
+                    title="Study Sync Office"
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.2!2d85.3147!3d27.7091!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19000a37b73d%3A0x3c04dc75e0e9e2a6!2sBag%20Bazar%2C%20Kathmandu!5e0!3m2!1sen!2snp"
                     width="100%"
                     height="165"
@@ -407,7 +407,7 @@ export default function RafflesFooter() {
               padding: "14px 0", flexWrap: "wrap", gap: 8,
             }}>
               <p style={{ fontFamily: "'Nunito Sans',sans-serif", fontSize: 13, color: "#1a0d00" }}>
-                All rights reserved 2025. Raffles Educare
+                © {new Date().getFullYear()}. Study Sync. All rights reserved.
               </p>
               <p style={{ fontFamily: "'Nunito Sans',sans-serif", fontSize: 13, color: "#1a0d00" }}>
                 Designed by{" "}

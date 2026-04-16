@@ -2,7 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 
-const faqs = [
+type FAQ = { id: number; question: string; answer: string };
+
+const faqs: FAQ[] = [
   {
     id: 1,
     question: "What countries can I apply to through Raffles Educare?",
@@ -47,9 +49,19 @@ const faqs = [
   },
 ];
 
-function FAQItem({ faq, index }) {
+function FAQItem({ faq, index }: { faq: FAQ; index: number }) {
   const [open, setOpen] = useState(false);
-  const contentRef = useRef(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const [height, setHeight] = useState<string>("0px");
+
+  useEffect(() => {
+    if (!contentRef.current) return;
+    const el = contentRef.current;
+    // measure after next paint to ensure accurate height
+    requestAnimationFrame(() => {
+      setHeight(open ? `${el.scrollHeight}px` : "0px");
+    });
+  }, [open]);
 
   return (
     <div
@@ -69,7 +81,8 @@ function FAQItem({ faq, index }) {
         className="faq-body"
         ref={contentRef}
         style={{
-          maxHeight: open ? contentRef.current?.scrollHeight + "px" : "0px",
+          maxHeight: height,
+          transition: "max-height 320ms ease",
         }}
       >
         <p className="faq-answer">{faq.answer}</p>
@@ -87,7 +100,7 @@ export default function ContactFAQPage() {
     message: "",
   });
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
-  const [activeField, setActiveField] = useState(null);
+  const [activeField, setActiveField] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
   const filtered = faqs.filter(
@@ -96,10 +109,10 @@ export default function ContactFAQPage() {
       f.answer.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleChange = (e) =>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("sending");
     await new Promise((r) => setTimeout(r, 1800));
@@ -601,7 +614,7 @@ export default function ContactFAQPage() {
               </div>
 
               <div className={`field ${activeField === "subject" ? "active" : ""}`}>
-                <label htmlFor="subject">I'm interested in</label>
+                <label htmlFor="subject">I&apos;m interested in</label>
                 <select
                   id="subject"
                   name="subject"
@@ -684,7 +697,7 @@ export default function ContactFAQPage() {
 
             <div className="faq-list">
               {filtered.length === 0 ? (
-                <div className="faq-empty">No questions match "{search}"</div>
+                <div className="faq-empty">No questions match &quot;{search}&quot;</div>
               ) : (
                 filtered.map((faq, i) => (
                   <FAQItem key={faq.id} faq={faq} index={i} />

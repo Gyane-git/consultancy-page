@@ -5,17 +5,17 @@ import FindUni from '@/components/find-uni'
 import UniPartners from '@/components/uniPartners'
 import FAQ from '@/components/FAQ'
 //import GetInTouch from "@/components/"
-import AboutStudySync from '@/components/AboutStudySync'
-import Team from '@/components/Team'
-import Destinations from '@/components/Destinations'
+//import AboutStudySync from '@/components/AboutStudySync'
+//import Team from '@/components/Team'
+//import Destinations from '@/components/Destinations'
 
 function home() {
   return (
     <div className="space-y-0">
       <HeroBanner />
-      <AboutStudySync />
+      {/* <AboutStudySync />
       <Destinations />
-      <Team />
+      <Team /> */}
       <Testimonials />
       <FindUni />
       <UniPartners />
