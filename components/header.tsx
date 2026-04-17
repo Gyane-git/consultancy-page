@@ -7,7 +7,7 @@ import Image from "next/image";
 const NAV_ITEMS = [
   {
     label: "IELTS Prep",
-    href: "/ielts",
+    
     children: [
       { label: "Courses & Coaching", href: "/ielts/courses" },
       { label: "Mock Tests", href: "/ielts/mock-tests" },
@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   },
   {
     label: "Destinations",
-    href: "/destinations",
+   
     active: true,
     children: [
       { label: "Australia", href: "/destinations/australia" },
@@ -35,41 +35,23 @@ const NAV_ITEMS = [
   {
     label: "Services",
     href: "/services",
-    children: [
-      { label: "Visa Assistance", href: "/services/visa" },
-      { label: "Accommodation", href: "/services/accommodation" },
-      { label: "Scholarship Guidance", href: "/services/scholarships" },
-      { label: "Transport Guidance", href: "/services/transport" },
-      { label: "Pre-departure Support", href: "/services/pre-departure" },
-    ],
+    
   },
   {
     label: "Popular Courses",
     href: "/courses",
-    children: [
-      { label: "MBA", href: "/courses/mba" },
-      { label: "Engineering", href: "/courses/engineering" },
-      { label: "Computer Science", href: "/courses/cs" },
-      { label: "Nursing & Healthcare", href: "/courses/nursing" },
-    ],
+    
   },
   { label: "Blog", href: "/blog" },
   {
     label: "About Us",
     href: "/about",
-    children: [
-      { label: "Our Story", href: "/about#story" },
-      { label: "Team", href: "/about#team" },
-      { label: "Careers", href: "/about#careers" },
-    ],
+    
   },
   {
     label: "Contact",
     href: "/contact",
-    children: [
-      { label: "Kathmandu Office", href: "/contact#kathmandu" },
-      { label: "Sydney Office", href: "/contact#sydney" },
-    ],
+   
   },
 ];
 
@@ -81,7 +63,7 @@ type NavChild = {
 
 type NavItem = {
   label: string;
-  href: string;
+  href?: string;
   active?: boolean;
   children?: NavChild[];
 };
@@ -389,7 +371,7 @@ export default function TheNextHeader() {
                 onMouseLeave={() => setOpenMenu(null)}
               >
                 <a
-                  href={item.href}
+                  href={item.href || "#"}
                   className={`nav-link${item.active ? " active" : ""}${openMenu === i ? " open" : ""}`}
                   onClick={(e) => item.children && e.preventDefault()}
                 >

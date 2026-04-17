@@ -56,7 +56,7 @@ const PLANS = [
 
 // ─── Hooks ───────────────────────────────────────────────────────────────────
 
-function useInView(threshold = 0.15) {
+function useInView(threshold = 0.15): [React.RefObject<null>, boolean] {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -70,13 +70,13 @@ function useInView(threshold = 0.15) {
   return [ref, visible];
 }
 
-function useCounter(target, active, duration = 1300) {
+function useCounter(target: string, active: boolean, duration = 1300) {
   const [val, setVal] = useState(0);
   useEffect(() => {
     if (!active) return;
     const numeric = parseFloat(String(target).replace(/[^0-9.]/g, ""));
-    let start = null;
-    const step = (ts) => {
+    let start: number | null = null;
+    const step = (ts: number) => {
       if (!start) start = ts;
       const p = Math.min((ts - start) / duration, 1);
       setVal(+(numeric * p).toFixed(1));
@@ -89,7 +89,7 @@ function useCounter(target, active, duration = 1300) {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function StatBox({ label, value, suffix, accent }) {
+function StatBox({ label, value, suffix, accent }: { label: string; value: string; suffix: string; accent: string }) {
   const [ref, vis] = useInView();
   const count = useCounter(value, vis);
   return (
@@ -101,8 +101,8 @@ function StatBox({ label, value, suffix, accent }) {
 }
 
 function BandCalculator() {
-  const [scores, setScores] = useState({ listening: "", reading: "", writing: "", speaking: "" });
-  const keys = ["listening", "reading", "writing", "speaking"];
+  const [scores, setScores] = useState<Record<string, string>>({ listening: "", reading: "", writing: "", speaking: "" });
+  const keys: (keyof typeof scores)[] = ["listening", "reading", "writing", "speaking"];
   const keyColors = ["#29a8d4", "#f4a01c", "#e53935", "#2eaa62"];
 
   const band = () => {
@@ -135,7 +135,7 @@ function BandCalculator() {
               value={scores[k]}
               onChange={(e) => setScores((p) => ({ ...p, [k]: e.target.value }))}
               className="calc-input"
-              style={{ "--focus-color": keyColors[i] }}
+              style={{ "--focus-color": keyColors[i] } as React.CSSProperties}
             />
           </div>
         ))}
