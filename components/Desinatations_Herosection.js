@@ -27,7 +27,7 @@ export default function HeroSection() {
           application. You're in good hands.
         </p>
 
-        <a href="#counselling" className="hero__cta">
+        <a href="/free-consultant" className="hero__cta">
           Book free counselling
           <span className="hero__cta-arrow" aria-hidden="true">›</span>
         </a>
