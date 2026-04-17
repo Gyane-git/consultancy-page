@@ -241,7 +241,7 @@ export default function StudySyncFooter() {
         <Skyline />
 
         {/* Gold body */}
-        <div style={{ background: "#F5A800", paddingBottom: 0 }}>
+        <div style={{ background: "#f4a01c", paddingBottom: 0 }}>
           <div className="rf-inner" style={{ maxWidth: 1320, margin: "0 auto", padding: "46px 48px 0" }}>
 
             {/* 4-column grid */}

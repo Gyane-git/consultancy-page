@@ -90,7 +90,7 @@ export default function FreeConsultationPage() {
       <section style={{
         position: "relative",
         overflow: "hidden",
-        background: "#1a1464",
+        background: "#29a8d4",
         paddingTop: "80px",
         paddingBottom: "80px",
         paddingLeft: "24px",
