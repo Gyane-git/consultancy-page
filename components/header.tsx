@@ -6,12 +6,12 @@ import Image from "next/image";
 
 const NAV_ITEMS = [
   {
-    label: "IELTS Prep",
+    label: "English Proficiency",
     
     children: [
-      { label: "Courses & Coaching", href: "/ielts/courses" },
-      { label: "Mock Tests", href: "/ielts/mock-tests" },
-      { label: "Resources", href: "/ielts/resources" },
+      { label: "Prepare IELTS", href: "/eng-proficiency/ielts-prepare" },
+      { label: "Prepare PTE", href: "/eng-proficiency/pte-prepare" },
+      { label: "Prepae Duolingo", href: "/eng-proficiency/duolingo" },
     ],
   },
   {

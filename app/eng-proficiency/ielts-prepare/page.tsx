@@ -1,61 +1,105 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { CheckCircle, Star, Award, BookOpen } from "lucide-react";
+import { CheckCircle, Star, Award, BookOpen, Zap, Globe } from "lucide-react";
 
-// ─── Brand palette (extracted from logo) ────────────────────────────────────
+// ─── Brand palette ───────────────────────────────────────────────────────────
 // Red: #e53935 | Orange: #f4a01c | Teal: #29a8d4 | Green: #2eaa62
 
 const COURSES = [
   {
-    title: "Foundations",
+    title: "Foundation Course",
     label: "Beginner",
-    week: "4 Weeks",
-    desc: "Listening, reading basics, grammar and vocabulary — built for students starting from zero.",
+    week: "8 Weeks",
+    price: "NPR 10,000",
+    mode: "Offline Only",
+    modeColor: "#e53935",
+    desc: "Complete IELTS concept clarity — Listening, Reading, Writing, Speaking, plus full mock tests and feedback. Built for students starting from zero.",
+    breakdown: [
+      "Week 1 — Listening (Basics + Strategies)",
+      "Week 2–3 — Reading (Skimming, Scanning, Question Types)",
+      "Week 4–5 — Writing (Tasks 1 & 2)",
+      "Week 6 — Speaking (Fluency + Confidence)",
+      "Week 7–8 — Full Mock Tests + Feedback",
+    ],
+    bestFor: "Beginners to IELTS needing full concept clarity",
     icon: BookOpen,
     accent: "#29a8d4",
     accentLight: "#e8f6fb",
     num: "01",
   },
   {
-    title: "Target Band",
-    label: "6 – 7",
-    week: "8 Weeks",
-    desc: "Structured technique drills, timed tests and weekly mock exams to reach your target.",
+    title: "Advanced Classes",
+    label: "6 – 7+",
+    week: "5 Weeks",
+    price: "NPR 5,000",
+    mode: "Offline & Online",
+    modeColor: "#2eaa62",
+    desc: "Targeted technique drills for students who already know the basics. Focus on time management, band-boosting writing, and speaking fluency.",
+    breakdown: [
+      "Week 1 — Listening (Advanced Techniques)",
+      "Week 2 — Reading (Time Management Focus)",
+      "Week 3 — Writing (Task Improvement + Band Boost)",
+      "Week 4 — Speaking (Fluency + Confidence Training)",
+      "Week 5 — Mock Test + Performance Analysis",
+    ],
+    bestFor: "Students with basic IELTS knowledge",
     icon: Star,
     accent: "#f4a01c",
     accentLight: "#fef6e4",
     num: "02",
   },
   {
-    title: "Advanced Band",
-    label: "7+",
-    week: "12 Weeks",
-    desc: "Intensive 1:1 coaching, essay feedback and speaking clinics for top-tier results.",
-    icon: Award,
+    title: "Fast-Track",
+    label: "All Levels",
+    week: "2 Weeks",
+    price: "NPR 5,000",
+    mode: "Offline & Online",
+    modeColor: "#2eaa62",
+    desc: "Intensive last-minute prep — a quick foundation overview followed by an exam-week of back-to-back mock tests and targeted feedback.",
+    breakdown: [
+      "Week 1 — Quick Foundation (All Modules Overview)",
+      "Week 2 — Intensive Mock Tests + Detailed Feedback",
+    ],
+    bestFor: "Students with limited time or last-minute preparation",
+    icon: Zap,
     accent: "#e53935",
     accentLight: "#fdecea",
     num: "03",
   },
+  {
+    title: "Basic English Package",
+    label: "English",
+    week: "3 Months",
+    price: "NPR 15,000",
+    mode: "Offline & Online",
+    modeColor: "#2eaa62",
+    desc: "A comprehensive English language foundation — grammar, writing, speaking, and real-life communication. Ends with certification.",
+    breakdown: [
+      "Month 1–2 — Basic Grammar, Worksheets & Application",
+      "Week 6 — Describing Pictures (Practical Communication)",
+      "Week 7 — Speaking Classes (Confidence Building)",
+      "Week 8 — Review & Assessment",
+      "Month 3 — Fluency, Writing & Final Presentation",
+    ],
+    bestFor: "Anyone needing solid English language foundations",
+    icon: Globe,
+    accent: "#2eaa62",
+    accentLight: "#e6f6ee",
+    num: "04",
+  },
 ];
 
 const FEATURES = [
-  { text: "Real exam simulation", color: "#e53935" },
-  { text: "Personal mentorship", color: "#f4a01c" },
-  { text: "Flexible class schedule", color: "#29a8d4" },
-  { text: "Weekly mock tests", color: "#2eaa62" },
-  { text: "AI-based performance tracking", color: "#e53935" },
-  { text: "Speaking confidence training", color: "#29a8d4" },
-];
-
-const PLANS = [
-  { name: "Foundation", price: "$99", tag: "Starter", accent: "#29a8d4", light: "#e8f6fb" },
-  { name: "Target 6–7", price: "$249", tag: "Most Popular", accent: "#e53935", light: "#fdecea" },
-  { name: "Advanced 7+", price: "$449", tag: "Elite", accent: "#2eaa62", light: "#e6f6ee" },
+  { text: "Real exam simulation with full mock tests", color: "#e53935" },
+  { text: "Personal mentorship & feedback sessions", color: "#f4a01c" },
+  { text: "Flexible offline and online class options", color: "#29a8d4" },
+  { text: "Weekly mock tests & performance analysis", color: "#2eaa62" },
+  { text: "Speaking confidence & fluency training", color: "#e53935" },
+  { text: "Certified by Ministry of Education, Nepal", color: "#29a8d4" },
 ];
 
 // ─── Hooks ───────────────────────────────────────────────────────────────────
-
 function useInView(threshold = 0.15): [React.RefObject<null>, boolean] {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -88,7 +132,6 @@ function useCounter(target: string, active: boolean, duration = 1300) {
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
-
 function StatBox({ label, value, suffix, accent }: { label: string; value: string; suffix: string; accent: string }) {
   const [ref, vis] = useInView();
   const count = useCounter(value, vis);
@@ -129,8 +172,7 @@ function BandCalculator() {
               {k.charAt(0).toUpperCase() + k.slice(1)}
             </label>
             <input
-              type="number"
-              min={0} max={9} step={0.5}
+              type="number" min={0} max={9} step={0.5}
               placeholder="0 – 9"
               value={scores[k]}
               onChange={(e) => setScores((p) => ({ ...p, [k]: e.target.value }))}
@@ -151,8 +193,158 @@ function BandCalculator() {
   );
 }
 
-// ─── Page ────────────────────────────────────────────────────────────────────
+// ─── Expandable Course Card ──────────────────────────────────────────────────
+function CourseCard({ c, visible }: { c: typeof COURSES[0]; visible: boolean }) {
+  const [open, setOpen] = useState(false);
+  const Icon = c.icon;
+  return (
+    <div
+      className={`course-card${visible ? " vis" : ""}`}
+      style={{ borderColor: visible ? `${c.accent}35` : "var(--border)" }}
+    >
+      <div className="course-top-bar" style={{ background: c.accent }} />
+      <span className="course-num">{c.num}</span>
 
+      {/* Mode badge */}
+      <div style={{
+        position: "absolute", top: 18, right: 18,
+        background: `${c.modeColor}18`, color: c.modeColor,
+        fontSize: 10, fontWeight: 700, letterSpacing: "0.08em",
+        padding: "3px 10px", borderRadius: 100,
+        textTransform: "uppercase",
+      }}>{c.mode}</div>
+
+      <div className="course-icon-wrap" style={{ background: c.accentLight, color: c.accent }}>
+        <Icon size={24} />
+      </div>
+      <p className="course-week" style={{ color: c.accent }}>{c.week}</p>
+      <h3 className="course-title">{c.title}</h3>
+      <p className="course-band">Level: {c.label}</p>
+
+      {/* Price */}
+      <div style={{
+        margin: "10px 0 14px",
+        fontFamily: "var(--font-head)",
+        fontSize: "1.4rem", fontWeight: 800,
+        color: c.accent, letterSpacing: "-0.03em",
+      }}>{c.price}</div>
+
+      <p className="course-desc">{c.desc}</p>
+
+      {/* Expandable breakdown */}
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          marginTop: 20, background: "none", border: "none", cursor: "pointer",
+          fontFamily: "var(--font-head)", fontSize: 12, fontWeight: 700,
+          color: c.accent, letterSpacing: "0.08em", textTransform: "uppercase",
+          display: "flex", alignItems: "center", gap: 6, padding: 0,
+          transition: "opacity 0.2s",
+        }}
+      >
+        {open ? "Hide" : "View"} Course Breakdown {open ? "↑" : "↓"}
+      </button>
+
+      {open && (
+        <div style={{
+          marginTop: 16, padding: "16px 18px",
+          background: c.accentLight, borderRadius: 12,
+          borderLeft: `3px solid ${c.accent}`,
+        }}>
+          <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
+            {c.breakdown.map((b, i) => (
+              <li key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                <span style={{
+                  width: 6, height: 6, borderRadius: "50%",
+                  background: c.accent, flexShrink: 0, marginTop: 6,
+                }} />
+                <span style={{ fontSize: 13, color: "var(--text)", lineHeight: 1.6 }}>{b}</span>
+              </li>
+            ))}
+          </ul>
+          <div style={{
+            marginTop: 14, paddingTop: 12,
+            borderTop: `1px solid ${c.accent}30`,
+            fontSize: 12, color: "var(--muted)", fontWeight: 600,
+          }}>
+            ✦ Best For: {c.bestFor}
+          </div>
+        </div>
+      )}
+
+      <a href="#" className="course-link" style={{ color: c.accent, marginTop: 20 }}>Enroll Now →</a>
+    </div>
+  );
+}
+
+// ─── Class Schedule Info Card ────────────────────────────────────────────────
+function ScheduleCard() {
+  return (
+    <div style={{
+      background: "var(--white)", border: "1.5px solid var(--border)",
+      borderRadius: 20, padding: "36px 32px",
+      display: "flex", flexDirection: "column", gap: 0,
+      boxShadow: "var(--shadow-sm)",
+    }}>
+      <p style={{
+        fontSize: 11, fontWeight: 700, letterSpacing: "0.18em",
+        textTransform: "uppercase", color: "#f4a01c", marginBottom: 8,
+      }}>Class Schedule</p>
+      <h3 style={{
+        fontFamily: "var(--font-head)", fontSize: "1.4rem",
+        fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 24, color: "var(--text)",
+      }}>How Each Class is Structured</h3>
+
+      {/* 5 days/week */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+        <div style={{
+          width: 44, height: 44, borderRadius: 12,
+          background: "#fef6e4", display: "flex", alignItems: "center",
+          justifyContent: "center", fontSize: 20, flexShrink: 0,
+        }}>📅</div>
+        <div>
+          <div style={{ fontFamily: "var(--font-head)", fontWeight: 800, fontSize: "1rem", color: "var(--text)" }}>5 Days / Week</div>
+          <div style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 2 }}>1.5 hours per class session</div>
+        </div>
+      </div>
+
+      {/* Time breakdown bars */}
+      {[
+        { label: "Lesson", mins: 45, color: "#29a8d4", pct: "50%" },
+        { label: "Practice", mins: 30, color: "#f4a01c", pct: "33%" },
+        { label: "Speaking Activity", mins: 15, color: "#2eaa62", pct: "17%" },
+      ].map((t) => (
+        <div key={t.label} style={{ marginBottom: 14 }}>
+          <div style={{
+            display: "flex", justifyContent: "space-between",
+            marginBottom: 6,
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>{t.label}</span>
+            <span style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600 }}>{t.mins} mins</span>
+          </div>
+          <div style={{
+            height: 8, background: "var(--surface2)", borderRadius: 4, overflow: "hidden",
+          }}>
+            <div style={{
+              height: "100%", width: t.pct, background: t.color,
+              borderRadius: 4, transition: "width 1s ease",
+            }} />
+          </div>
+        </div>
+      ))}
+
+      <div style={{
+        marginTop: 8, padding: "14px 16px",
+        background: "var(--surface2)", borderRadius: 10,
+        fontSize: 13, color: "var(--muted)", lineHeight: 1.65,
+      }}>
+        🕐 <strong style={{ color: "var(--text)" }}>Total:</strong> 90 minutes — lesson, practice, and speaking activity every session.
+      </div>
+    </div>
+  );
+}
+
+// ─── Page ────────────────────────────────────────────────────────────────────
 export default function IELTSCourses() {
   const [coursesRef, coursesVis] = useInView();
   const [featRef, featVis] = useInView();
@@ -186,26 +378,17 @@ export default function IELTSCourses() {
 
         body { background: var(--bg); color: var(--text); font-family: var(--font-body); }
 
-        /* ── HERO ───────────────────────────────────────────────────────── */
+        /* ── HERO ── */
         .hero {
-          position: relative;
-          min-height: 92vh;
-          display: flex;
-          align-items: center;
-          padding: 80px 6vw 60px;
-          overflow: hidden;
-          background: var(--white);
+          position: relative; min-height: 92vh;
+          display: flex; align-items: center;
+          padding: 80px 6vw 60px; overflow: hidden; background: var(--white);
         }
         .hero-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; }
         .hero-inner {
-          position: relative;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 80px;
-          align-items: center;
-          max-width: 1200px;
-          margin: 0 auto;
-          width: 100%;
+          position: relative; display: grid;
+          grid-template-columns: 1fr 1fr; gap: 80px;
+          align-items: center; max-width: 1200px; margin: 0 auto; width: 100%;
         }
         @media (max-width: 860px) {
           .hero-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -263,10 +446,7 @@ export default function IELTSCourses() {
 
         /* Hero visual cards */
         .hero-visual { display: flex; align-items: center; justify-content: center; }
-        .hero-visual-grid {
-          display: grid; grid-template-columns: 1fr 1fr;
-          gap: 16px; width: 380px;
-        }
+        .hero-visual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 380px; }
         .hero-vis-card {
           background: var(--white); border: 1.5px solid var(--border);
           border-radius: 18px; padding: 22px 20px;
@@ -283,7 +463,7 @@ export default function IELTSCourses() {
         .vis-label { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
         .vis-value { font-family: var(--font-head); font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; }
 
-        /* ── STATS STRIP ────────────────────────────────────────────────── */
+        /* ── STATS ── */
         .stats-strip {
           background: var(--text); padding: 52px 6vw;
           display: flex; justify-content: center; flex-wrap: wrap;
@@ -306,7 +486,7 @@ export default function IELTSCourses() {
           letter-spacing: 0.12em; text-transform: uppercase; margin-top: 8px; font-weight: 600;
         }
 
-        /* ── SECTION ────────────────────────────────────────────────────── */
+        /* ── SECTION ── */
         .section { padding: 96px 6vw; max-width: 1200px; margin: 0 auto; }
         .section-eyebrow {
           font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
@@ -319,7 +499,7 @@ export default function IELTSCourses() {
           margin-bottom: 56px; max-width: 480px; line-height: 1.15;
         }
 
-        /* ── COURSES ────────────────────────────────────────────────────── */
+        /* ── COURSES ── */
         .courses-outer { background: var(--bg); }
         .courses-grid {
           display: grid;
@@ -335,8 +515,9 @@ export default function IELTSCourses() {
         }
         .course-card.vis { opacity: 1; transform: translateY(0); }
         .course-card:nth-child(1) { transition-delay: 0s; }
-        .course-card:nth-child(2) { transition-delay: 0.15s; }
-        .course-card:nth-child(3) { transition-delay: 0.3s; }
+        .course-card:nth-child(2) { transition-delay: 0.12s; }
+        .course-card:nth-child(3) { transition-delay: 0.24s; }
+        .course-card:nth-child(4) { transition-delay: 0.36s; }
         .course-card:hover { box-shadow: var(--shadow-lg); }
         .course-top-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 20px 20px 0 0; }
         .course-num {
@@ -350,18 +531,18 @@ export default function IELTSCourses() {
         }
         .course-week { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
         .course-title { font-family: var(--font-head); font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; color: var(--text); }
-        .course-band { font-size: 0.9rem; color: var(--muted); font-weight: 500; margin-bottom: 18px; }
+        .course-band { font-size: 0.9rem; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
         .course-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.75; }
         .course-link {
-          margin-top: 28px; font-family: var(--font-head); font-size: 13px;
-          font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
           display: flex; align-items: center; gap: 6px;
+          font-family: var(--font-head); font-size: 13px;
+          font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
           text-decoration: none; opacity: 0.45;
           transition: opacity 0.2s, gap 0.2s;
         }
         .course-card:hover .course-link { opacity: 1; gap: 10px; }
 
-        /* ── FEATURES ───────────────────────────────────────────────────── */
+        /* ── FEATURES ── */
         .features-outer { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .features-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
         @media (max-width: 768px) { .features-inner { grid-template-columns: 1fr; gap: 40px; } }
@@ -387,7 +568,7 @@ export default function IELTSCourses() {
         .feat-card-title { font-family: var(--font-head); font-size: 1.05rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; color: var(--text); }
         .feat-card-text { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
 
-        /* ── PRICING ────────────────────────────────────────────────────── */
+        /* ── PRICING ── */
         .pricing-outer { background: var(--bg); }
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
         .price-card {
@@ -400,8 +581,9 @@ export default function IELTSCourses() {
         }
         .price-card.vis { opacity: 1; transform: translateY(0); }
         .price-card:nth-child(1) { transition-delay: 0s; }
-        .price-card:nth-child(2) { transition-delay: 0.15s; }
-        .price-card:nth-child(3) { transition-delay: 0.3s; }
+        .price-card:nth-child(2) { transition-delay: 0.12s; }
+        .price-card:nth-child(3) { transition-delay: 0.24s; }
+        .price-card:nth-child(4) { transition-delay: 0.36s; }
         .price-card:hover { box-shadow: var(--shadow-lg); }
         .price-corner { position: absolute; bottom: -30px; right: -30px; width: 100px; height: 100px; border-radius: 50%; opacity: 0.1; }
         .price-tag {
@@ -409,11 +591,13 @@ export default function IELTSCourses() {
           font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
           text-transform: uppercase; margin-bottom: 24px; width: fit-content;
         }
-        .price-name { font-family: var(--font-head); font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; color: var(--text); }
-        .price-amount { font-family: var(--font-head); font-size: 3.6rem; font-weight: 800; letter-spacing: -0.05em; line-height: 1; margin-bottom: 24px; }
+        .price-name { font-family: var(--font-head); font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+        .price-duration { font-size: 12px; color: var(--muted); margin-bottom: 14px; font-weight: 500; }
+        .price-amount { font-family: var(--font-head); font-size: 2.4rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-bottom: 4px; }
+        .price-amount-sub { font-size: 11.5px; color: var(--muted); margin-bottom: 22px; }
         .price-divider { height: 1px; background: var(--border); margin-bottom: 22px; }
         .price-features { list-style: none; display: flex; flex-direction: column; gap: 12px; flex: 1; margin-bottom: 28px; }
-        .price-features li { font-size: 0.875rem; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+        .price-features li { font-size: 0.875rem; color: var(--muted); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
         .price-btn {
           width: 100%; padding: 14px; border-radius: 10px;
           font-family: var(--font-head); font-weight: 700; font-size: 13px;
@@ -423,7 +607,7 @@ export default function IELTSCourses() {
         }
         .price-btn:hover { transform: translateY(-2px); }
 
-        /* ── CALCULATOR ─────────────────────────────────────────────────── */
+        /* ── CALCULATOR ── */
         .calc-outer { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .calc-card { max-width: 780px; margin: 0 auto; }
         .calc-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
@@ -438,8 +622,7 @@ export default function IELTSCourses() {
           outline: none; width: 100%; -moz-appearance: textfield;
           transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .calc-input::-webkit-outer-spin-button,
-        .calc-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+        .calc-input::-webkit-outer-spin-button, .calc-input::-webkit-inner-spin-button { -webkit-appearance: none; }
         .calc-result {
           display: flex; align-items: center; justify-content: space-between;
           background: var(--bg); border: 2px solid; border-radius: 16px; padding: 28px 36px;
@@ -449,7 +632,7 @@ export default function IELTSCourses() {
         .calc-result-hint { font-size: 12px; color: var(--muted); }
         .calc-result-score { font-family: var(--font-head); font-size: 3.5rem; font-weight: 800; letter-spacing: -0.05em; transition: color 0.4s; }
 
-        /* ── CTA ────────────────────────────────────────────────────────── */
+        /* ── CTA ── */
         .cta-section {
           padding: 110px 6vw; text-align: center;
           position: relative; overflow: hidden; background: var(--text);
@@ -509,28 +692,28 @@ export default function IELTSCourses() {
 
           <div className="hero-inner">
             <div>
-              <div className="hero-badge"><span /> IELTS Coaching Centre</div>
+              <div className="hero-badge"><span /> IELTS Coaching Centre · Kathmandu</div>
               <h1 className="hero-h1">
                 <span className="w-teal">Master</span> the test.<br />
                 <span className="w-red">Not just</span> the<br />
                 <span className="w-green">language.</span>
               </h1>
               <p className="hero-sub">
-                Real practice, real results, real confidence. Structured courses from beginner to Band 7+ with expert mentorship tailored to you.
+                4 courses. Every level. Offline and online. From complete beginners to last-minute Band 7+ preparation — we have the right program for you.
               </p>
               <div className="hero-cta">
                 <a href="/contact" className="btn-primary">Book Free Trial</a>
-                <a href="#courses" className="btn-ghost">View Courses</a>
+                <a href="#courses" className="btn-ghost">View Courses ↓</a>
               </div>
             </div>
 
             <div className="hero-visual">
               <div className="hero-visual-grid">
                 {[
-                  { label: "Success Rate", value: "90%", icon: "🎯", color: "#e53935", light: "#fdecea" },
-                  { label: "Avg Band Score", value: "7.5+", icon: "⭐", color: "#f4a01c", light: "#fef6e4" },
-                  { label: "Students", value: "500+", icon: "👥", color: "#29a8d4", light: "#e8f6fb" },
-                  { label: "Years Active", value: "8+", icon: "🏆", color: "#2eaa62", light: "#e6f6ee" },
+                  { label: "Foundation", value: "8 wks", icon: "📚", color: "#29a8d4", light: "#e8f6fb" },
+                  { label: "Advanced", value: "5 wks", icon: "⭐", color: "#f4a01c", light: "#fef6e4" },
+                  { label: "Fast-Track", value: "2 wks", icon: "⚡", color: "#e53935", light: "#fdecea" },
+                  { label: "English Pkg", value: "3 mo", icon: "🌐", color: "#2eaa62", light: "#e6f6ee" },
                 ].map((item, i) => (
                   <div key={i} className="hero-vis-card">
                     <div className="vis-icon" style={{ background: item.light }}>{item.icon}</div>
@@ -548,6 +731,7 @@ export default function IELTSCourses() {
           <StatBox value="500" suffix="+" label="Students Trained" accent="#29a8d4" />
           <StatBox value="90" suffix="%" label="Success Rate" accent="#f4a01c" />
           <StatBox value="7.5" suffix="+" label="Average Band Score" accent="#2eaa62" />
+          <StatBox value="4" suffix="" label="Course Options" accent="#e53935" />
         </div>
 
         {/* ── COURSES ── */}
@@ -556,25 +740,9 @@ export default function IELTSCourses() {
             <p className="section-eyebrow" style={{ color: "#29a8d4" }}>Programs</p>
             <h2 className="section-title">Choose Your Path</h2>
             <div className="courses-grid" ref={coursesRef}>
-              {COURSES.map((c) => {
-                const Icon = c.icon;
-                return (
-                  <div key={c.title}
-                    className={`course-card${coursesVis ? " vis" : ""}`}
-                    style={{ borderColor: coursesVis ? `${c.accent}35` : "var(--border)" }}>
-                    <div className="course-top-bar" style={{ background: c.accent }} />
-                    <span className="course-num">{c.num}</span>
-                    <div className="course-icon-wrap" style={{ background: c.accentLight, color: c.accent }}>
-                      <Icon size={24} />
-                    </div>
-                    <p className="course-week" style={{ color: c.accent }}>{c.week}</p>
-                    <h3 className="course-title">{c.title}</h3>
-                    <p className="course-band">Band {c.label}</p>
-                    <p className="course-desc">{c.desc}</p>
-                    <a href="#" className="course-link" style={{ color: c.accent }}>Learn More →</a>
-                  </div>
-                );
-              })}
+              {COURSES.map((c) => (
+                <CourseCard key={c.title} c={c} visible={coursesVis} />
+              ))}
             </div>
           </div>
         </div>
@@ -596,10 +764,10 @@ export default function IELTSCourses() {
                 </div>
               </div>
               <div className="features-right">
+                <ScheduleCard />
                 {[
-                  { icon: "🤝", title: "Community-Driven Learning", text: "Learn alongside peers — our cohort model keeps you motivated and accountable throughout.", color: "#e8f6fb", border: "#29a8d4" },
                   { icon: "📊", title: "Adaptive Progress Tracking", text: "Weekly reports pinpoint exactly where you lose marks — and show you how to fix it fast.", color: "#fef6e4", border: "#f4a01c" },
-                  { icon: "🎙️", title: "Speaking Clinics", text: "Dedicated speaking labs with native-accent recordings and fluency drills every session.", color: "#e6f6ee", border: "#2eaa62" },
+                  { icon: "🎙️", title: "Speaking Clinics", text: "Dedicated speaking labs with fluency drills and real-life role plays every session.", color: "#e6f6ee", border: "#2eaa62" },
                 ].map((card, i) => (
                   <div key={i} className="feat-card"
                     style={{ background: card.color, borderColor: `${card.border}40` }}>
@@ -617,27 +785,54 @@ export default function IELTSCourses() {
         <div className="pricing-outer">
           <div className="section">
             <p className="section-eyebrow" style={{ color: "#e53935" }}>Investment</p>
-            <h2 className="section-title">Simple Pricing Plans</h2>
+            <h2 className="section-title">Transparent Pricing</h2>
             <div className="pricing-grid" ref={pricRef}>
-              {PLANS.map((plan, i) => (
+              {[
+                {
+                  name: "Foundation Course", duration: "8 Weeks · Offline Only",
+                  price: "NPR 10,000", tag: "Most Complete", accent: "#29a8d4", light: "#e8f6fb",
+                  features: ["All 4 IELTS modules covered", "Weekly mock tests + feedback", "Full concept clarity from zero"],
+                  featured: false,
+                },
+                {
+                  name: "Advanced Classes", duration: "5 Weeks · Offline & Online",
+                  price: "NPR 5,000", tag: "Popular", accent: "#f4a01c", light: "#fef6e4",
+                  features: ["Band-boosting writing drills", "Advanced listening & reading", "Mock test + performance analysis"],
+                  featured: true,
+                },
+                {
+                  name: "Fast-Track", duration: "2 Weeks · Offline & Online",
+                  price: "NPR 5,000", tag: "Last-Minute", accent: "#e53935", light: "#fdecea",
+                  features: ["All-modules overview in Week 1", "Intensive mock tests in Week 2", "Detailed feedback sessions"],
+                  featured: false,
+                },
+                {
+                  name: "English Package", duration: "3 Months · Offline & Online",
+                  price: "NPR 15,000", tag: "Comprehensive", accent: "#2eaa62", light: "#e6f6ee",
+                  features: ["Basic grammar foundation", "Speaking & writing skills", "Certificate upon completion"],
+                  featured: false,
+                },
+              ].map((plan, i) => (
                 <div key={i}
-                  className={`price-card${pricVis ? " vis" : ""}${i === 1 ? " price-card-featured" : ""}`}
-                  style={i === 1 ? { borderColor: `${plan.accent}45`, background: `${plan.accent}05`, borderWidth: "2px" } : {}}>
+                  className={`price-card${pricVis ? " vis" : ""}`}
+                  style={plan.featured ? { borderColor: `${plan.accent}45`, background: `${plan.accent}04`, borderWidth: "2px" } : {}}>
                   <div className="price-corner" style={{ background: plan.accent }} />
                   <span className="price-tag" style={{ background: plan.light, color: plan.accent }}>{plan.tag}</span>
                   <h4 className="price-name">{plan.name}</h4>
+                  <p className="price-duration">{plan.duration}</p>
                   <p className="price-amount" style={{ color: plan.accent }}>{plan.price}</p>
+                  <p className="price-amount-sub">per course · all materials included</p>
                   <div className="price-divider" />
                   <ul className="price-features">
-                    {["Full course access", "Mock exams included", "Expert feedback sessions"].map((f, fi) => (
+                    {plan.features.map((f, fi) => (
                       <li key={fi}>
-                        <CheckCircle size={15} style={{ color: plan.accent, flexShrink: 0 }} />
+                        <CheckCircle size={14} style={{ color: plan.accent, flexShrink: 0, marginTop: 1 }} />
                         {f}
                       </li>
                     ))}
                   </ul>
                   <button className="price-btn"
-                    style={i === 1
+                    style={plan.featured
                       ? { background: plan.accent, borderColor: plan.accent, color: "#fff" }
                       : { background: "transparent", borderColor: plan.accent, color: plan.accent }}>
                     Enroll Now
