@@ -471,15 +471,27 @@ export default function StudySyncFooter() {
               <p style={{ fontFamily: "'Nunito Sans',sans-serif", fontSize: 13, color: "#1a0d00", opacity: 0.75 }}>
                 © {new Date().getFullYear()} Study Sync. All rights reserved.
               </p>
-              <div style={{ display: "flex", gap: 20 }}>
-                {["Privacy Policy", "Terms of Service"].map(t => (
-                  <a key={t} href="#" style={{
-                    fontFamily: "'Nunito Sans',sans-serif", fontSize: 12.5,
-                    color: "#1a0d00", opacity: 0.65,
-                    textDecoration: "underline", textUnderlineOffset: 3,
-                  }}>{t}</a>
-                ))}
-              </div>
+             <div style={{ display: "flex", gap: 20 }}>
+  {[
+    { label: "Privacy Policy", href: "/PrivacyPolicy" },
+    { label: "Terms of Service", href: "/term" },
+  ].map((item) => (
+    <a
+      key={item.label}
+      href={item.href}
+      style={{
+        fontFamily: "'Nunito Sans', sans-serif",
+        fontSize: 12.5,
+        color: "#1a0d00",
+        opacity: 0.65,
+        textDecoration: "underline",
+        textUnderlineOffset: 3,
+      }}
+    >
+      {item.label}
+    </a>
+  ))}
+</div>
               <p style={{ fontFamily: "'Nunito Sans',sans-serif", fontSize: 13, color: "#1a0d00", opacity: 0.75 }}>
                 Designed by{" "}
                 <a href="#" style={{ color: "#1a0d00", fontWeight: 800, fontStyle: "italic", textDecoration: "underline" }}>
