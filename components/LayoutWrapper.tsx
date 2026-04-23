@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import TheNextHeader from "@/components/header";
-import RafflesFooter from "@/components/footer";
+import StudySyncFooter from "@/components/footer";
 import TawkToWidget from "@/components/TawkToWidget";
 
 interface LayoutWrapperProps {
@@ -20,7 +20,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
     <>
       {!isAdminRoute && <TheNextHeader />}
       {children}
-      {!isAdminRoute && <RafflesFooter />}
+      {!isAdminRoute && <StudySyncFooter />}
       {!isAdminRoute && <TawkToWidget />}
     </>
   );

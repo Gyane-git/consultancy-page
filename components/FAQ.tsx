@@ -7,7 +7,7 @@ type FAQ = { id: number; question: string; answer: string };
 const faqs: FAQ[] = [
   {
     id: 1,
-    question: "What countries can I apply to through Raffles Educare?",
+    question: "What countries can I apply to through StudySync Educare?",
     answer:
       "We assist students in applying to universities across the UK, USA, Canada, Australia, New Zealand, Ireland, Germany, and many more. Our counsellors are specialists in each destination and stay updated on the latest admission requirements.",
   },
@@ -37,7 +37,7 @@ const faqs: FAQ[] = [
   },
   {
     id: 6,
-    question: "Can Raffles help me with student accommodation?",
+    question: "Can StudySync help me with student accommodation?",
     answer:
       "Absolutely. We guide students through university-managed halls and private accommodation options, helping you find safe and affordable housing close to your campus.",
   },
@@ -550,7 +550,7 @@ export default function ContactFAQPage() {
       <div className="page-wrap">
         {/* Hero */}
         <div className="hero">
-          <div className="hero-eyebrow">Raffles Educare · Study Abroad</div>
+          <div className="hero-eyebrow">StudySync Educare · Study Abroad</div>
           <h1>
             Your journey <em>abroad</em>
             <br />starts with a question.

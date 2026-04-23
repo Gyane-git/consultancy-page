@@ -525,7 +525,7 @@ export default function AboutPage() {
             </div>
             <h2 className="ab-section-title">Who We Are</h2>
             <p className="ab-section-sub">
-              Raffles Educare is more than a consultancy — we are partners in your success story. Our dedicated team works tirelessly to ensure every student gets the right opportunity and feels supported throughout their journey abroad.
+              StudySync Educare is more than a consultancy — we are partners in your success story. Our dedicated team works tirelessly to ensure every student gets the right opportunity and feels supported throughout their journey abroad.
             </p>
 
             {/* CEO CARD */}
@@ -544,7 +544,7 @@ export default function AboutPage() {
                 <div className="ab-ceo-tag">Mission Insights</div>
                 <div className="ab-ceo-quote-title">Message from our CEO</div>
                 <p className="ab-ceo-quote-text">
-                  At Raffles Educare, we believe every dream deserves the right direction. Since we started, our mission has been to guide students towards a future full of possibilities. We provide them with the knowledge, resources, and confidence they need to succeed globally. Studying abroad is more than just school; it's a life-changing experience. Our dedicated team works hard to make sure every student gets the right opportunity and feels supported along the way. We are not just counselors; we are partners in your success story.
+                  At StudySync Educare, we believe every dream deserves the right direction. Since we started, our mission has been to guide students towards a future full of possibilities. We provide them with the knowledge, resources, and confidence they need to succeed globally. Studying abroad is more than just school; it's a life-changing experience. Our dedicated team works hard to make sure every student gets the right opportunity and feels supported along the way. We are not just counselors; we are partners in your success story.
                 </p>
               </div>
             </div>
