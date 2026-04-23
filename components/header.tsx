@@ -170,7 +170,7 @@ export default function TheNextHeader() {
           to { opacity: 1; transform: translateY(0); }
         }
 
-        .thenext-header {
+        .StudySync-header {
           position: sticky;
           top: 0;
           z-index: 999;
@@ -178,7 +178,7 @@ export default function TheNextHeader() {
           transition: box-shadow 0.25s ease;
           font-family: 'Poppins', sans-serif;
         }
-        .thenext-header.scrolled {
+        .StudySync-header.scrolled {
           box-shadow: 0 2px 24px rgba(192,57,43,0.10);
         }
 
@@ -340,7 +340,7 @@ export default function TheNextHeader() {
 
       <header
         ref={headerRef}
-        className={`thenext-header${scrolled ? " scrolled" : ""}`}
+        className={`StudySync-header${scrolled ? " scrolled" : ""}`}
         style={{ position: "sticky" }}
       >
         <div className="header-inner">

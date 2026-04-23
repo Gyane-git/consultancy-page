@@ -22,7 +22,7 @@ export default function HeroSection() {
         <p className="hero__description">
           Australia provides future-forward education, a comfortable lifestyle,
           and strong employment prospects in a diverse, welcoming environment. At
-          StudyIn, we'll guide you every step of the way to studying in
+          StudySync, we'll guide you every step of the way to studying in
           Australia – from choosing the right course to building a standout
           application. You're in good hands.
         </p>
