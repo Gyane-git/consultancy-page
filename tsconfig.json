@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/blog/page.js", "app/contact/page.js"  ],
+, "app/blog/page.js", "app/contact/page.js", "app/services/page.js", "components/uniPartners.tsx"  ],
   "exclude": ["node_modules"]
 }
