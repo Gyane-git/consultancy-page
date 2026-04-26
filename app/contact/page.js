@@ -60,12 +60,32 @@ const subjectColors = ["active-red", "active-orange", "active-green", "active-bl
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", time: "", subject: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setError("");
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.success) {
+        throw new Error(data?.error || "Failed to submit inquiry");
+      }
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to submit your message right now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -407,13 +427,14 @@ export default function ContactPage() {
 
                   <div className="cp-submit-row">
                     <span className="cp-submit-note">We respect your privacy.</span>
-                    <button type="submit" className="cp-submit-btn">
-                      Send Message
+                    <button type="submit" className="cp-submit-btn" disabled={submitting}>
+                      {submitting ? "Sending..." : "Send Message"}
                       <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 12h12m0 0-4-4m4 4-4 4" />
                       </svg>
                     </button>
                   </div>
+                  {error ? <p style={{ marginTop: 10, color: "#e8352a", fontSize: "0.8rem" }}>{error}</p> : null}
 
                 </form>
               </>

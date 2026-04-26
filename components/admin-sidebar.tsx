@@ -40,6 +40,7 @@ import {
   
   Plus,
   Video,
+  User,
 } from "lucide-react";
 
 const EducationSidebar = () => {
@@ -63,18 +64,20 @@ const EducationSidebar = () => {
   // Trimmed menu: keep main admin sections only
   const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/admin/dashboard", description: "Overview & Analytics" },
-    { icon: GraduationCap, label: "Students", path: "/admin/students", expandable: true, children: [ { name: "All Students", path: "/admin/students", icon: Users, count: 1284 } ] },
-    { icon: FileText, label: "Applications", path: "/admin/applications", expandable: false, children: [] },
-    { icon: BookOpen, label: "IELTS Prep", path: "/admin/ielts", expandable: false, children: [] },
+    // { icon: GraduationCap, label: "Students", path: "/admin/students", expandable: true, children: [ { name: "All Students", path: "/admin/students", icon: Users, count: 1284 } ] },
+    // { icon: FileText, label: "Applications", path: "/admin/applications", expandable: false, children: [] },
+    // { icon: BookOpen, label: "IELTS Prep", path: "/admin/ielts", expandable: false, children: [] },
     { icon: Globe, label: "Destinations", path: "/admin/destinations", expandable: false, children: [] },
     { icon: Globe, label: "Universities", path: "/admin/universities", expandable: false, children: [] },
-    { icon: Award, label: "Scholarships", path: "/admin/scholarships", expandable: false, children: [] },
+    // { icon: Award, label: "Scholarships", path: "/admin/scholarships", expandable: false, children: [] },
     { icon: Calendar, label: "Consultations", path: "/admin/consultations", expandable: false, children: [] },
-    { icon: BarChart3, label: "Reports", path: "/admin/reports", expandable: false, children: [] },
+    {icon: FileText , label: "Blog Posts", path: "/admin/blog", expandable: false, children: [] },
+    { icon: User, label: "About CEO", path: "/admin/aboutus", expandable: false, children: [] },
+    //{ icon: BarChart3, label: "Reports", path: "/admin/reports", expandable: false, children: [] },
     { icon: UserCog, label: "Staff", path: "/admin/staff", expandable: false, children: [] },
-    { icon: DollarSign, label: "Payments", path: "/admin/payments", expandable: false, children: [] },
-    { icon: Mail, label: "Communications", path: "/admin/communications", expandable: false, children: [] },
-    { icon: Settings, label: "Settings", path: "/admin/settings", expandable: false, children: [] },
+    //{ icon: DollarSign, label: "Payments", path: "/admin/payments", expandable: false, children: [] },
+    //{ icon: Mail, label: "Communications", path: "/admin/communications", expandable: false, children: [] },
+    //{ icon: Settings, label: "Settings", path: "/admin/settings", expandable: false, children: [] },
   ];
 
   // Helper function to render icons with active state

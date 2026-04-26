@@ -32,6 +32,8 @@ import {
 export default function FreeConsultationPage() {
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [formData, setFormData] = useState({
     // Step 1
     name: "",
@@ -77,8 +79,25 @@ export default function FreeConsultationPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError("");
+    try {
+      const res = await fetch("/api/consultations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.success) {
+        throw new Error(data?.error || "Failed to submit consultation request");
+      }
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error(error);
+      setSubmitError("Could not submit right now. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const progressPercentage = (step / totalSteps) * 100;
@@ -465,16 +484,19 @@ export default function FreeConsultationPage() {
                           Continue <ArrowRight size={18} />
                         </button>
                       ) : (
-                        <button type="submit" style={{
+                        <button type="submit" disabled={isSubmitting} style={{
                           display: "flex", alignItems: "center", gap: "8px",
                           padding: "14px 28px", background: "#e8265a",
                           color: "#ffffff", fontWeight: "700", fontSize: "15px",
                           borderRadius: "10px", border: "none", cursor: "pointer"
                         }}>
-                          Book My Free Consultation <CheckCircle size={18} />
+                          {isSubmitting ? "Submitting..." : "Book My Free Consultation"} <CheckCircle size={18} />
                         </button>
                       )}
                     </div>
+                    {submitError ? (
+                      <p style={{ marginTop: "12px", color: "#dc2626", fontSize: "13px", fontWeight: "600" }}>{submitError}</p>
+                    ) : null}
                   </form>
                 </div>
               ) : (
