@@ -50,6 +50,7 @@ export async function POST(request: Request) {
     const category = String(payload?.category ?? "").trim();
     const readTime = String(payload?.readTime ?? "").trim();
     const thumbnail = String(payload?.thumbnail ?? "").trim();
+    const videoUrl = String(payload?.videoUrl ?? "").trim();
     const isPublished = payload?.isPublished !== false;
     const tags = normalizeTags(payload?.tags);
 
@@ -58,9 +59,20 @@ export async function POST(request: Request) {
     }
 
     const [result] = await pool.query<ResultSetHeader>(
-      `INSERT INTO BlogPost (slug, title, excerpt, content, category, readTime, thumbnail, tags, isPublished)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [slug, title, excerpt || null, content, category || null, readTime || null, thumbnail || null, tags, isPublished],
+      `INSERT INTO BlogPost (slug, title, excerpt, content, category, readTime, thumbnail, videoUrl, tags, isPublished)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        slug,
+        title,
+        excerpt || null,
+        content,
+        category || null,
+        readTime || null,
+        thumbnail || null,
+        videoUrl || null,
+        tags,
+        isPublished,
+      ],
     );
 
     const [rows] = await pool.query<RowDataPacket[]>("SELECT * FROM BlogPost WHERE id = ?", [result.insertId]);
@@ -89,6 +101,7 @@ export async function PUT(request: Request) {
     const category = String(payload?.category ?? "").trim();
     const readTime = String(payload?.readTime ?? "").trim();
     const thumbnail = String(payload?.thumbnail ?? "").trim();
+    const videoUrl = String(payload?.videoUrl ?? "").trim();
     const isPublished = payload?.isPublished !== false;
     const tags = normalizeTags(payload?.tags);
 
@@ -102,9 +115,21 @@ export async function PUT(request: Request) {
 
     await pool.query(
       `UPDATE BlogPost
-       SET slug = ?, title = ?, excerpt = ?, content = ?, category = ?, readTime = ?, thumbnail = ?, tags = ?, isPublished = ?
+       SET slug = ?, title = ?, excerpt = ?, content = ?, category = ?, readTime = ?, thumbnail = ?, videoUrl = ?, tags = ?, isPublished = ?
        WHERE id = ?`,
-      [slug, title, excerpt || null, content, category || null, readTime || null, thumbnail || null, tags, isPublished, id],
+      [
+        slug,
+        title,
+        excerpt || null,
+        content,
+        category || null,
+        readTime || null,
+        thumbnail || null,
+        videoUrl || null,
+        tags,
+        isPublished,
+        id,
+      ],
     );
 
     const [rows] = await pool.query<RowDataPacket[]>("SELECT * FROM BlogPost WHERE id = ?", [id]);

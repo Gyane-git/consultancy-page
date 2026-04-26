@@ -94,7 +94,8 @@ export async function ensureContentTables() {
           content LONGTEXT NOT NULL,
           category VARCHAR(100) NULL,
           readTime VARCHAR(40) NULL,
-          thumbnail VARCHAR(500) NULL,
+          thumbnail LONGTEXT NULL,
+          videoUrl VARCHAR(1200) NULL,
           tags TEXT NULL,
           isPublished BOOLEAN NOT NULL DEFAULT true,
           publishedAt TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
@@ -148,6 +149,16 @@ export async function ensureContentTables() {
         await pool.query("ALTER TABLE StaffProfile MODIFY COLUMN image LONGTEXT NULL");
       }
 
+      const [blogColumns] = await pool.query<RowDataPacket[]>("SHOW COLUMNS FROM BlogPost");
+      const blogThumbnail = blogColumns.find((col) => col.Field === "thumbnail");
+      const hasBlogVideoUrl = blogColumns.some((col) => col.Field === "videoUrl");
+      if (blogThumbnail && typeof blogThumbnail.Type === "string" && !blogThumbnail.Type.includes("longtext")) {
+        await pool.query("ALTER TABLE BlogPost MODIFY COLUMN thumbnail LONGTEXT NULL");
+      }
+      if (!hasBlogVideoUrl) {
+        await pool.query("ALTER TABLE BlogPost ADD COLUMN videoUrl VARCHAR(1200) NULL");
+      }
+
       await pool.query(`
         CREATE TABLE IF NOT EXISTS ContactRequest (
           id INT NOT NULL AUTO_INCREMENT,
@@ -187,6 +198,19 @@ export async function ensureContentTables() {
         )
       `);
 
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS SiteSetting (
+          id INT NOT NULL AUTO_INCREMENT,
+          singletonKey VARCHAR(40) NOT NULL DEFAULT 'default',
+          showUniversityTab BOOLEAN NOT NULL DEFAULT true,
+          homeShowFindUni BOOLEAN NOT NULL DEFAULT true,
+          createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          PRIMARY KEY (id),
+          UNIQUE KEY uniq_site_setting_singleton (singletonKey)
+        )
+      `);
+
       await pool.query(
         `INSERT IGNORE INTO AboutCeo (singletonKey, ceoName, designation, message, profileImage, linkedinUrl)
          VALUES ('default', ?, ?, ?, ?, ?)`,
@@ -197,6 +221,11 @@ export async function ensureContentTables() {
           "",
           "",
         ],
+      );
+
+      await pool.query(
+        `INSERT IGNORE INTO SiteSetting (singletonKey, showUniversityTab, homeShowFindUni)
+         VALUES ('default', true, true)`,
       );
 
       for (const destination of defaultDestinations) {

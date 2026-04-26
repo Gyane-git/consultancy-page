@@ -150,6 +150,7 @@ export default function TheNextHeader() {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showUniversityTab, setShowUniversityTab] = useState(true);
   const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -157,6 +158,29 @@ export default function TheNextHeader() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadSettings() {
+      try {
+        const res = await fetch("/api/site-settings", { cache: "no-store" });
+        const data = await res.json();
+        if (!ignore && data?.success && data?.settings) {
+          setShowUniversityTab(data.settings.showUniversityTab !== false);
+        }
+      } catch (error) {
+        console.error("Failed to load site settings", error);
+      }
+    }
+
+    loadSettings();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  const navItems = NAV_ITEMS.filter((item) => (item.label === "Universities" ? showUniversityTab : true));
 
   return (
     <>
@@ -361,7 +385,7 @@ export default function TheNextHeader() {
 
           {/* Desktop Nav */}
           <nav>
-            {NAV_ITEMS.map((item: NavItem, i) => (
+            {navItems.map((item: NavItem, i) => (
               <div
                 key={i}
                 className="nav-item"
@@ -433,7 +457,7 @@ export default function TheNextHeader() {
 
         {/* Mobile Menu */}
         <div className={`mobile-menu${mobileOpen ? " open" : ""}`}>
-          {NAV_ITEMS.map((item, i) => (
+          {navItems.map((item, i) => (
             <a key={i} href={item.href} className="mobile-link">
               {item.label}
             </a>

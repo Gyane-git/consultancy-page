@@ -42,6 +42,7 @@ import {
   Video,
   User,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 const EducationSidebar = () => {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
@@ -68,11 +69,12 @@ const EducationSidebar = () => {
     // { icon: FileText, label: "Applications", path: "/admin/applications", expandable: false, children: [] },
     // { icon: BookOpen, label: "IELTS Prep", path: "/admin/ielts", expandable: false, children: [] },
     { icon: Globe, label: "Destinations", path: "/admin/destinations", expandable: false, children: [] },
-    { icon: Globe, label: "Universities", path: "/admin/universities", expandable: false, children: [] },
+    //{ icon: Globe, label: "Universities", path: "/admin/universities", expandable: false, children: [] },
     // { icon: Award, label: "Scholarships", path: "/admin/scholarships", expandable: false, children: [] },
     { icon: Calendar, label: "Consultations", path: "/admin/consultations", expandable: false, children: [] },
     {icon: FileText , label: "Blog Posts", path: "/admin/blog", expandable: false, children: [] },
     { icon: User, label: "About CEO", path: "/admin/aboutus", expandable: false, children: [] },
+    { icon: Settings, label: "Site Settings", path: "/admin/site-settings", expandable: false, children: [] },
     //{ icon: BarChart3, label: "Reports", path: "/admin/reports", expandable: false, children: [] },
     { icon: UserCog, label: "Staff", path: "/admin/staff", expandable: false, children: [] },
     //{ icon: DollarSign, label: "Payments", path: "/admin/payments", expandable: false, children: [] },
@@ -81,7 +83,7 @@ const EducationSidebar = () => {
   ];
 
   // Helper function to render icons with active state
-  const renderIcon = (Icon: any, isActiveItem: boolean, customClass = "") => {
+  const renderIcon = (Icon: LucideIcon, isActiveItem: boolean, customClass = "") => {
     return <Icon className={`w-5 h-5 transition-colors ${isActiveItem ? 'text-blue-600' : 'text-gray-500 group-hover:text-blue-600'} ${customClass}`} />;
   };
 

@@ -67,6 +67,15 @@ export default function BlogPage() {
                 href={`/blog/${blog.slug}`}
                 style={{ textDecoration: "none", color: "inherit", background: "#fff", border: "1px solid #e8e8e8", borderRadius: 14, padding: 18, display: "block" }}
               >
+                {blog.thumbnail ? (
+                  <div style={{ marginBottom: 12 }}>
+                    <img
+                      src={blog.thumbnail}
+                      alt={blog.title || "Blog thumbnail"}
+                      style={{ width: "100%", height: 170, objectFit: "cover", borderRadius: 10, border: "1px solid #f1f1f1" }}
+                    />
+                  </div>
+                ) : null}
                 <div style={{ fontSize: "0.75rem", color: "#1a90c8", fontWeight: 700, marginBottom: 8 }}>{blog.category || "General"}</div>
                 <h2 style={{ fontSize: "1.1rem", lineHeight: 1.35, color: "#111", marginBottom: 10 }}>{blog.title}</h2>
                 <p style={{ color: "#6b7280", fontSize: "0.88rem", lineHeight: 1.6, marginBottom: 12 }}>{blog.excerpt || "No summary available."}</p>
