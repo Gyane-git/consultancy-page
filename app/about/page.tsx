@@ -52,8 +52,8 @@ const mvg = [
   },
 ];
 
-function useInView(threshold = 0.15) {
-  const ref = useRef(null);
+function useInView(threshold = 0.15): [React.RefObject<HTMLDivElement | null>, boolean] {
+  const ref = useRef<HTMLDivElement | null>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
     const el = ref.current;
@@ -65,7 +65,15 @@ function useInView(threshold = 0.15) {
   return [ref, inView];
 }
 
-function FadeSection({ children, delay = 0, className = "" }) {
+function FadeSection({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
   const [ref, inView] = useInView();
   return (
     <div ref={ref} className={className} style={{

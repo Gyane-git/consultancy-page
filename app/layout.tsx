@@ -1,19 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
 import { Toaster } from "react-hot-toast";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "StudySync - Your Ultimate Study Abroad Companion",
@@ -23,7 +12,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className="antialiased"
+        style={{
+          ["--font-geist-sans" as string]:
+            "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+          ["--font-geist-mono" as string]:
+            "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace",
+        }}
+      >
         <LayoutWrapper>{children}</LayoutWrapper>
         <Toaster position="top-right" />
         <CookieConsentBanner />

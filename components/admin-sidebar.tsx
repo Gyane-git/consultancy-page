@@ -108,10 +108,6 @@ const EducationSidebar = () => {
               >
                 <div className="relative">
                   {renderIcon(item.icon, isActive(item.path) && !item.expandable)}
-                  {/* Notification badge for counts */}
-                  {item.children && item.children.some(child => child.count) && (
-                    <span className="absolute -top-1 -right-2 w-2 h-2 bg-red-500 rounded-full"></span>
-                  )}
                 </div>
                 <div className="flex-1">
                   <span className={`text-sm font-medium transition-colors ${
@@ -136,36 +132,6 @@ const EducationSidebar = () => {
               )}
             </div>
 
-            {/* Expandable Children Menu */}
-            {item.expandable && expandedItems[item.label] && item.children && (
-              <div className="ml-9 mt-1 space-y-1 border-l-2 border-gray-200 ml-11">
-                {item.children.map((child, i) => (
-                  <Link
-                    key={i}
-                    href={child.path}
-                    className={`flex items-center justify-between px-4 py-2 text-sm transition-all duration-200 rounded-lg mx-2 ${
-                      isActive(child.path)
-                        ? 'bg-blue-50 text-blue-600 font-medium'
-                        : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      {child.icon && renderIcon(child.icon, isActive(child.path), "w-4 h-4")}
-                      <span>{child.name}</span>
-                    </div>
-                    {child.count && (
-                      <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                        isActive(child.path) 
-                          ? 'bg-blue-100 text-blue-700' 
-                          : 'bg-gray-100 text-gray-600'
-                      }`}>
-                        {child.count}
-                      </span>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            )}
           </div>
         ))}
       </div>
