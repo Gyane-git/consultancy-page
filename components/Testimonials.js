@@ -172,7 +172,7 @@ export default function Testimonials() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [reviewPage, setReviewPage] = useState(0);
   const reviewsPerPage = 3;
-  const filters = ["All", "Student", "Parent"];
+  
 
   const filteredVideos =
     activeFilter === "All"
@@ -639,15 +639,7 @@ export default function Testimonials() {
               <h2 className="section-title">Voices from Our Community</h2>
             </div>
             <div className="filter-pills">
-              {filters.map((f) => (
-                <button
-                  key={f}
-                  className={`filter-pill ${activeFilter === f ? "active" : ""}`}
-                  onClick={() => setActiveFilter(f)}
-                >
-                  {f}
-                </button>
-              ))}
+              
             </div>
           </div>
           <div className="video-grid">
