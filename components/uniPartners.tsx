@@ -1,4 +1,5 @@
 "use client";
+import { Info } from "lucide-react";
 import React, { useState } from "react";
 
 interface LogoRowProps {
@@ -154,33 +155,33 @@ const LogoRow: React.FC<LogoRowProps & { colorOffset?: number }> = ({
 
 const UniPartners = () => {
   const row1 = [
-    { name: "University of Oxford", abbr: "OX", country: "UK" },
-    { name: "Canterbury Christ Church", abbr: "CC", country: "UK" },
-    { name: "Oxford Brookes", abbr: "OB", country: "UK" },
-    { name: "Swansea University", abbr: "SW", country: "UK" },
-    { name: "Univ. of Westminster", abbr: "UW", country: "UK" },
-    { name: "Univ. of Essex", abbr: "UE", country: "UK" },
-    { name: "Lancaster University", abbr: "LU", country: "UK" },
+    { name: "University-of-York", abbr: <img className="w-12 h-12" src="/uni/University-of-York.png" alt="uni" />  },
+    { name: "American-university-of-the-caribbean-school-of-medicine", abbr: <img className="w-12 h-12" src="/uni/american-university-of-the-caribbean-school-of-medicine-logo.png" alt="uni" /> },
+    { name: "Amsterdam-school-of-the-arts", abbr: <img className="w-12 h-12" src="/uni/amsterdam-school-of-the-arts-logo.png" alt="uni" /> },
+    { name: "Aureus-university-school-of-medicine", abbr: <img className="w-12 h-12" src="/uni/aureus-university-school-of-medicine-logo.png" alt="uni" /> },
+    { name: "Autonomous-university-of-barcelona", abbr: <img className="w-12 h-12" src="/uni/autonomous-university-of-barcelona-logo.png" alt="uni" /> },
+    { name: "Avans-university-of-applied-sciences", abbr: <img className="w-12 h-12" src="/uni/avans-university-of-applied-sciences-logo.png" alt="uni" /> },
+    { name: "Clip-path-group", abbr: <img className="w-12 h-12" src="/uni/Clip-path-group.png" alt="uni" /> },
   ];
 
   const row2 = [
-    { name: "Univ. of California Irvine", abbr: "UCI", country: "USA" },
-    { name: "Bath Spa University", abbr: "BS", country: "UK" },
-    { name: "Univ. of Bristol", abbr: "UB", country: "UK" },
-    { name: "Univ. of West London", abbr: "WL", country: "UK" },
-    { name: "Univ. of Stirling", abbr: "ST", country: "UK" },
-    { name: "York St John Univ.", abbr: "YJ", country: "UK" },
-    { name: "Pearson College", abbr: "PC", country: "UK" },
+    { name: "Codarts-university-of-the-arts", abbr: <img className="w-12 h-12" src="/uni/codarts-university-of-the-arts-logo.png" alt="uni" /> },
+    { name: "De-kempel-university-of-applied-sciences", abbr: <img className="w-12 h-12" src="/uni/de-kempel-university-of-applied-sciences-logo.png" alt="uni" /> },
+    { name: "Delft-university-of-technology", abbr: <img className="w-12 h-12" src="/uni/delft-university-of-technology-logo.png" alt="uni" /> },  
+    { name: "Design-academy-eindhoven", abbr: <img className="w-12 h-12" src="/uni/design-academy-eindhoven-logo.png" alt="uni" /> },
+    { name: "Dresden-university-of-technology", abbr: <img className="w-12 h-12" src="/uni/dresden-university-of-technology-logo.png" alt="uni" /> },
+    { name: "Driestar-christian-university", abbr: <img className="w-12 h-12" src="/uni/driestar-christian-university-logo.png" alt="uni" /> },
+    { name: "Durham-university", abbr: <img className="w-12 h-12" src="/uni/durham-university-logo.png" alt="uni" /> },
   ];
 
   const row3 = [
-    { name: "Univ. of Surrey", abbr: "SY", country: "UK" },
-    { name: "Univ. of Nottingham", abbr: "UN", country: "UK" },
-    { name: "Univ. of Kent", abbr: "KT", country: "UK" },
-    { name: "Univ. of Exeter", abbr: "EX", country: "UK" },
-    { name: "SOAS Univ. of London", abbr: "SA", country: "UK" },
-    { name: "Roehampton University", abbr: "RH", country: "UK" },
-    { name: "Univ. of Birmingham", abbr: "BM", country: "UK" },
+    { name: "Durham-university", abbr: <img className="w-12 h-12" src="/uni/durham-university-logo.png" alt="uni" /> },
+    { name: "Uppsala-university", abbr: <img className="w-12 h-12" src="/uni/uppsala-university-logo.jpg" alt="uni" /> },
+    { name: "Xavier-university-school-of-medicine", abbr: <img className="w-12 h-12" src="/uni/xavier-university-school-of-medicine-logo.png" alt="uni" /> },
+    { name: "The-University-of-Kent-1", abbr: <img className="w-12 h-12" src="/uni/The-University-of-Kent-1.png" alt="uni" /> },
+    { name: "University-of-Exeter", abbr: <img className="w-12 h-12" src="/uni/University-of-Exeter.png" alt="uni" /> },
+    { name: "Oxford-university", abbr: <img className="w-12 h-12" src="/uni/oxford.png" alt="uni" /> },
+    { name: "the-university-of-manchester-logo", abbr: <img className="w-12 h-12" src="/uni/the-university-of-manchester-logo.png" alt="uni" /> },
   ];
 
   const stats = [
