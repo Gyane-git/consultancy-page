@@ -2,8 +2,15 @@
 import { Info } from "lucide-react";
 import React, { useState } from "react";
 
+type LogoItem = {
+  name: string;
+  abbr: React.ReactNode;
+  country?: string;
+  color?: string;
+};
+
 interface LogoRowProps {
-  logos: { name: string; abbr: string; country: string; color?: string }[];
+  logos: LogoItem[];
   direction?: "right" | "left";
   speed?: number;
 }
@@ -19,7 +26,7 @@ const COLORS = [
   { bg: "#212121", text: "#fff", accent: "#BDBDBD" },
 ];
 
-const LogoCard = ({ logo, colorIdx }: { logo: { name: string; abbr: string; country: string; color?: string }; colorIdx: number }) => {
+const LogoCard = ({ logo, colorIdx }: { logo: LogoItem; colorIdx: number }) => {
   const c = COLORS[colorIdx % COLORS.length];
   const [hovered, setHovered] = useState(false);
 
@@ -107,7 +114,7 @@ const LogoCard = ({ logo, colorIdx }: { logo: { name: string; abbr: string; coun
             transition: "color 0.3s",
           }}
         >
-          {logo.country}
+          {logo.country || ""}
         </div>
       </div>
     </div>
