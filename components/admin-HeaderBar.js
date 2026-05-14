@@ -115,7 +115,7 @@ export default function AdminHeaderBar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white border-b shadow-sm">
+    <header className="sticky top-0 z-50 w-full bg-white border-b shadow-sm text-gray-600">
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">

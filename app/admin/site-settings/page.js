@@ -54,7 +54,7 @@ export default function AdminSiteSettingsPage() {
   }
 
   return (
-    <div className="p-6 max-w-3xl">
+    <div className="p-6 max-w-3xl text-gray-600">
       <h1 className="text-2xl font-semibold mb-1">Site Settings</h1>
       <p className="text-sm text-gray-600 mb-6">Control navbar and homepage toggle behavior from admin panel.</p>
 

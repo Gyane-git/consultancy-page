@@ -4,7 +4,7 @@ const next = require("next");
 const dev = false;
 const app = next({ dev });
 const handle = app.getRequestHandler();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 2222;
 
 app.prepare().then(() => {
   createServer((req, res) => handle(req, res)).listen(port, () => {

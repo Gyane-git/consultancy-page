@@ -22,7 +22,7 @@ export default function AdminConsultationsPage() {
   }, []);
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 text-gray-600">
       <div>
         <h1 className="text-2xl font-semibold mb-1">Consultation & Contact Requests</h1>
         <p className="text-sm text-gray-600">Stored form submissions from free consultation and contact pages.</p>

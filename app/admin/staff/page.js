@@ -103,7 +103,7 @@ export default function AdminStaffPage() {
   }
 
   return (
-    <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 text-gray-600">
       <div>
         <h1 className="text-2xl font-semibold mb-1">Staff Profiles</h1>
         <p className="text-sm text-gray-600 mb-4">Fields: staff name, image, social media URL, and designation.</p>

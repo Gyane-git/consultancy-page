@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
   const recentBlogs = blogs.slice(0, 5);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 space-y-6">
+    <div className="min-h-screen bg-gray-50 p-6 space-y-6 text-gray-600">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
         <p className="text-sm text-gray-600 mt-1">Relevant overview of your website content and form submissions.</p>

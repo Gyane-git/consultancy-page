@@ -102,7 +102,7 @@ export default function AdminAboutUsPage() {
   }
 
   return (
-    <div className="p-6 max-w-3xl">
+    <div className="p-6 max-w-3xl text-gray-600">
       <h1 className="text-2xl font-semibold mb-1">About Us: CEO Profile</h1>
       <p className="text-sm text-gray-600 mb-6">Manage CEO name, designation, message, profile image and LinkedIn URL.</p>
 

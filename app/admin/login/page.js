@@ -72,7 +72,7 @@ export default function LoginPage() {
           ) : null}
 
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
+            <div className="mb-4 text-gray-700">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
               </label>
@@ -92,7 +92,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="mb-6">
+            <div className="mb-6 text-gray-700">
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                 Password
               </label>
@@ -106,7 +106,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent outline-none transition"
-                  placeholder="••••••••"
+                  placeholder="Password"
                   required
                 />
                 <button

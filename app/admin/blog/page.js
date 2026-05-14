@@ -206,7 +206,7 @@ export default function AdminBlogPage() {
   }
 
   return (
-    <div className="p-6 grid grid-cols-1 xl:grid-cols-2 gap-6">
+    <div className="p-6 grid grid-cols-1 xl:grid-cols-2 gap-6 text-gray-600">
       <section className="bg-white border rounded-xl p-5">
         <h1 className="text-2xl font-semibold mb-1">Blog Posts</h1>
         <p className="text-sm text-gray-600 mb-5">Create and manage blog posts shown on the website.</p>
