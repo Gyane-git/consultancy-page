@@ -160,6 +160,8 @@ export default function StudySyncFooter() {
 
   const navLinks = ["IELTS Prep", "Destinations", "Services", "Courses", "Universities", "Blog", "About", "Contact"];
   const quickLinks = ["Apply Now", "Scholarships", "Visa Guide", "Pre-Departure", "Partner Login", "Student Portal"];
+  const mapEmbedUrl =
+    "https://www.google.com/maps?q=Bag+Bazar+Kathmandu+Nepal&output=embed";
 
   return (
     <div style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
@@ -240,6 +242,16 @@ export default function StudySyncFooter() {
           .rf-grid { grid-template-columns: 1fr !important; }
           .rf-inner { padding: 0 18px !important; }
           .rf-stats { flex-wrap: wrap; }
+          .rf-link { font-size: 12px; padding: 4px 0; }
+          .rf-sub-input { font-size: 12px; padding: 10px 12px; }
+          .rf-sub-btn { font-size: 10px; padding: 0 12px; }
+          .rf-social-row { gap: 6px !important; margin-bottom: 12px !important; }
+          .rf-social-row a { width: 34px !important; height: 34px !important; }
+          .rf-map { display: none; }
+          .rf-approved { margin-top: 12px !important; }
+          .rf-bottom { justify-content: center !important; text-align: center; gap: 6px !important; }
+          .rf-bottom p, .rf-bottom a { font-size: 11px !important; }
+          .rf-achievement { display: none !important; }
         }
       `}</style>
 
@@ -306,7 +318,7 @@ export default function StudySyncFooter() {
                         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                       </svg>
                     }
-                    text="Bag Bazar, Kathmandu, Nepal"
+                    text="Kathmandu, Nepal"
                   />
                   <ContactItem
                     icon={
@@ -314,7 +326,7 @@ export default function StudySyncFooter() {
                         <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C9.61 21 3 14.39 3 6a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
                       </svg>
                     }
-                    text="+977-01-XXXXXXX"
+                    text="015924164"
                   />
                   <ContactItem
                     icon={
@@ -322,7 +334,7 @@ export default function StudySyncFooter() {
                         <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                       </svg>
                     }
-                    text="info@studysync.com.np"
+                    text="admin@studysync.com.np"
                   />
                 </div>
               </div>
@@ -347,7 +359,7 @@ export default function StudySyncFooter() {
                 {quickLinks.map(l => <a key={l} href="#" className="rf-link">{l}</a>)} */}
 
                 {/* MOE Badge */}
-                <div style={{
+                <div className="rf-approved" style={{
                   marginTop: 24,
                   background: "rgba(0,0,0,0.08)",
                   borderRadius: 8,
@@ -390,7 +402,7 @@ export default function StudySyncFooter() {
                 }}>Connect With Us</h3>
 
                 {/* Social row */}
-                <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+                <div className="rf-social-row" style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
                   <SocialBtn href="#" label="Facebook">
                     <svg width="20" height="20" viewBox="0 0 36 36" fill="currentColor">
                       <path d="M28 4H8a4 4 0 00-4 4v20a4 4 0 004 4h10V22h-4v-5h4v-3.5C18 10.1 20.4 8 23.6 8c1.5 0 3.1.3 3.1.3V12H24.7c-1.7 0-2.2 1.1-2.2 2.2V17h4.3l-.7 5H22.5v10H28a4 4 0 004-4V8a4 4 0 00-4-4z"/>
@@ -447,10 +459,10 @@ export default function StudySyncFooter() {
                 </div> */}
 
                 {/* Google Map */}
-                <div style={{ borderRadius: 8, overflow: "hidden", boxShadow: "0 2px 14px rgba(0,0,0,0.18)" }}>
+                <div className="rf-map" style={{ borderRadius: 8, overflow: "hidden", boxShadow: "0 2px 14px rgba(0,0,0,0.18)" }}>
                   <iframe
                     title="Study Sync Office"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.2!2d85.3147!3d27.7091!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19000a37b73d%3A0x3c04dc75e0e9e2a6!2sBag%20Bazar%2C%20Kathmandu!5e0!3m2!1sen!2snp"
+                    src={mapEmbedUrl}
                     width="100%"
                     height="160"
                     style={{ border: "none", display: "block" }}
@@ -464,7 +476,7 @@ export default function StudySyncFooter() {
 
             {/* ── Bottom Bar ── */}
             <hr className="rf-divider" style={{ marginTop: 36 }} />
-            <div style={{
+            <div className="rf-bottom" style={{
               display: "flex", alignItems: "center", justifyContent: "space-between",
               padding: "16px 0", flexWrap: "wrap", gap: 8,
             }}>
@@ -495,7 +507,7 @@ export default function StudySyncFooter() {
               <p style={{ fontFamily: "'Nunito Sans',sans-serif", fontSize: 13, color: "#1a0d00", opacity: 0.75 }}>
                 Designed by{" "}
                 <a href="#" style={{ color: "#1a0d00", fontWeight: 800, fontStyle: "italic", textDecoration: "underline" }}>
-                  DevMind Solutions
+                  Synexis Tech Solution Pvt. Ltd.
                 </a>
               </p>
             </div>
@@ -504,7 +516,7 @@ export default function StudySyncFooter() {
         </div>
 
         {/* Achievement side tab */}
-        <div style={{
+        <div className="rf-achievement" style={{
           position: "fixed", right: -28, top: "40%",
           transform: "rotate(90deg)", transformOrigin: "right center",
           background: "#fff", border: "1px solid #ccc",

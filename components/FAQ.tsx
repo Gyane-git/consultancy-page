@@ -545,6 +545,28 @@ export default function ContactFAQPage() {
           letter-spacing: 0.1em;
           margin-top: 2px;
         }
+
+        @media (max-width: 640px) {
+          .page-wrap { padding: 30px 14px 44px; }
+          .hero { margin-bottom: 30px; }
+          .hero-eyebrow { font-size: 9px; letter-spacing: 0.12em; padding: 5px 10px; margin-bottom: 10px; }
+          .hero h1 { font-size: clamp(1.75rem, 8vw, 2.2rem); line-height: 1.15; }
+          .hero-sub { font-size: 0.9rem; line-height: 1.55; margin-top: 10px; }
+          .layout { gap: 16px; }
+          .contact-card, .faq-card { padding: 22px 16px 20px; }
+          .card-title { font-size: 1.4rem; margin-bottom: 18px; }
+          .field input, .field textarea, .field select { font-size: 0.88rem; padding: 11px 12px; }
+          .field label { font-size: 10px; margin-bottom: 5px; }
+          .submit-btn { padding: 12px 16px; font-size: 0.88rem; }
+          .social-strip { display: none; }
+          .faq-search-wrap { margin-bottom: 16px; }
+          .faq-trigger { padding: 12px; gap: 10px; }
+          .faq-num { display: none; }
+          .faq-q { font-size: 0.84rem; line-height: 1.35; }
+          .faq-icon { width: 22px; height: 22px; font-size: 14px; }
+          .faq-answer { padding: 0 12px 12px 12px; font-size: 0.81rem; line-height: 1.6; }
+          .stats-bar { display: none; }
+        }
       `}</style>
 
       <div className="page-wrap">

@@ -149,6 +149,7 @@ function FlyoutMenu({
 export default function TheNextHeader() {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileExpanded, setMobileExpanded] = useState<number | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [showUniversityTab, setShowUniversityTab] = useState(true);
   const headerRef = useRef<HTMLElement>(null);
@@ -329,7 +330,7 @@ export default function TheNextHeader() {
         .mobile-menu.open { display: block; }
         .mobile-link {
           display: block;
-          padding: 11px 28px;
+          padding: 11px 22px;
           font-family: 'Poppins', sans-serif;
           font-size: 14px;
           font-weight: 500;
@@ -338,9 +339,59 @@ export default function TheNextHeader() {
           transition: color 0.15s, background 0.15s;
         }
         .mobile-link:hover { color: #c0392b; background: #fff5f5; }
+        .mobile-parent {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 11px 22px;
+          border: none;
+          background: none;
+          color: #2d2d2d;
+          font-family: 'Poppins', sans-serif;
+          font-size: 14px;
+          font-weight: 600;
+          text-align: left;
+          cursor: pointer;
+        }
+        .mobile-parent.open {
+          color: #c0392b;
+          background: #fff5f5;
+        }
+        .mobile-caret {
+          width: 16px;
+          height: 16px;
+          transition: transform 0.2s ease;
+          flex-shrink: 0;
+        }
+        .mobile-caret.open {
+          transform: rotate(180deg);
+        }
+        .mobile-submenu {
+          margin: 0 14px 8px;
+          border: 1px solid #f4d6d3;
+          border-radius: 10px;
+          overflow: hidden;
+          background: #fffafa;
+        }
+        .mobile-sub-link {
+          display: block;
+          padding: 10px 14px;
+          font-size: 13px;
+          color: #4a4a4a;
+          text-decoration: none;
+          border-top: 1px solid #f5e4e2;
+        }
+        .mobile-sub-link:first-child {
+          border-top: none;
+        }
+        .mobile-sub-link:hover {
+          color: #c0392b;
+          background: #fff1f0;
+        }
         .mobile-cta {
           display: block;
-          margin: 14px 28px 0;
+          margin: 14px 18px 0;
           padding: 12px 18px;
           background: #c0392b;
           color: #fff;
@@ -431,7 +482,10 @@ export default function TheNextHeader() {
           <button
             className="hamburger"
             aria-label="Toggle menu"
-            onClick={() => setMobileOpen((v) => !v)}
+            onClick={() => {
+              setMobileOpen((v) => !v);
+              setMobileExpanded(null);
+            }}
           >
             {mobileOpen ? (
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -457,13 +511,37 @@ export default function TheNextHeader() {
 
         {/* Mobile Menu */}
         <div className={`mobile-menu${mobileOpen ? " open" : ""}`}>
-          {navItems.map((item, i) => (
-            <a key={i} href={item.href} className="mobile-link">
-              {item.label}
-            </a>
-          ))}
-          <a href="#" className="mobile-cta">
-            Meet The Representative
+          {navItems.map((item, i) =>
+            item.children?.length ? (
+              <div key={i}>
+                <button
+                  type="button"
+                  className={`mobile-parent${mobileExpanded === i ? " open" : ""}`}
+                  onClick={() => setMobileExpanded((prev) => (prev === i ? null : i))}
+                >
+                  <span>{item.label}</span>
+                  <svg className={`mobile-caret${mobileExpanded === i ? " open" : ""}`} viewBox="0 0 10 10" fill="none">
+                    <path d="M2 3.5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                </button>
+                {mobileExpanded === i ? (
+                  <div className="mobile-submenu">
+                    {item.children.map((child, idx) => (
+                      <a key={idx} href={child.href} className="mobile-sub-link">
+                        {child.label}
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              <a key={i} href={item.href} className="mobile-link">
+                {item.label}
+              </a>
+            ),
+          )}
+          <a href="/free-consultant" className="mobile-cta">
+            Book Free Consultation
           </a>
         </div>
       </header>

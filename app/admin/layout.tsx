@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import AdminHeaderBar from "@/components/admin-HeaderBar";
 import SideHeaderBar from "@/components/admin-sidebar";
@@ -13,19 +13,32 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const isLoginRoute = pathname === "/admin/login";
-  const hasAdminAuth = typeof window !== "undefined" && Boolean(localStorage.getItem("admin_auth"));
+  const [isReady, setIsReady] = useState(false);
+  const [hasAdminAuth, setHasAdminAuth] = useState(false);
 
   useEffect(() => {
-    if (!isLoginRoute && !hasAdminAuth) {
+    if (isLoginRoute) {
+      setHasAdminAuth(true);
+      setIsReady(true);
+      return;
+    }
+
+    const hasAuth = Boolean(localStorage.getItem("admin_auth"));
+    setHasAdminAuth(hasAuth);
+    setIsReady(true);
+  }, [isLoginRoute]);
+
+  useEffect(() => {
+    if (isReady && !isLoginRoute && !hasAdminAuth) {
       router.replace("/admin/login");
     }
-  }, [isLoginRoute, hasAdminAuth, router]);
+  }, [isReady, isLoginRoute, hasAdminAuth, router]);
 
   if (isLoginRoute) {
     return <>{children}</>;
   }
 
-  if (!hasAdminAuth) {
+  if (!isReady || !hasAdminAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-600">
         Redirecting to admin login...

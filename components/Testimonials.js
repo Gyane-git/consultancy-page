@@ -1,15 +1,33 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
-const videoTestimonials = [
+function toYoutubeEmbedUrl(url) {
+  if (!url) return "";
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.includes("youtu.be")) {
+      const id = parsed.pathname.replace("/", "").trim();
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : "";
+    }
+    if (parsed.hostname.includes("youtube.com")) {
+      const id = parsed.searchParams.get("v");
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : "";
+    }
+    return "";
+  } catch {
+    return "";
+  }
+}
+
+const fallbackVideoTestimonials = [
   {
     id: 1,
     name: "Dipesh's Father",
     role: "Parents Testimonial",
     caption: "Watch what Dipesh's father has to say",
     thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop",
-    videoUrl: "#",
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     tag: "Parent",
   },
   {
@@ -18,7 +36,7 @@ const videoTestimonials = [
     role: "Student",
     caption: "Watch what Dipesh Rijal has to say",
     thumbnail: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=500&fit=crop",
-    videoUrl: "#",
+    videoUrl: "https://www.youtube.com/watch?v=ysz5S6PUM-U",
     tag: "Student",
   },
   {
@@ -27,7 +45,7 @@ const videoTestimonials = [
     role: "Student",
     caption: "Watch what Prasis Kandel has to say",
     thumbnail: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop",
-    videoUrl: "#",
+    videoUrl: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
     tag: "Student",
   },
   {
@@ -36,7 +54,7 @@ const videoTestimonials = [
     role: "Parent",
     caption: "Watch what Sita Sharma has to say",
     thumbnail: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop",
-    videoUrl: "#",
+    videoUrl: "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
     tag: "Parent",
   },
 ];
@@ -123,6 +141,8 @@ function StarRating({ rating, max = 5 }) {
 
 function VideoCard({ testimonial, index }) {
   const [hovered, setHovered] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const embedUrl = toYoutubeEmbedUrl(testimonial.videoUrl);
   return (
     <div
       className="video-card"
@@ -131,13 +151,31 @@ function VideoCard({ testimonial, index }) {
       onMouseLeave={() => setHovered(false)}
     >
       <div className="video-thumb-wrap">
-        <Image src={testimonial.thumbnail} alt={testimonial.name} className="video-thumb" width={400} height={500} />
-        <div className={`video-overlay ${hovered ? "hovered" : ""}`} />
-        <button className={`play-btn ${hovered ? "hovered" : ""}`} aria-label="Play video">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z" />
-          </svg>
-        </button>
+        {isPlaying && embedUrl ? (
+          <iframe
+            className="video-iframe"
+            src={embedUrl}
+            title={testimonial.name}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        ) : (
+          <>
+            <Image src={testimonial.thumbnail} alt={testimonial.name} className="video-thumb" width={400} height={500} />
+            <div className={`video-overlay ${hovered ? "hovered" : ""}`} />
+            <button
+              className={`play-btn ${hovered ? "hovered" : ""}`}
+              aria-label="Play video"
+              onClick={() => setIsPlaying(true)}
+              type="button"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </button>
+          </>
+        )}
         <span className="video-tag">{testimonial.tag}</span>
       </div>
       <div className="video-info">
@@ -171,8 +209,30 @@ function ReviewCard({ review, index }) {
 export default function Testimonials() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [reviewPage, setReviewPage] = useState(0);
+  const [videoTestimonials, setVideoTestimonials] = useState(fallbackVideoTestimonials);
   const reviewsPerPage = 3;
-  
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadVideos() {
+      try {
+        const res = await fetch("/api/video-testimonials", { cache: "no-store" });
+        const data = await res.json();
+        if (!active) return;
+        if (res.ok && data?.success && Array.isArray(data.videos) && data.videos.length > 0) {
+          setVideoTestimonials(data.videos);
+        }
+      } catch (error) {
+        console.error("Failed to load video testimonials", error);
+      }
+    }
+
+    loadVideos();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const filteredVideos =
     activeFilter === "All"
@@ -374,6 +434,13 @@ export default function Testimonials() {
           position: relative;
           aspect-ratio: 3/4;
           overflow: hidden;
+          background: #000;
+        }
+        .video-iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+          display: block;
         }
         .video-thumb {
           width: 100%;
@@ -598,10 +665,35 @@ export default function Testimonials() {
         
 
         @media (max-width: 640px) {
-          .stats-row { gap: 24px; }
+          .t-hero { padding: 58px 16px 34px; }
+          .hero-eyebrow { font-size: 10px; letter-spacing: 1.2px; padding: 6px 12px; margin-bottom: 12px; }
+          .t-title { font-size: clamp(30px, 9vw, 44px); line-height: 1.15; letter-spacing: -1px; margin-bottom: 10px; }
+          .t-sub { font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
+          .stats-row { gap: 14px; }
           .stat-divider { display: none; }
-          .section-head { flex-direction: column; align-items: flex-start; }
-          .cta-strip { padding: 40px 24px; }
+          .stat-num { font-size: 22px; }
+          .stat-label { font-size: 11px; }
+          .section { padding: 0 14px 42px; }
+          .section-head { flex-direction: column; align-items: flex-start; margin-bottom: 18px; gap: 8px; }
+          .section-title { font-size: 24px; }
+          .fancy-divider { margin-bottom: 30px; padding: 0 14px; }
+          .video-grid { grid-template-columns: 1fr; gap: 14px; }
+          .video-card { border-radius: 16px; }
+          .video-info { padding: 12px 14px 14px; }
+          .video-caption { font-size: 12px; }
+          .video-name { font-size: 16px; }
+          .play-btn { width: 50px; height: 50px; }
+          .review-grid { grid-template-columns: 1fr; gap: 14px; margin-bottom: 22px; }
+          .review-card { padding: 16px; border-radius: 16px; }
+          .review-card::before { display: none; }
+          .review-avatar { width: 42px; height: 42px; }
+          .review-name { font-size: 15px; }
+          .review-course { font-size: 11px; }
+          .review-date { display: none; }
+          .review-text { font-size: 13px; line-height: 1.55; margin-bottom: 12px; }
+          .verified-badge { font-size: 10px; padding: 4px 10px; }
+          .pagination { gap: 8px; }
+          .page-btn { width: 38px; height: 38px; }
         }
       `}</style>
 

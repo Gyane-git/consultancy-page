@@ -49,6 +49,41 @@ const defaultBlogs = [
   },
 ];
 
+const defaultVideoTestimonials = [
+  {
+    name: "Dipesh's Father",
+    role: "Parents Testimonial",
+    caption: "Watch what Dipesh's father has to say",
+    thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop",
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    tag: "Parent",
+  },
+  {
+    name: "Dipesh Rijal",
+    role: "Student",
+    caption: "Watch what Dipesh Rijal has to say",
+    thumbnail: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=500&fit=crop",
+    videoUrl: "https://www.youtube.com/watch?v=ysz5S6PUM-U",
+    tag: "Student",
+  },
+  {
+    name: "Prasis Kandel",
+    role: "Student",
+    caption: "Watch what Prasis Kandel has to say",
+    thumbnail: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop",
+    videoUrl: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+    tag: "Student",
+  },
+  {
+    name: "Sita Sharma",
+    role: "Parent",
+    caption: "Watch what Sita Sharma has to say",
+    thumbnail: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop",
+    videoUrl: "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+    tag: "Parent",
+  },
+];
+
 export async function ensureContentTables() {
   if (!initPromise) {
     initPromise = (async () => {
@@ -211,6 +246,23 @@ export async function ensureContentTables() {
         )
       `);
 
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS VideoTestimonial (
+          id INT NOT NULL AUTO_INCREMENT,
+          name VARCHAR(191) NOT NULL,
+          role VARCHAR(191) NULL,
+          caption TEXT NULL,
+          thumbnail LONGTEXT NULL,
+          videoUrl VARCHAR(1200) NOT NULL,
+          tag VARCHAR(80) NULL,
+          displayOrder INT NOT NULL DEFAULT 0,
+          isActive BOOLEAN NOT NULL DEFAULT true,
+          createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          PRIMARY KEY (id)
+        )
+      `);
+
       await pool.query(
         `INSERT IGNORE INTO AboutCeo (singletonKey, ceoName, designation, message, profileImage, linkedinUrl)
          VALUES ('default', ?, ?, ?, ?, ?)`,
@@ -241,6 +293,15 @@ export async function ensureContentTables() {
           `INSERT IGNORE INTO BlogPost (slug, title, excerpt, content, category, readTime, tags, isPublished)
            VALUES (?, ?, ?, ?, ?, ?, ?, true)`,
           [blog.slug, blog.title, blog.excerpt, blog.content, blog.category, blog.readTime, blog.tags],
+        );
+      }
+
+      for (let index = 0; index < defaultVideoTestimonials.length; index += 1) {
+        const video = defaultVideoTestimonials[index];
+        await pool.query(
+          `INSERT IGNORE INTO VideoTestimonial (name, role, caption, thumbnail, videoUrl, tag, displayOrder, isActive)
+           VALUES (?, ?, ?, ?, ?, ?, ?, true)`,
+          [video.name, video.role, video.caption, video.thumbnail, video.videoUrl, video.tag, index],
         );
       }
     })();

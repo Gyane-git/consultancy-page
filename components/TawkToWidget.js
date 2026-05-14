@@ -7,11 +7,11 @@ export default function TawkToWidget() {
   const [showSelection, setShowSelection] = useState(false);
 
   const settings = {
-    whatsapp: "9821212332",
-    viber: "9821212332",
+    whatsapp: "9810724525",
+    viber: "9810724525",
   };
 
-  const message = "Hello! I'm interested in your products!";
+  const message = "Hello! I'm interested in your services!";
 
   const handleChatIconClick = (e) => {
     e.preventDefault();

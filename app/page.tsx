@@ -44,7 +44,7 @@ export default function Home() {
       <UniPartners />
       <FAQ />
 
-      {showSplash && (
+      {/* {showSplash && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/65">
           <div className="relative rounded-2xl bg-transparent p-2 mx-4 sm:mx-8 md:mx-0">
             <button
@@ -65,7 +65,7 @@ export default function Home() {
             />
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
