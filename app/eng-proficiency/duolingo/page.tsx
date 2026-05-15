@@ -167,10 +167,20 @@ function DETCalculator() {
   return (
     <div className="calc-card">
       <p className="calc-eyebrow">Estimate Your Score</p>
-      <h2 className="calc-title">DET Score Calculator</h2>
-      <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 32, marginTop: -36, lineHeight: 1.6 }}>
-        Enter your subscores for each skill area (10–160 scale). The DET reports four subscores alongside an overall score.
-      </p>
+
+<h2 className="calc-title">DET Score Calculator</h2>
+
+<p
+  style={{
+    fontSize: 13,
+    color: "var(--muted)",
+    marginTop: 12,
+    marginBottom: 32,
+    lineHeight: 1.6,
+  }}
+>
+  Enter your subscores for each skill area (10–160 scale). The DET reports four subscores alongside an overall score.
+</p>
       <div className="calc-grid">
         {keys.map((k, i) => (
           <div key={k} className="calc-field">

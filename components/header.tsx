@@ -430,7 +430,7 @@ export default function TheNextHeader() {
             />
             <div className="logo-text-block">
               <span className="logo-text">Study<span>Sync</span></span>
-              <span className="logo-tagline">Your Future, Perfectly Synced</span>
+              <span className="logo-tagline">LET THE POSSIBILITIES SYNC IN!</span>
             </div>
           </Link>
 
