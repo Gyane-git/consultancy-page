@@ -69,7 +69,7 @@ const EducationSidebar = () => {
     // { icon: FileText, label: "Applications", path: "/admin/applications", expandable: false, children: [] },
     // { icon: BookOpen, label: "IELTS Prep", path: "/admin/ielts", expandable: false, children: [] },
     { icon: Globe, label: "Destinations", path: "/admin/destinations", expandable: false, children: [] },
-    //{ icon: Globe, label: "Universities", path: "/admin/universities", expandable: false, children: [] },
+    { icon: Globe, label: "Universities", path: "/admin/universities", expandable: false, children: [] },
     // { icon: Award, label: "Scholarships", path: "/admin/scholarships", expandable: false, children: [] },
     { icon: Calendar, label: "Consultations", path: "/admin/consultations", expandable: false, children: [] },
     {icon: FileText , label: "Blog Posts", path: "/admin/blog", expandable: false, children: [] },

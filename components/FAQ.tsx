@@ -7,7 +7,7 @@ type FAQ = { id: number; question: string; answer: string };
 const faqs: FAQ[] = [
   {
     id: 1,
-    question: "What countries can I apply to through StudySync Educare?",
+    question: "What countries can I apply to through StudySync?",
     answer:
       "We assist students in applying to universities across the UK, USA, Canada, Australia, New Zealand, Ireland, Germany, and many more. Our counsellors are specialists in each destination and stay updated on the latest admission requirements.",
   },

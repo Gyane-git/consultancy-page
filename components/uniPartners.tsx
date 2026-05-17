@@ -1,10 +1,9 @@
 "use client";
-import { Info } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type LogoItem = {
   name: string;
-  abbr: React.ReactNode;
+  logo?: string;
   country?: string;
   color?: string;
 };
@@ -16,14 +15,14 @@ interface LogoRowProps {
 }
 
 const COLORS = [
-  { bg: "#1E3A5F", text: "#fff", accent: "#4A90D9" },
-  { bg: "#1B4332", text: "#fff", accent: "#52B788" },
-  { bg: "#4A1942", text: "#fff", accent: "#C77DFF" },
-  { bg: "#7B2D00", text: "#fff", accent: "#FF9500" },
-  { bg: "#1A237E", text: "#fff", accent: "#7986CB" },
-  { bg: "#004D40", text: "#fff", accent: "#4DB6AC" },
-  { bg: "#880E4F", text: "#fff", accent: "#F48FB1" },
-  { bg: "#212121", text: "#fff", accent: "#BDBDBD" },
+  { bg: "", text: "#fff", accent: "" },
+  { bg: "", text: "#fff", accent: "" },
+  { bg: "", text: "#fff", accent: "" },
+  { bg: "", text: "#fff", accent: "" },
+  { bg: "", text: "#fff", accent: "" },
+  { bg: "", text: "#fff", accent: "" },
+  { bg: "", text: "#fff", accent: "" },
+  { bg: "", text: "#fff", accent: "" },
 ];
 
 const LogoCard = ({ logo, colorIdx }: { logo: LogoItem; colorIdx: number }) => {
@@ -73,8 +72,8 @@ const LogoCard = ({ logo, colorIdx }: { logo: LogoItem; colorIdx: number }) => {
       )}
       <div
         style={{
-          width: "48px",
-          height: "48px",
+          width: "112px",
+          height: "82px",
           borderRadius: "12px",
           background: hovered ? c.accent + "22" : "#f5f5f5",
           display: "flex",
@@ -88,34 +87,15 @@ const LogoCard = ({ logo, colorIdx }: { logo: LogoItem; colorIdx: number }) => {
           border: hovered ? `1px solid ${c.accent}44` : "1px solid transparent",
         }}
       >
-        {logo.abbr}
-      </div>
-      <div style={{ textAlign: "center", padding: "0 10px" }}>
-        <div
-          style={{
-            fontSize: "11px",
-            fontWeight: 600,
-            color: hovered ? "#fff" : "#222",
-            lineHeight: 1.3,
-            transition: "color 0.3s",
-            maxWidth: "150px",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {logo.name}
-        </div>
-        <div
-          style={{
-            fontSize: "10px",
-            color: hovered ? c.accent : "#999",
-            marginTop: "2px",
-            transition: "color 0.3s",
-          }}
-        >
-          {logo.country || ""}
-        </div>
+        {logo.logo ? (
+          <img
+            src={logo.logo}
+            alt={logo.name}
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          />
+        ) : (
+          <span style={{ fontSize: "12px", padding: "0 8px", textAlign: "center" }}>{logo.name}</span>
+        )}
       </div>
     </div>
   );
@@ -161,35 +141,57 @@ const LogoRow: React.FC<LogoRowProps & { colorOffset?: number }> = ({
 };
 
 const UniPartners = () => {
-  const row1 = [
-    { name: "University-of-York", abbr: <img className="w-12 h-12" src="/uni/University-of-York.png" alt="uni" />  },
-    { name: "American-university-of-the-caribbean-school-of-medicine", abbr: <img className="w-12 h-12" src="/uni/american-university-of-the-caribbean-school-of-medicine-logo.png" alt="uni" /> },
-    { name: "Amsterdam-school-of-the-arts", abbr: <img className="w-12 h-12" src="/uni/amsterdam-school-of-the-arts-logo.png" alt="uni" /> },
-    { name: "Aureus-university-school-of-medicine", abbr: <img className="w-12 h-12" src="/uni/aureus-university-school-of-medicine-logo.png" alt="uni" /> },
-    { name: "Autonomous-university-of-barcelona", abbr: <img className="w-12 h-12" src="/uni/autonomous-university-of-barcelona-logo.png" alt="uni" /> },
-    { name: "Avans-university-of-applied-sciences", abbr: <img className="w-12 h-12" src="/uni/avans-university-of-applied-sciences-logo.png" alt="uni" /> },
-    { name: "Clip-path-group", abbr: <img className="w-12 h-12" src="/uni/Clip-path-group.png" alt="uni" /> },
+  const fallbackLogos: LogoItem[] = [
+    { name: "University of York", logo: "/uni/University-of-York.png" },
+    { name: "AUC School of Medicine", logo: "/uni/american-university-of-the-caribbean-school-of-medicine-logo.png" },
+    { name: "Amsterdam School of the Arts", logo: "/uni/amsterdam-school-of-the-arts-logo.png" },
+    { name: "Aureus University", logo: "/uni/aureus-university-school-of-medicine-logo.png" },
+    { name: "Autonomous University of Barcelona", logo: "/uni/autonomous-university-of-barcelona-logo.png" },
+    { name: "Avans University", logo: "/uni/avans-university-of-applied-sciences-logo.png" },
+    { name: "Codarts University", logo: "/uni/codarts-university-of-the-arts-logo.png" },
+    { name: "Delft University of Technology", logo: "/uni/delft-university-of-technology-logo.png" },
+    { name: "Durham University", logo: "/uni/durham-university-logo.png" },
+    { name: "University of Exeter", logo: "/uni/University-of-Exeter.png" },
+    { name: "Oxford University", logo: "/uni/oxford.png" },
+    { name: "University of Manchester", logo: "/uni/the-university-of-manchester-logo.png" },
   ];
 
-  const row2 = [
-    { name: "Codarts-university-of-the-arts", abbr: <img className="w-12 h-12" src="/uni/codarts-university-of-the-arts-logo.png" alt="uni" /> },
-    { name: "De-kempel-university-of-applied-sciences", abbr: <img className="w-12 h-12" src="/uni/de-kempel-university-of-applied-sciences-logo.png" alt="uni" /> },
-    { name: "Delft-university-of-technology", abbr: <img className="w-12 h-12" src="/uni/delft-university-of-technology-logo.png" alt="uni" /> },  
-    { name: "Design-academy-eindhoven", abbr: <img className="w-12 h-12" src="/uni/design-academy-eindhoven-logo.png" alt="uni" /> },
-    { name: "Dresden-university-of-technology", abbr: <img className="w-12 h-12" src="/uni/dresden-university-of-technology-logo.png" alt="uni" /> },
-    { name: "Driestar-christian-university", abbr: <img className="w-12 h-12" src="/uni/driestar-christian-university-logo.png" alt="uni" /> },
-    { name: "Durham-university", abbr: <img className="w-12 h-12" src="/uni/durham-university-logo.png" alt="uni" /> },
-  ];
+  const [logos, setLogos] = useState<LogoItem[]>(fallbackLogos);
 
-  const row3 = [
-    { name: "Durham-university", abbr: <img className="w-12 h-12" src="/uni/durham-university-logo.png" alt="uni" /> },
-    { name: "Uppsala-university", abbr: <img className="w-12 h-12" src="/uni/uppsala-university-logo.jpg" alt="uni" /> },
-    { name: "Xavier-university-school-of-medicine", abbr: <img className="w-12 h-12" src="/uni/xavier-university-school-of-medicine-logo.png" alt="uni" /> },
-    { name: "The-University-of-Kent-1", abbr: <img className="w-12 h-12" src="/uni/The-University-of-Kent-1.png" alt="uni" /> },
-    { name: "University-of-Exeter", abbr: <img className="w-12 h-12" src="/uni/University-of-Exeter.png" alt="uni" /> },
-    { name: "Oxford-university", abbr: <img className="w-12 h-12" src="/uni/oxford.png" alt="uni" /> },
-    { name: "the-university-of-manchester-logo", abbr: <img className="w-12 h-12" src="/uni/the-university-of-manchester-logo.png" alt="uni" /> },
-  ];
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadUniversities() {
+      try {
+        const res = await fetch("/api/university", { cache: "no-store" });
+        const data = await res.json();
+        if (!ignore && res.ok && data?.success && Array.isArray(data.universities)) {
+          const nextLogos = data.universities
+            .filter((u: { logo?: string | null; name?: string }) => Boolean(u?.logo))
+            .map((u: { logo?: string | null; name?: string }) => ({
+              name: String(u.name || "University"),
+              logo: String(u.logo || ""),
+            }));
+          if (nextLogos.length > 0) setLogos(nextLogos);
+        }
+      } catch (error) {
+        console.error("Failed to load universities", error);
+      }
+    }
+
+    loadUniversities();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  const chunkSize = Math.max(1, Math.ceil(logos.length / 3));
+  const row1 = logos.slice(0, chunkSize);
+  const row2 = logos.slice(chunkSize, chunkSize * 2);
+  const row3 = logos.slice(chunkSize * 2);
+  const safeRow1 = row1.length ? row1 : logos;
+  const safeRow2 = row2.length ? row2 : logos;
+  const safeRow3 = row3.length ? row3 : logos;
 
   const stats = [
     { value: "250+", label: "Partner Universities" },
@@ -320,9 +322,9 @@ const UniPartners = () => {
         }} />
 
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <LogoRow logos={row1} direction="right" speed={45} colorOffset={0} />
-          <LogoRow logos={row2} direction="left"  speed={38} colorOffset={3} />
-          <LogoRow logos={row3} direction="right" speed={50} colorOffset={5} />
+          <LogoRow logos={safeRow1} direction="right" speed={45} colorOffset={0} />
+          <LogoRow logos={safeRow2} direction="left"  speed={38} colorOffset={3} />
+          <LogoRow logos={safeRow3} direction="right" speed={50} colorOffset={5} />
         </div>
       </div>
 

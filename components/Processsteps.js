@@ -313,57 +313,93 @@ export default function ProcessSteps() {
           </div>
 
           {/* STEP TRACK */}
-          <div className="ps-track-wrap">
-            <div className="ps-track">
-              {steps.map((s, i) => {
-                const state = i < active ? "done" : i === active ? "active" : "";
-                return (
-                  <div key={s.id} style={{ display: "flex", alignItems: "flex-start", flex: 1 }}>
-                    <div
-                      className={`ps-step ${state}`}
-                      onClick={() => setActive(i)}
-                      style={{ minWidth: 72 }}
-                    >
-                      <div
-                        className="ps-circle"
-                        style={
-                          i === active
-                            ? { borderColor: s.color, boxShadow: `0 0 0 5px ${s.borderGlow}` }
-                            : {}
-                        }
-                      >
-                        <span style={{ color: i === active ? s.color : i < active ? "#ccc" : "#ccc" }}>
-                          {s.icon}
-                        </span>
-                      </div>
-                      <div
-                        className="ps-step-num"
-                        style={i === active ? { color: s.color } : {}}
-                      >
-                        {String(s.id).padStart(2, "0")}
-                      </div>
-                      <div
-                        className="ps-step-label"
-                        style={i === active ? { color: s.color } : {}}
-                      >
-                        {s.label}
-                      </div>
-                    </div>
+          <div className="ps-track-wrap ">
+  <div className="ps-track mt-12 ">
+    {steps.map((s, i) => {
+      const state = i < active ? "done" : i === active ? "active" : "";
+      return (
+        <div
+          className="ps-step-row"
+          key={s.id}
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            flex: 1,
+            marginTop: 12,     // top margin
+            marginBottom: 8,  // bottom margin
+          }}
+        >
+          <div
+            className={`ps-step ${state}`}
+            onClick={() => setActive(i)}
+            style={{
+              minWidth: 72,
+              marginTop: 10,     // step top margin
+              marginBottom: 10,  // step bottom margin
+            }}
+          >
+            <div
+              className="ps-circle"
+              style={
+                i === active
+                  ? {
+                      borderColor: s.color,
+                      boxShadow: `0 0 0 5px ${s.borderGlow}`,
+                      marginTop: 8,
+                      marginBottom: 8,
+                    }
+                  : {
+                      marginTop: 8,
+                      marginBottom: 8,
+                    }
+              }
+            >
+              <span
+                style={{
+                  color: i === active ? s.color : i < active ? "#ccc" : "#ccc",
+                }}
+              >
+                {s.icon}
+              </span>
+            </div>
 
-                    {/* CONNECTOR */}
-                    {i < steps.length - 1 && (
-                      <div className="ps-step-connector">
-                        <div className={`ps-connector-line${i < active ? " done" : ""}`} />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+            <div
+              className="ps-step-num"
+              style={{
+                ...(i === active ? { color: s.color } : {}),
+                marginTop: 6,
+                marginBottom: 6,
+              }}
+            >
+              {String(s.id).padStart(2, "0")}
+            </div>
+
+            <div
+              className="ps-step-label"
+              style={{
+                ...(i === active ? { color: s.color } : {}),
+                marginTop: 6,
+                marginBottom: 6,
+              }}
+            >
+              {s.label}
             </div>
           </div>
 
+          {/* CONNECTOR */}
+          {i < steps.length - 1 && (
+            <div className="ps-step-connector">
+              <div className={`ps-connector-line${i < active ? " done" : ""}`} />
+            </div>
+          )}
+        </div>
+      );
+    })}
+  </div>
+</div>
+
           {/* PROGRESS BAR */}
-          <div className="ps-progress-bar">
+          <div className="ps-progress-bar mt-8">
             <div
               className="ps-progress-fill"
               style={{ width: `${progress}%`, background: step.color }}
@@ -371,7 +407,7 @@ export default function ProcessSteps() {
           </div>
 
           {/* DETAIL PANEL */}
-          <div className="ps-panel" key={active}>
+          <div className="ps-panel " key={active} >
             <div className="ps-panel-accent" style={{ background: step.color }} />
             <div className="ps-panel-top">
               <div

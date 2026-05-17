@@ -31,7 +31,7 @@ const contactInfo = [
       </svg>
     ),
     label: "Email Us",
-    value: "hello@studyabroad.np",
+    value: "info@studysync.com.np",
   },
   {
     color: "#1a9e5c",
@@ -41,7 +41,7 @@ const contactInfo = [
       </svg>
     ),
     label: "Call Us",
-    value: "+977 01-4XXXXXX",
+    value: "015924164",
   },
   {
     color: "#1a90c8",
@@ -391,7 +391,7 @@ export default function ContactPage() {
                   <div className="cp-row">
                     <div className="cp-field">
                       <label>Phone Number</label>
-                      <input name="phone" type="tel" placeholder="+977 98XXXXXXXX" value={form.phone} onChange={handleChange} />
+                      <input name="phone" type="tel" placeholder="+977 " value={form.phone} onChange={handleChange} />
                     </div>
                     <div className="cp-field">
                       <label>Best Time to Call</label>
