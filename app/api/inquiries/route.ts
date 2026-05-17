@@ -45,3 +45,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: "Failed to submit inquiry" }, { status: 500 });
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    await ensureContentTables();
+    const { searchParams } = new URL(request.url);
+    const id = Number(searchParams.get("id"));
+
+    if (!Number.isFinite(id) || id <= 0) {
+      return NextResponse.json({ success: false, error: "Valid id is required" }, { status: 400 });
+    }
+
+    const pool = getPool();
+    await pool.query("DELETE FROM ContactRequest WHERE id = ?", [id]);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("inquiries DELETE error", error);
+    return NextResponse.json({ success: false, error: "Failed to delete inquiry" }, { status: 500 });
+  }
+}

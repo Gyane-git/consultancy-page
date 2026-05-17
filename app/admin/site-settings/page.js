@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AdminSiteSettingsPage() {
   const [settings, setSettings] = useState({
@@ -45,9 +46,11 @@ export default function AdminSiteSettingsPage() {
       }
       setSettings(data.settings);
       setNotice("Site settings updated successfully.");
+      toast.success("Site settings updated successfully.");
     } catch (error) {
       console.error(error);
       setNotice("Failed to save settings.");
+      toast.error("Failed to save settings.");
     } finally {
       setSaving(false);
     }

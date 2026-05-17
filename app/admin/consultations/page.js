@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AdminConsultationsPage() {
   const [consultations, setConsultations] = useState([]);
@@ -37,10 +38,12 @@ export default function AdminConsultationsPage() {
       const data = await res.json();
       if (!res.ok || !data?.success) throw new Error(data?.error || "Failed to update status");
       setNotice("Consultation status updated.");
+      toast.success("Consultation status updated.");
       await loadData();
     } catch (error) {
       console.error(error);
       setNotice(error instanceof Error ? error.message : "Failed to update status");
+      toast.error(error instanceof Error ? error.message : "Failed to update status");
     }
   }
 
@@ -52,10 +55,29 @@ export default function AdminConsultationsPage() {
       const data = await res.json();
       if (!res.ok || !data?.success) throw new Error(data?.error || "Failed to delete consultation");
       setNotice("Consultation request deleted.");
+      toast.success("Consultation request deleted.");
       await loadData();
     } catch (error) {
       console.error(error);
       setNotice(error instanceof Error ? error.message : "Failed to delete consultation");
+      toast.error(error instanceof Error ? error.message : "Failed to delete consultation");
+    }
+  }
+
+  async function deleteContact(id) {
+    if (!window.confirm("Delete this contact request?")) return;
+    setNotice("");
+    try {
+      const res = await fetch(`/api/inquiries?id=${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok || !data?.success) throw new Error(data?.error || "Failed to delete contact request");
+      setNotice("Contact request deleted.");
+      toast.success("Contact request deleted.");
+      await loadData();
+    } catch (error) {
+      console.error(error);
+      setNotice(error instanceof Error ? error.message : "Failed to delete contact request");
+      toast.error(error instanceof Error ? error.message : "Failed to delete contact request");
     }
   }
 
@@ -103,9 +125,14 @@ export default function AdminConsultationsPage() {
         <div className="space-y-3">
           {contacts.map((item) => (
             <div key={item.id} className="border rounded-lg p-3">
-              <p className="font-semibold">{item.name} ({item.email})</p>
-              <p className="text-sm text-gray-600">Phone: {item.phone || "-"} | Subject: {item.subject || "-"}</p>
-              <p className="text-sm text-gray-600">Message: {item.message || "-"}</p>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-semibold">{item.name} ({item.email})</p>
+                  <p className="text-sm text-gray-600">Phone: {item.phone || "-"} | Subject: {item.subject || "-"}</p>
+                  <p className="text-sm text-gray-600">Message: {item.message || "-"}</p>
+                </div>
+                <button className="text-sm text-red-600 shrink-0" onClick={() => deleteContact(item.id)}>Delete</button>
+              </div>
             </div>
           ))}
           {!contacts.length ? <p className="text-sm text-gray-500">No contact requests yet.</p> : null}

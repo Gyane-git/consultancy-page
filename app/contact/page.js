@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const subjects = [
   "Study in Australia",
@@ -79,9 +80,11 @@ export default function ContactPage() {
       if (!res.ok || !data?.success) {
         throw new Error(data?.error || "Failed to submit inquiry");
       }
+      toast.success("Your message has been submitted.");
       setSubmitted(true);
     } catch (err) {
       console.error(err);
+      toast.error("Unable to submit your message right now.");
       setError("Unable to submit your message right now. Please try again.");
     } finally {
       setSubmitting(false);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 
 const emptyForm = {
   id: null,
@@ -70,6 +71,7 @@ export default function AdminVideoTestimonialsPage() {
     } catch (error) {
       console.error(error);
       setNotice(error instanceof Error ? error.message : "Failed to fetch video testimonials");
+      toast.error(error instanceof Error ? error.message : "Failed to fetch video testimonials");
     } finally {
       setLoading(false);
     }
@@ -106,11 +108,13 @@ export default function AdminVideoTestimonialsPage() {
       if (!res.ok || !data?.success) throw new Error(data?.error || "Failed to save video testimonial");
 
       setNotice(form.id ? "Video testimonial updated." : "Video testimonial created.");
+      toast.success(form.id ? "Video testimonial updated." : "Video testimonial created.");
       setForm(emptyForm);
       await loadVideos();
     } catch (error) {
       console.error(error);
       setNotice(error instanceof Error ? error.message : "Failed to save video testimonial");
+      toast.error(error instanceof Error ? error.message : "Failed to save video testimonial");
     } finally {
       setSaving(false);
     }
@@ -126,11 +130,13 @@ export default function AdminVideoTestimonialsPage() {
       if (!res.ok || !data?.success) throw new Error(data?.error || "Failed to delete video testimonial");
 
       setNotice("Video testimonial deleted.");
+      toast.success("Video testimonial deleted.");
       if (form.id === id) setForm(emptyForm);
       await loadVideos();
     } catch (error) {
       console.error(error);
       setNotice(error instanceof Error ? error.message : "Failed to delete video testimonial");
+      toast.error(error instanceof Error ? error.message : "Failed to delete video testimonial");
     }
   }
 
@@ -143,9 +149,11 @@ export default function AdminVideoTestimonialsPage() {
       const dataUrl = await toCompressedDataUrl(file);
       setForm((prev) => ({ ...prev, thumbnail: dataUrl }));
       setNotice("Thumbnail selected from gallery.");
+      toast.success("Thumbnail selected from gallery.");
     } catch (error) {
       console.error(error);
       setNotice("Failed to process thumbnail image.");
+      toast.error("Failed to process thumbnail image.");
     }
   }
 
@@ -162,6 +170,7 @@ export default function AdminVideoTestimonialsPage() {
       isActive: item.isActive !== false,
     });
     setNotice("Editing selected video testimonial.");
+    toast("Editing selected video testimonial.");
   }
 
   return (

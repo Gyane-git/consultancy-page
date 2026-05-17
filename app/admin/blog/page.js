@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 
 const emptyForm = {
   id: null,
@@ -97,6 +98,7 @@ export default function AdminBlogPage() {
     } catch (error) {
       console.error(error);
       setNotice("Failed to load blog posts.");
+      toast.error("Failed to load blog posts.");
     } finally {
       setLoading(false);
     }
@@ -129,6 +131,7 @@ export default function AdminBlogPage() {
 
     if (!payload.slug || !payload.title.trim() || !payload.content.trim()) {
       setNotice("Slug, title and content are required.");
+      toast.error("Slug, title and content are required.");
       setSaving(false);
       return;
     }
@@ -147,11 +150,13 @@ export default function AdminBlogPage() {
       }
 
       setNotice(payload.id ? "Blog post updated." : "Blog post created.");
+      toast.success(payload.id ? "Blog post updated." : "Blog post created.");
       setForm(emptyForm);
       await loadBlogs();
     } catch (error) {
       console.error(error);
       setNotice(error instanceof Error ? error.message : "Failed to save blog post");
+      toast.error(error instanceof Error ? error.message : "Failed to save blog post");
     } finally {
       setSaving(false);
     }
@@ -170,6 +175,7 @@ export default function AdminBlogPage() {
       }
 
       setNotice("Blog post deleted.");
+      toast.success("Blog post deleted.");
       if (form.id === id) {
         setForm(emptyForm);
       }
@@ -177,17 +183,20 @@ export default function AdminBlogPage() {
     } catch (error) {
       console.error(error);
       setNotice(error instanceof Error ? error.message : "Failed to delete blog post");
+      toast.error(error instanceof Error ? error.message : "Failed to delete blog post");
     }
   }
 
   function startEdit(blog) {
     setForm(mapBlogToForm(blog));
     setNotice("Editing selected blog post.");
+    toast("Editing selected blog post.");
   }
 
   function clearForm() {
     setForm(emptyForm);
     setNotice("Form reset.");
+    toast("Form reset.");
   }
 
   async function handleThumbnailFromGallery(e) {
@@ -199,9 +208,11 @@ export default function AdminBlogPage() {
       const dataUrl = await toCompressedDataUrl(file);
       setForm((prev) => ({ ...prev, thumbnail: dataUrl }));
       setNotice("Thumbnail selected from gallery.");
+      toast.success("Thumbnail selected from gallery.");
     } catch (error) {
       console.error(error);
       setNotice("Failed to process thumbnail image.");
+      toast.error("Failed to process thumbnail image.");
     }
   }
 

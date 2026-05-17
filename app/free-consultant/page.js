@@ -28,6 +28,7 @@ import {
   Plane,
   DollarSign,
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function FreeConsultationPage() {
   const [step, setStep] = useState(1);
@@ -91,9 +92,11 @@ export default function FreeConsultationPage() {
       if (!res.ok || !data?.success) {
         throw new Error(data?.error || "Failed to submit consultation request");
       }
+      toast.success("Consultation request submitted successfully.");
       setIsSubmitted(true);
     } catch (error) {
       console.error(error);
+      toast.error("Could not submit right now. Please try again.");
       setSubmitError("Could not submit right now. Please try again.");
     } finally {
       setIsSubmitting(false);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 async function toCompressedDataUrl(file) {
   const sourceUrl = await new Promise((resolve, reject) => {
@@ -79,9 +80,11 @@ export default function AdminAboutUsPage() {
       const data = await res.json();
       if (!res.ok || !data?.success) throw new Error(data?.error || "Failed to save");
       setNotice("CEO profile updated successfully.");
+      toast.success("CEO profile updated successfully.");
     } catch (error) {
       console.error(error);
       setNotice("Failed to save CEO profile.");
+      toast.error("Failed to save CEO profile.");
     } finally {
       setSaving(false);
     }
@@ -95,9 +98,11 @@ export default function AdminAboutUsPage() {
       const dataUrl = await toCompressedDataUrl(file);
       setForm((prev) => ({ ...prev, profileImage: dataUrl }));
       setNotice("Image selected from gallery.");
+      toast.success("Image selected from gallery.");
     } catch (error) {
       console.error(error);
       setNotice("Failed to process image.");
+      toast.error("Failed to process image.");
     }
   }
 

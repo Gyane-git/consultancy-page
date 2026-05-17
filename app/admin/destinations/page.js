@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const emptyForm = { id: null, slug: "", name: "", shortText: "", longText: "", isActive: true };
 
@@ -31,9 +32,11 @@ export default function AdminDestinationsPage() {
     const data = await res.json();
     if (!res.ok || !data?.success) {
       setNotice(data?.error || "Failed to save destination");
+      toast.error(data?.error || "Failed to save destination");
       return;
     }
     setNotice("Destination saved.");
+    toast.success("Destination saved.");
     setForm(emptyForm);
     loadData();
   }
@@ -44,9 +47,11 @@ export default function AdminDestinationsPage() {
     const data = await res.json();
     if (!res.ok || !data?.success) {
       setNotice(data?.error || "Failed to delete destination");
+      toast.error(data?.error || "Failed to delete destination");
       return;
     }
     setNotice("Destination deleted.");
+    toast.success("Destination deleted.");
     loadData();
   }
 

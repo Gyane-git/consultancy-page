@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 
 const emptyForm = {
   id: null,
@@ -95,6 +96,7 @@ export default function AdminUniversitiesPage() {
     } catch (error) {
       console.error(error);
       setNotice(error instanceof Error ? error.message : "Failed to fetch universities");
+      toast.error(error instanceof Error ? error.message : "Failed to fetch universities");
     } finally {
       setLoading(false);
     }
@@ -126,11 +128,13 @@ export default function AdminUniversitiesPage() {
       if (!res.ok || !data?.success) throw new Error(data?.error || "Failed to save university");
 
       setNotice(form.id ? "University updated." : "University created.");
+      toast.success(form.id ? "University updated." : "University created.");
       setForm(emptyForm);
       await loadData();
     } catch (error) {
       console.error(error);
       setNotice(error instanceof Error ? error.message : "Failed to save university");
+      toast.error(error instanceof Error ? error.message : "Failed to save university");
     } finally {
       setSaving(false);
     }
@@ -144,11 +148,13 @@ export default function AdminUniversitiesPage() {
       const data = await res.json();
       if (!res.ok || !data?.success) throw new Error(data?.error || "Failed to delete university");
       setNotice("University deleted.");
+      toast.success("University deleted.");
       if (form.id === id) setForm(emptyForm);
       await loadData();
     } catch (error) {
       console.error(error);
       setNotice(error instanceof Error ? error.message : "Failed to delete university");
+      toast.error(error instanceof Error ? error.message : "Failed to delete university");
     }
   }
 
@@ -166,6 +172,7 @@ export default function AdminUniversitiesPage() {
       isActive: item.isActive !== false,
     });
     setNotice("Editing selected university.");
+    toast("Editing selected university.");
   }
 
   async function handleImagePick(type, e) {
@@ -176,9 +183,11 @@ export default function AdminUniversitiesPage() {
       const dataUrl = await toCompressedDataUrl(file);
       setForm((prev) => ({ ...prev, [type]: dataUrl }));
       setNotice(type === "logo" ? "Logo selected from gallery." : "Support image selected from gallery.");
+      toast.success(type === "logo" ? "Logo selected from gallery." : "Support image selected from gallery.");
     } catch (error) {
       console.error(error);
       setNotice("Failed to process image.");
+      toast.error("Failed to process image.");
     }
   }
 

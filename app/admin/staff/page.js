@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const emptyForm = { id: null, name: "", designation: "", image: "", socialUrl: "", displayOrder: 0, isActive: true };
 
@@ -69,9 +70,11 @@ export default function AdminStaffPage() {
     const data = await res.json();
     if (!res.ok || !data?.success) {
       setNotice(data?.error || "Failed to save staff profile");
+      toast.error(data?.error || "Failed to save staff profile");
       return;
     }
     setNotice("Staff profile saved.");
+    toast.success("Staff profile saved.");
     setForm(emptyForm);
     loadStaff();
   }
@@ -82,9 +85,11 @@ export default function AdminStaffPage() {
     const data = await res.json();
     if (!res.ok || !data?.success) {
       setNotice(data?.error || "Failed to delete staff profile");
+      toast.error(data?.error || "Failed to delete staff profile");
       return;
     }
     setNotice("Staff profile deleted.");
+    toast.success("Staff profile deleted.");
     loadStaff();
   }
 
@@ -96,9 +101,11 @@ export default function AdminStaffPage() {
       const dataUrl = await toCompressedDataUrl(file);
       setForm((prev) => ({ ...prev, image: dataUrl }));
       setNotice("Image selected from gallery.");
+      toast.success("Image selected from gallery.");
     } catch (error) {
       console.error(error);
       setNotice("Failed to process image.");
+      toast.error("Failed to process image.");
     }
   }
 

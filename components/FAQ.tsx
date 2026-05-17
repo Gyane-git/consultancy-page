@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import toast from "react-hot-toast";
 
 type FAQ = { id: number; question: string; answer: string };
 
@@ -115,12 +116,30 @@ export default function ContactFAQPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("sending");
-    await new Promise((r) => setTimeout(r, 1800));
-    setStatus("success");
-    setTimeout(() => {
-      setStatus("idle");
-      setForm({ name: "", phone: "", email: "", subject: "", message: "" });
-    }, 3000);
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data?.success) {
+        throw new Error(data?.error || "Failed to submit inquiry");
+      }
+
+      toast.success("Your message has been sent.");
+      setStatus("success");
+      setTimeout(() => {
+        setStatus("idle");
+        setForm({ name: "", phone: "", email: "", subject: "", message: "" });
+      }, 3000);
+    } catch (error) {
+      console.error(error);
+      toast.error("Could not send message. Please try again.");
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 2500);
+    }
   };
 
   return (
@@ -356,6 +375,10 @@ export default function ContactFAQPage() {
         .submit-btn.success {
           background: linear-gradient(135deg, #10b981 0%, #059669 100%);
           box-shadow: 0 4px 24px rgba(16,185,129,0.4);
+        }
+        .submit-btn.error {
+          background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+          box-shadow: 0 4px 24px rgba(239,68,68,0.35);
         }
 
         .btn-inner {
@@ -680,6 +703,7 @@ export default function ContactFAQPage() {
                   {status === "idle" && "Send Message →"}
                   {status === "sending" && "Sending…"}
                   {status === "success" && "✓ Message Sent!"}
+                  {status === "error" && "Could not send. Try again."}
                 </span>
               </button>
             </form>
