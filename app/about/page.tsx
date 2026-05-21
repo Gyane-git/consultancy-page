@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import StaffTeam from "@/components/staff-team";
 
 const stats = [
-  { value: "2005", label: "Founded", color: "#e8352a" },
+  { value: "2025", label: "Founded", color: "#e8352a" },
   { value: "99%+", label: "Visa Success Rate", color: "#e8922a" },
   { value: "700+", label: "Students Annually", color: "#1a9e5c" },
   { value: "100%", label: "Dedicated Guidance", color: "#1a90c8" },
@@ -531,7 +531,7 @@ export default function AboutPage() {
                 Globally
               </h1>
               <p className="ab-hero-desc">
-                Since 2005, we have been a trusted partner for Nepali students aspiring to study in the UK, USA, Australia, Canada and Denmark — with a legacy of guidance, integrity, and 100% visa dedication.
+                Since 2025, we have been a trusted partner for Nepali students aspiring to study in the UK, USA, Australia, Canada and Denmark — with a legacy of guidance, integrity, and 100% visa dedication.
               </p>
               <div className="ab-country-pills">
                 {countries.map((c) => (
@@ -554,7 +554,7 @@ export default function AboutPage() {
 
         {/* ── SINCE BANNER ── */}
         <div className="ab-since">
-          <span className="ab-since-text">Serving since 2005</span>
+          <span className="ab-since-text">Serving since 2025</span>
           <div className="ab-since-dots">
             {["#e8352a","#e8922a","#1a9e5c","#1a90c8"].map((c, i) => (
               <div key={i} className="ab-since-dot" style={{ background: c }} />

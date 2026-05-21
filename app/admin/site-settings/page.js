@@ -7,6 +7,7 @@ export default function AdminSiteSettingsPage() {
   const [settings, setSettings] = useState({
     showUniversityTab: true,
     homeShowFindUni: true,
+    mapEmbedUrl: "https://www.google.com/maps?q=Bag+Bazar+Kathmandu+Nepal&output=embed",
   });
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState("");
@@ -74,6 +75,18 @@ export default function AdminSiteSettingsPage() {
             className="h-5 w-5"
           />
         </label>
+
+        <div className="border rounded-lg px-4 py-3">
+          <p className="font-medium text-gray-900 mb-1">Contact Page Google Map URL</p>
+          <p className="text-sm text-gray-600 mb-3">Paste Google Maps embed URL (`...output=embed`) or a Google Maps share URL.</p>
+          <input
+            type="text"
+            value={settings.mapEmbedUrl || ""}
+            onChange={(e) => setSettings((prev) => ({ ...prev, mapEmbedUrl: e.target.value }))}
+            className="w-full border rounded-lg px-3 py-2 text-sm"
+            placeholder="https://www.google.com/maps?q=Bag+Bazar+Kathmandu+Nepal&output=embed"
+          />
+        </div>
 
         <label className="flex items-center justify-between gap-4 border rounded-lg px-4 py-3">
           <div>

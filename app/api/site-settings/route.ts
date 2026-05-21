@@ -7,12 +7,14 @@ type SiteSettingsRow = RowDataPacket & {
   singletonKey: string;
   showUniversityTab: number | boolean;
   homeShowFindUni: number | boolean;
+  mapEmbedUrl: string | null;
 };
 
 function mapSettings(row: SiteSettingsRow | undefined) {
   return {
     showUniversityTab: row ? Boolean(row.showUniversityTab) : true,
     homeShowFindUni: row ? Boolean(row.homeShowFindUni) : true,
+    mapEmbedUrl: row?.mapEmbedUrl || "https://www.google.com/maps?q=Bag+Bazar+Kathmandu+Nepal&output=embed",
   };
 }
 
@@ -35,15 +37,17 @@ export async function POST(request: Request) {
 
     const showUniversityTab = payload?.showUniversityTab !== false;
     const homeShowFindUni = payload?.homeShowFindUni !== false;
+    const mapEmbedUrl = String(payload?.mapEmbedUrl || "").trim();
 
     const pool = getPool();
     await pool.query(
-      `INSERT INTO SiteSetting (singletonKey, showUniversityTab, homeShowFindUni)
-       VALUES ('default', ?, ?)
+      `INSERT INTO SiteSetting (singletonKey, showUniversityTab, homeShowFindUni, mapEmbedUrl)
+       VALUES ('default', ?, ?, ?)
        ON DUPLICATE KEY UPDATE
          showUniversityTab = VALUES(showUniversityTab),
-         homeShowFindUni = VALUES(homeShowFindUni)`,
-      [showUniversityTab, homeShowFindUni],
+         homeShowFindUni = VALUES(homeShowFindUni),
+         mapEmbedUrl = VALUES(mapEmbedUrl)`,
+      [showUniversityTab, homeShowFindUni, mapEmbedUrl || null],
     );
 
     const [rows] = await pool.query<SiteSettingsRow[]>("SELECT * FROM SiteSetting WHERE singletonKey = 'default' LIMIT 1");

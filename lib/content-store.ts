@@ -239,12 +239,19 @@ export async function ensureContentTables() {
           singletonKey VARCHAR(40) NOT NULL DEFAULT 'default',
           showUniversityTab BOOLEAN NOT NULL DEFAULT true,
           homeShowFindUni BOOLEAN NOT NULL DEFAULT true,
+          mapEmbedUrl VARCHAR(2000) NULL,
           createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
           updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
           PRIMARY KEY (id),
           UNIQUE KEY uniq_site_setting_singleton (singletonKey)
         )
       `);
+
+      const [siteSettingColumns] = await pool.query<RowDataPacket[]>("SHOW COLUMNS FROM SiteSetting");
+      const hasMapEmbedUrl = siteSettingColumns.some((col) => col.Field === "mapEmbedUrl");
+      if (!hasMapEmbedUrl) {
+        await pool.query("ALTER TABLE SiteSetting ADD COLUMN mapEmbedUrl VARCHAR(2000) NULL");
+      }
 
       await pool.query(`
         CREATE TABLE IF NOT EXISTS VideoTestimonial (
@@ -276,8 +283,9 @@ export async function ensureContentTables() {
       );
 
       await pool.query(
-        `INSERT IGNORE INTO SiteSetting (singletonKey, showUniversityTab, homeShowFindUni)
-         VALUES ('default', true, true)`,
+        `INSERT IGNORE INTO SiteSetting (singletonKey, showUniversityTab, homeShowFindUni, mapEmbedUrl)
+         VALUES ('default', true, true, ?)`,
+        ["https://www.google.com/maps?q=Bag+Bazar+Kathmandu+Nepal&output=embed"],
       );
 
       for (const destination of defaultDestinations) {

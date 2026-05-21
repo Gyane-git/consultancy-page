@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 const subjects = [
@@ -63,6 +63,37 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [mapUrl, setMapUrl] = useState("https://www.google.com/maps?q=Bag+Bazar+Kathmandu+Nepal&output=embed");
+
+  useEffect(() => {
+    let ignore = false;
+    async function loadMapUrl() {
+      try {
+        const res = await fetch("/api/site-settings", { cache: "no-store" });
+        const data = await res.json();
+        if (!ignore && data?.success && data?.settings?.mapEmbedUrl) {
+          setMapUrl(String(data.settings.mapEmbedUrl));
+        }
+      } catch (err) {
+        console.error("Failed to load map url", err);
+      }
+    }
+    loadMapUrl();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  const embedMapUrl = useMemo(() => {
+    const raw = String(mapUrl || "").trim();
+    if (!raw) return "https://www.google.com/maps?q=Bag+Bazar+Kathmandu+Nepal&output=embed";
+    if (raw.includes("/maps/embed") || raw.includes("output=embed")) return raw;
+    const match = raw.match(/@([-0-9.]+),([-0-9.]+)/);
+    if (match?.[1] && match?.[2]) {
+      return `https://www.google.com/maps?q=${match[1]},${match[2]}&z=15&output=embed`;
+    }
+    return `https://www.google.com/maps?q=${encodeURIComponent(raw)}&output=embed`;
+  }, [mapUrl]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -184,6 +215,12 @@ export default function ContactPage() {
           height: 130px; display: flex;
           align-items: center; justify-content: center;
           position: relative; margin-top: 12px;
+        }
+        .cp-map iframe {
+          position: absolute; inset: 0;
+          width: 100%; height: 100%;
+          border: 0;
+          z-index: 1;
         }
         .cp-map-grid {
           position: absolute; inset: 0;
@@ -351,11 +388,14 @@ export default function ContactPage() {
               ))}
             </div>
             <div className="cp-map">
-              <div className="cp-map-grid" />
-              <div className="cp-map-pin">
-                <div className="cp-map-pin-dot" />
-                <div className="cp-map-pin-label">Kathmandu, Nepal</div>
-              </div>
+              <iframe
+                title="StudySync Office Map"
+                src={embedMapUrl}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              <div className="cp-map-grid" style={{ zIndex: 2, opacity: 0.12 }} />
             </div>
           </div>
 
