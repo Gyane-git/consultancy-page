@@ -6,7 +6,7 @@ import { CheckCircle, Smartphone, Zap, BookOpen, Clock } from "lucide-react";
 // ─── Brand palette (Duolingo-inspired) ──────────────────────────────────────
 // Green: #58cc02 | Blue: #1cb0f6 | Purple: #ce82ff | Orange: #ff9600
 
-const COURSES = [
+const FALLBACK_COURSES = [
   {
     title: "DET Starter",
     label: "Beginner",
@@ -209,7 +209,7 @@ function DETCalculator() {
   );
 }
 
-function CourseCard({ c, visible }: { c: typeof COURSES[0]; visible: boolean }) {
+function CourseCard({ c, visible }: { c: typeof FALLBACK_COURSES[0]; visible: boolean }) {
   const [open, setOpen] = useState(false);
   const Icon = c.icon;
   return (
@@ -314,6 +314,47 @@ export default function DuolingoCourses() {
   const [coursesRef, coursesVis] = useInView();
   const [featRef, featVis] = useInView();
   const [pricRef, pricVis] = useInView();
+  const [courses, setCourses] = useState(FALLBACK_COURSES);
+
+  useEffect(() => {
+    let ignore = false;
+    async function loadCourses() {
+      try {
+        const res = await fetch("/api/eng-courses?testType=duolingo", { cache: "no-store" });
+        const data = await res.json();
+        if (!ignore && res.ok && data?.success && Array.isArray(data.courses) && data.courses.length > 0) {
+          const next = data.courses.map((item: {
+            title?: string;
+            target?: string;
+            courseTime?: string;
+            price?: string;
+            description?: string;
+            breakdown?: string[];
+          }, i: number) => {
+            const ui = FALLBACK_COURSES[i % FALLBACK_COURSES.length];
+            return {
+              ...ui,
+              title: String(item.title || ui.title),
+              label: String(item.target || ui.label),
+              week: String(item.courseTime || ui.week),
+              price: String(item.price || ui.price),
+              desc: String(item.description || ui.desc),
+              breakdown: Array.isArray(item.breakdown) && item.breakdown.length ? item.breakdown : ui.breakdown,
+              num: String(i + 1).padStart(2, "0"),
+            };
+          });
+          setCourses(next);
+        }
+      } catch (error) {
+        console.error("Failed to load Duolingo courses", error);
+      }
+    }
+
+    loadCourses();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return (
     <>
@@ -550,9 +591,9 @@ export default function DuolingoCourses() {
             <div className="hero-visual">
               <div className="hero-visual-grid">
                 {[
-                  { label: "DET Starter", value: "4 wks", icon: "📚", color: "#58cc02" },
-                  { label: "DET Core", value: "5 wks", icon: "📱", color: "#1cb0f6" },
-                  { label: "DET Advanced", value: "4 wks", icon: "⚡", color: "#ce82ff" },
+                  { label: "DET Starter", value: "4 weeks", icon: "📚", color: "#58cc02" },
+                  { label: "DET Core", value: "5 weeks", icon: "📱", color: "#1cb0f6" },
+                  { label: "DET Advanced", value: "4 weeks", icon: "⚡", color: "#ce82ff" },
                   { label: "DET Express", value: "10 days", icon: "🚀", color: "#ff9600" },
                 ].map((item, i) => (
                   <div key={i} className="hero-vis-card">
@@ -580,7 +621,7 @@ export default function DuolingoCourses() {
             <p className="section-eyebrow" style={{ color: "#58cc02" }}>Programs</p>
             <h2 className="section-title">Choose Your DET Path</h2>
             <div className="courses-grid" ref={coursesRef}>
-              {COURSES.map((c) => <CourseCard key={c.title} c={c} visible={coursesVis} />)}
+              {courses.map((c) => <CourseCard key={c.title} c={c} visible={coursesVis} />)}
             </div>
           </div>
         </div>
@@ -619,45 +660,7 @@ export default function DuolingoCourses() {
         </div>
 
         {/* ── PRICING ── */}
-        <div className="pricing-outer">
-          <div className="section">
-            <p className="section-eyebrow" style={{ color: "#ce82ff" }}>Investment</p>
-            <h2 className="section-title">Transparent Pricing</h2>
-            <div className="pricing-grid" ref={pricRef}>
-              {[
-                { name: "DET Starter", duration: "4 Weeks · Offline & Online", price: "NPR 6,000", tag: "Start Here", accent: "#58cc02", light: "#f0fce0", features: ["Full DET format orientation", "All 4 skill areas covered", "1 full adaptive mock test"], featured: false },
-                { name: "DET Core", duration: "5 Weeks · Offline & Online", price: "NPR 7,000", tag: "Most Popular", accent: "#1cb0f6", light: "#e8f7ff", features: ["Vocabulary & grammar drills", "Speaking & writing coaching", "Full adaptive mock + feedback"], featured: true },
-                { name: "DET Advanced", duration: "4 Weeks · Offline & Online", price: "NPR 7,500", tag: "Score 115+", accent: "#ce82ff", light: "#faf0ff", features: ["Advanced fluency coaching", "3× adaptive mock tests", "1:1 score report analysis"], featured: false },
-                { name: "DET Express", duration: "10 Days · Offline & Online", price: "NPR 3,500", tag: "Last-Minute", accent: "#ff9600", light: "#fff4e5", features: ["Task type crash course", "Timed speaking & writing drills", "2× scored mock tests"], featured: false },
-              ].map((plan, i) => (
-                <div key={i} className={`price-card${pricVis ? " vis" : ""}`}
-                  style={plan.featured ? { borderColor: `${plan.accent}55`, background: `${plan.accent}04`, borderWidth: "2px" } : {}}>
-                  <div className="price-corner" style={{ background: plan.accent }} />
-                  <span className="price-tag" style={{ background: plan.light, color: plan.accent }}>{plan.tag}</span>
-                  <h4 className="price-name">{plan.name}</h4>
-                  <p className="price-duration">{plan.duration}</p>
-                  <p className="price-amount" style={{ color: plan.accent }}>{plan.price}</p>
-                  <p className="price-amount-sub">per course · all materials included</p>
-                  <div className="price-divider" />
-                  <ul className="price-features">
-                    {plan.features.map((f, fi) => (
-                      <li key={fi}>
-                        <CheckCircle size={14} style={{ color: plan.accent, flexShrink: 0, marginTop: 1 }} />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <button className="price-btn"
-                    style={plan.featured
-                      ? { background: plan.accent, borderColor: plan.accent, color: "#fff" }
-                      : { background: "transparent", borderColor: plan.accent, color: plan.accent }}>
-                    Enroll Now
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        
 
         {/* ── CALCULATOR ── */}
         <div className="calc-outer">
