@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
-const services = [
+const FALLBACK_SERVICES = [
   {
     id: "01",
     slug: "study-abroad-counselling",
@@ -11,11 +11,6 @@ const services = [
     tagline: "Your dream destination, mapped.",
     color: "#e8352a",
     bg: "#fff0ef",
-    icon: (
-      <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253" />
-      </svg>
-    ),
     desc: "Personalized one-on-one counselling to help you choose the right country, university, and course — aligned with your academic background, career goals, and budget.",
     features: ["Country & university shortlisting", "Course & intake selection", "Profile evaluation", "Career pathway planning"],
     stat: "10+",
@@ -28,11 +23,6 @@ const services = [
     tagline: "Applications that open doors.",
     color: "#e8922a",
     bg: "#fff7ee",
-    icon: (
-      <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 3.741-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-      </svg>
-    ),
     desc: "End-to-end application management — from SOP writing and document preparation to submission tracking and offer letter follow-up.",
     features: ["SOP & personal statement drafting", "Document checklist & preparation", "Application portal submission", "Offer letter follow-up"],
     stat: "500+",
@@ -45,11 +35,6 @@ const services = [
     tagline: "99%+ success, zero guesswork.",
     color: "#1a9e5c",
     bg: "#edf9f3",
-    icon: (
-      <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
-      </svg>
-    ),
     desc: "Meticulous visa file preparation with expert review at every step. We handle complex cases and ensure your application meets every requirement.",
     features: ["Visa document checklist", "Financial document guidance", "Mock visa interview prep", "Embassy appointment support"],
     stat: "99%+",
@@ -62,11 +47,6 @@ const services = [
     tagline: "Choose smart. Grow faster.",
     color: "#1a90c8",
     bg: "#edf6fb",
-    icon: (
-      <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
-      </svg>
-    ),
     desc: "Data-driven career guidance that maps your skills and interests to the most in-demand courses and industries across global markets.",
     features: ["Personality & skills assessment", "Industry demand analysis", "Course comparison & selection", "Post-study work pathway advice"],
     stat: "700+",
@@ -79,11 +59,6 @@ const services = [
     tagline: "Score higher. Apply stronger.",
     color: "#e8352a",
     bg: "#fff0ef",
-    icon: (
-      <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-      </svg>
-    ),
     desc: "Structured IELTS, PTE, and Duolingo preparation with practice tests, score analysis, and targeted improvement strategies to hit your target band score.",
     features: ["Full-length mock tests", "Band score analysis", "Speaking & writing coaching", "PTE & Duolingo guidance"],
     stat: "6.5+",
@@ -160,7 +135,7 @@ function ServiceCard({ service, index }) {
               {service.id}
             </div>
             <div className="sv-card-icon" style={{ background: service.bg, color: service.color }}>
-              {service.icon}
+              {serviceIcons[index % serviceIcons.length]}
             </div>
           </div>
 
@@ -196,6 +171,44 @@ function ServiceCard({ service, index }) {
 }
 
 export default function ServicesPage() {
+  const [services, setServices] = useState(FALLBACK_SERVICES);
+  const [sectionData, setSectionData] = useState({
+    subtitle: "Our Services",
+    title: "Five Ways We Shape Your Future",
+    description:
+      "We support your full study abroad journey with expert guidance, documentation support, and career-focused planning.",
+    pointsLabel: "5 Core Services",
+  });
+
+  useEffect(() => {
+    let ignore = false;
+    async function loadServicesContent() {
+      try {
+        const res = await fetch("/api/services-page", { cache: "no-store" });
+        const data = await res.json();
+        if (!ignore && data?.success) {
+          if (Array.isArray(data.services) && data.services.length) {
+            setServices(data.services);
+          }
+          if (data.section) {
+            setSectionData({
+              subtitle: data.section.subtitle || "Our Services",
+              title: data.section.title || "Five Ways We Shape Your Future",
+              description: data.section.description || "",
+              pointsLabel: data.section.pointsLabel || `${data.services?.length || 0} Core Services`,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load services page data", error);
+      }
+    }
+    loadServicesContent();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   return (
     <>
       <style>{`
@@ -638,10 +651,13 @@ export default function ServicesPage() {
           <AnimatedSection>
             <div className="sv-section-header">
               <div>
-                <div className="sv-section-label">Our Services</div>
-                <h2 className="sv-section-title">Five Ways We<br />Shape Your Future</h2>
+                <div className="sv-section-label">{sectionData.subtitle}</div>
+                <h2 className="sv-section-title">{sectionData.title}</h2>
+                <p style={{ color: "rgba(240,234,216,0.75)", marginTop: 10, maxWidth: 560, lineHeight: 1.7 }}>
+                  {sectionData.description}
+                </p>
               </div>
-              <div className="sv-count-badge">5 Core Services</div>
+              <div className="sv-count-badge">{sectionData.pointsLabel || `${services.length} Core Services`}</div>
             </div>
           </AnimatedSection>
 
@@ -698,3 +714,10 @@ export default function ServicesPage() {
     </>
   );
 }
+  const serviceIcons = [
+    <svg key="a" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253" /></svg>,
+    <svg key="b" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 3.741-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" /></svg>,
+    <svg key="c" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" /></svg>,
+    <svg key="d" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" /></svg>,
+    <svg key="e" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.6" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>,
+  ];

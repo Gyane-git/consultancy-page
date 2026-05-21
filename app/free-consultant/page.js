@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -35,6 +35,7 @@ export default function FreeConsultationPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [destinationOptions, setDestinationOptions] = useState([]);
   const [formData, setFormData] = useState({
     // Step 1
     name: "",
@@ -59,6 +60,31 @@ export default function FreeConsultationPage() {
   });
 
   const totalSteps = 4;
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadDestinations() {
+      try {
+        const res = await fetch("/api/destination", { cache: "no-store" });
+        const data = await res.json();
+        if (!ignore && data?.success) {
+          const dynamicNames = Array.isArray(data.destinations)
+            ? data.destinations.map((item) => item.name).filter(Boolean)
+            : [];
+          const uniqueNames = Array.from(new Set(dynamicNames));
+          setDestinationOptions([...uniqueNames, "Not decided yet"]);
+        }
+      } catch (error) {
+        console.error("Failed to load consultation destinations", error);
+      }
+    }
+
+    loadDestinations();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -333,7 +359,7 @@ export default function FreeConsultationPage() {
                           name="studyDestination"
                           value={formData.studyDestination}
                           onChange={handleChange}
-                          options={["Australia", "United Kingdom", "Canada", "United States", "New Zealand", "Germany", "Ireland", "Netherlands", "Not decided yet"]}
+                          options={destinationOptions.length ? destinationOptions : ["Not decided yet"]}
                           icon={Globe}
                           required
                         />

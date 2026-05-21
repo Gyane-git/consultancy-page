@@ -75,15 +75,26 @@ const defaultMeta = {
 
 export default function DestinationDetailPage({ slug }: { slug: string }) {
   const [destination, setDestination] = useState<Destination | null>(null);
+  const [allDestinations, setAllDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let ignore = false;
     async function loadDestination() {
       try {
-        const res = await fetch(`/api/destination?slug=${encodeURIComponent(slug)}`, { cache: "no-store" });
-        const data = await res.json();
-        if (!ignore && data?.success) setDestination(data.destination ?? null);
+        const [destinationRes, allDestinationsRes] = await Promise.all([
+          fetch(`/api/destination?slug=${encodeURIComponent(slug)}`, { cache: "no-store" }),
+          fetch("/api/destination", { cache: "no-store" }),
+        ]);
+        const destinationData = await destinationRes.json();
+        const allDestinationsData = await allDestinationsRes.json();
+
+        if (!ignore && destinationData?.success) {
+          setDestination(destinationData.destination ?? null);
+        }
+        if (!ignore && allDestinationsData?.success) {
+          setAllDestinations(Array.isArray(allDestinationsData.destinations) ? allDestinationsData.destinations : []);
+        }
       } catch (error) {
         console.error("Failed to load destination", error);
       } finally {
@@ -496,13 +507,13 @@ export default function DestinationDetailPage({ slug }: { slug: string }) {
 
             <div className="dd-sidebar-card">
               <div className="dd-sidebar-label">Other Destinations</div>
-              {["UK", "USA", "Australia", "Canada", "Denmark"]
-                .filter((d) => d.toLowerCase() !== slug.toLowerCase())
+              {allDestinations
+                .filter((d) => d.slug.toLowerCase() !== slug.toLowerCase())
                 .slice(0, 4)
                 .map((d, i) => (
                   <a
-                    key={d}
-                    href={`/destinations/${d.toLowerCase()}`}
+                    key={d.id}
+                    href={`/destinations/${d.slug}`}
                     style={{
                       display: "flex", alignItems: "center", gap: 10,
                       padding: "8px 0", borderBottom: i < 3 ? "1px solid #f5f5f5" : "none",
@@ -512,7 +523,7 @@ export default function DestinationDetailPage({ slug }: { slug: string }) {
                     onMouseOut={(e) => e.currentTarget.style.opacity = "1"}
                   >
                     <div style={{ width: 6, height: 6, borderRadius: "50%", background: LOGO_COLORS[i % 4], flexShrink: 0 }} />
-                    <span style={{ fontSize: "0.8rem", fontWeight: 500, color: "#444" }}>{d}</span>
+                    <span style={{ fontSize: "0.8rem", fontWeight: 500, color: "#444" }}>{d.name}</span>
                     <span style={{ marginLeft: "auto", fontSize: "0.68rem", color: "#bbb" }}>→</span>
                   </a>
                 ))}

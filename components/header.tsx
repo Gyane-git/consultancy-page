@@ -18,18 +18,7 @@ const NAV_ITEMS = [
     label: "Destinations",
    
     active: true,
-    children: [
-      { label: "Australia", href: "/destinations/australia" },
-      { label: "United Kingdom", href: "/destinations/uk" },
-      { label: "United States", href: "/destinations/usa" },
-      { label: "Canada", href: "/destinations/canada" },
-      { label: "Ireland", href: "/destinations/ireland" },
-      { label: "Malta", href: "/destinations/malta" },
-      { label: "Germany", href: "/destinations/germany" },
-      { label: "New Zealand", href: "/destinations/new-zealand" },
-      { label: "Dubai", href: "/destinations/dubai" },
-      { label: "Georgia", href: "/destinations/georgia" },
-    ],
+    children: [],
   },
   { label: "Universities", href: "/universities" },
   {
@@ -40,7 +29,7 @@ const NAV_ITEMS = [
   {
     label: "Popular Courses",
     href: "/courses",
-    
+    children: [],
   },
   { label: "Blog", href: "/blog" },
   {
@@ -152,12 +141,39 @@ export default function TheNextHeader() {
   const [mobileExpanded, setMobileExpanded] = useState<number | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [showUniversityTab, setShowUniversityTab] = useState(true);
+  const [dynamicDestinations, setDynamicDestinations] = useState<NavChild[]>([]);
+  const [dynamicCourses, setDynamicCourses] = useState<NavChild[]>([]);
   const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    async function loadPopularCourses() {
+      try {
+        const res = await fetch("/api/popular-courses", { cache: "no-store" });
+        const data = await res.json();
+        if (!ignore && data?.success) {
+          const items = Array.isArray(data.courses) ? data.courses : [];
+          setDynamicCourses(
+            items.map((item: { name: string; slug: string }) => ({
+              label: item.name,
+              href: `/courses/${item.slug}`,
+            }))
+          );
+        }
+      } catch (error) {
+        console.error("Failed to load popular course menu", error);
+      }
+    }
+    loadPopularCourses();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -181,7 +197,52 @@ export default function TheNextHeader() {
     };
   }, []);
 
-  const navItems = NAV_ITEMS.filter((item) => (item.label === "Universities" ? showUniversityTab : true));
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadDestinations() {
+      try {
+        const res = await fetch("/api/destination", { cache: "no-store" });
+        const data = await res.json();
+        if (!ignore && data?.success) {
+          const items = Array.isArray(data.destinations) ? data.destinations : [];
+          setDynamicDestinations(
+            items.map((item: { name: string; slug: string }) => ({
+              label: item.name,
+              href: `/destinations/${item.slug}`,
+            }))
+          );
+        }
+      } catch (error) {
+        console.error("Failed to load destination menu", error);
+      }
+    }
+
+    loadDestinations();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  const navItems: NavItem[] = NAV_ITEMS
+    .map((item) => {
+      if (item.label === "Destinations") {
+        return {
+          ...item,
+          children: dynamicDestinations.length
+            ? dynamicDestinations
+            : [{ label: "All Destinations", href: "/destinations" }],
+        };
+      }
+      if (item.label === "Popular Courses") {
+        return {
+          ...item,
+          children: dynamicCourses.length ? dynamicCourses : [{ label: "All Courses", href: "/courses" }],
+        };
+      }
+      return item;
+    })
+    .filter((item) => (item.label === "Universities" ? showUniversityTab : true));
 
   return (
     <>
