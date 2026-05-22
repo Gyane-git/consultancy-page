@@ -11,7 +11,10 @@ export default function PopupAdsAdmin() {
 
   const [formData, setFormData] = useState({
     title: "",
+    imageUrl: "",
     color: "#000000",
+    targetMode: "global",
+    targetPathsText: "",
     isActive: true,
   });
 
@@ -28,7 +31,10 @@ export default function PopupAdsAdmin() {
       const parsedAds = data.map((item) => ({
         id: item.id,
         title: item.title || "Untitled Ad",
+        imageUrl: item.imageUrl || "",
         color: item.color || "#000000",
+        targetMode: item.targetMode || "global",
+        targetPaths: Array.isArray(item.targetPaths) ? item.targetPaths : [],
         isActive: !!item.isActive,
       }));
 
@@ -56,7 +62,10 @@ export default function PopupAdsAdmin() {
 
     const adPayload = {
       title: formData.title,
+      imageUrl: formData.imageUrl,
       color: formData.color,
+      targetMode: formData.targetMode,
+      targetPaths: formData.targetPathsText,
     };
 
     try {
@@ -92,7 +101,10 @@ export default function PopupAdsAdmin() {
     setEditingAd(ad);
     setFormData({
       title: ad.title,
+      imageUrl: ad.imageUrl || "",
       color: ad.color || "#000000",
+      targetMode: ad.targetMode || "global",
+      targetPathsText: Array.isArray(ad.targetPaths) ? ad.targetPaths.join("\n") : "",
       isActive: ad.isActive,
     });
     setShowModal(true);
@@ -110,7 +122,7 @@ export default function PopupAdsAdmin() {
   };
 
   const resetForm = () => {
-    setFormData({ title: "", color: "#000000", isActive: true });
+    setFormData({ title: "", imageUrl: "", color: "#000000", targetMode: "global", targetPathsText: "", isActive: true });
     setEditingAd(null);
     setShowModal(false);
   };
@@ -126,7 +138,7 @@ export default function PopupAdsAdmin() {
           <button
             onClick={() => {
               setEditingAd(null);
-              setFormData({ title: "", color: "#000000", isActive: true });
+              setFormData({ title: "", imageUrl: "", color: "#000000", targetMode: "global", targetPathsText: "", isActive: true });
               setShowModal(true);
             }}
             className="px-5 py-3 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 flex items-center gap-2"
@@ -166,6 +178,9 @@ export default function PopupAdsAdmin() {
                         <h3 className="text-lg font-bold text-slate-800 truncate">
                           {ad.title}
                         </h3>
+                        <span className="text-xs text-slate-500">
+                          {ad.targetMode === "global" ? "All Pages" : `Paths: ${(ad.targetPaths || []).join(", ") || "-"}`}
+                        </span>
 
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -222,6 +237,20 @@ export default function PopupAdsAdmin() {
 
               <div>
                 <label className="block text-sm font-semibold mb-2 text-gray-900">
+                  Popup Image URL / Gallery Image *
+                </label>
+                <textarea
+                  name="imageUrl"
+                  value={formData.imageUrl}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border rounded-lg text-black"
+                  placeholder="Paste image URL or base64 data URL from gallery"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-gray-900">
                   Color *
                 </label>
                 <input
@@ -232,6 +261,36 @@ export default function PopupAdsAdmin() {
                   className="w-16 h-10 border rounded cursor-pointer"
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-gray-900">
+                  Show Popup On
+                </label>
+                <select
+                  name="targetMode"
+                  value={formData.targetMode}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border rounded-lg text-black"
+                >
+                  <option value="global">All Pages (Global)</option>
+                  <option value="path">Specific URL Paths</option>
+                </select>
+              </div>
+
+              {formData.targetMode === "path" ? (
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-gray-900">
+                    URL Paths (one per line)
+                  </label>
+                  <textarea
+                    name="targetPathsText"
+                    value={formData.targetPathsText}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border rounded-lg text-black"
+                    placeholder={"/eng-proficiency/pte-prepare\n/".replace("\\n", "\n")}
+                  />
+                </div>
+              ) : null}
 
               <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-lg text-gray-900">
                 <input

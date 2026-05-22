@@ -81,7 +81,7 @@ const EducationSidebar = () => {
     { icon: Settings, label: "Site Settings", path: "/admin/site-settings", expandable: false, children: [] },
     //{ icon: BarChart3, label: "Reports", path: "/admin/reports", expandable: false, children: [] },
     { icon: UserCog, label: "Staff", path: "/admin/staff", expandable: false, children: [] },
-    //{ icon: DollarSign, label: "Payments", path: "/admin/payments", expandable: false, children: [] },
+    { icon: Plus, label: "Popup-Bnaners", path: "/admin/popup-ads", expandable: false, children: [] },
     //{ icon: Mail, label: "Communications", path: "/admin/communications", expandable: false, children: [] },
     //{ icon: Settings, label: "Settings", path: "/admin/settings", expandable: false, children: [] },
   ];
