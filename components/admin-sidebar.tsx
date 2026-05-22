@@ -41,6 +41,7 @@ import {
   Plus,
   Video,
   User,
+  List,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -76,6 +77,9 @@ const EducationSidebar = () => {
     // { icon: Award, label: "Scholarships", path: "/admin/scholarships", expandable: false, children: [] },
     { icon: Calendar, label: "Consultations", path: "/admin/consultations", expandable: false, children: [] },
     {icon: FileText , label: "Blog Posts", path: "/admin/blog", expandable: false, children: [] },
+    { icon: List, label: "Banners-List", path: "/admin/banner-list", expandable: false, children: [] },
+    { icon: Plus, label: "Add-Banners", path: "/admin/add-banner", expandable: false, children: [] },
+
     { icon: Video, label: "Video Testimonials", path: "/admin/video-testimonials", expandable: false, children: [] },
     { icon: User, label: "About CEO", path: "/admin/aboutus", expandable: false, children: [] },
     { icon: Settings, label: "Site Settings", path: "/admin/site-settings", expandable: false, children: [] },

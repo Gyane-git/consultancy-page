@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const images = [
+const fallbackImages = [
   "https://brightedugroup.com/blog/wp-content/uploads/2024/10/Bright-Main-Banner-768x432-1.webp",
   "https://www.abroadfromnepal.com/wp-content/uploads/2026/02/Best-Consultancy-in-Nepal-for-France.jpg",
   "/image.png",
@@ -11,14 +11,42 @@ const images = [
 
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);
+  const [images, setImages] = useState(fallbackImages);
+  const [links, setLinks] = useState([]);
 
   useEffect(() => {
+    let ignore = false;
+    async function loadBanners() {
+      try {
+        const res = await fetch("/api/banner", { cache: "no-store" });
+        const data = await res.json();
+        if (!ignore && data?.success && Array.isArray(data.banners) && data.banners.length) {
+          const bannerImages = data.banners.map((item) => item.image_path).filter(Boolean);
+          const bannerLinks = data.banners.map((item) => item.link_url || "");
+          if (bannerImages.length) {
+            setImages(bannerImages);
+            setLinks(bannerLinks);
+            setCurrent(0);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load banners", error);
+      }
+    }
+    loadBanners();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!images.length) return;
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [images]);
 
   return (
     <div className="relative w-full h-[33vh] sm:h-[45vh] md:h-[70vh] lg:h-[90vh] overflow-hidden bg-black">
@@ -29,15 +57,29 @@ export default function HeroSlider() {
             index === current ? "opacity-100" : "opacity-0"
           }`}
         >
-          <img
-            src={img}
-            alt={`Banner ${index + 1}`}
-            className="w-full h-full object-contain sm:object-cover"
-            style={{
-              filter: "brightness(1.1) contrast(1.05)",
-              objectPosition: index === 0 ? "center top" : "center",
-            }}
-          />
+          {links[index] ? (
+            <a href={links[index]} className="block w-full h-full">
+              <img
+                src={img}
+                alt={`Banner ${index + 1}`}
+                className="w-full h-full object-contain sm:object-cover"
+                style={{
+                  filter: "brightness(1.1) contrast(1.05)",
+                  objectPosition: index === 0 ? "center top" : "center",
+                }}
+              />
+            </a>
+          ) : (
+            <img
+              src={img}
+              alt={`Banner ${index + 1}`}
+              className="w-full h-full object-contain sm:object-cover"
+              style={{
+                filter: "brightness(1.1) contrast(1.05)",
+                objectPosition: index === 0 ? "center top" : "center",
+              }}
+            />
+          )}
         </div>
       ))}
 

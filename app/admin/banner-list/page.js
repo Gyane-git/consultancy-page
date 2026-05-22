@@ -4,9 +4,11 @@ import Image from "next/image";
 
 export default function BannerList() {
   const [banners, setBanners] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({ banner_name: "", image_path: "", link_url: "", displayOrder: 0, isActive: true });
 
   const fetchBanners = async () => {
-    const res = await fetch("/api/banner");
+    const res = await fetch("/api/banner?all=1");
     const data = await res.json();
     if (data.success) {
       setBanners(data.banners);
@@ -16,7 +18,7 @@ export default function BannerList() {
   const deleteBanner = async (id) => {
     if (!confirm("Are you sure you want to delete this banner?")) return;
 
-    const res = await fetch(`/api/banner/${id}`, {
+    const res = await fetch(`/api/banner?id=${id}`, {
       method: "DELETE",
     });
 
@@ -31,13 +33,41 @@ export default function BannerList() {
   };
 
   const handleEdit = (id) => {
-    // Add your edit logic here
-    console.log("Edit banner:", id);
+    const banner = banners.find((b) => b.id === id);
+    if (!banner) return;
+    setEditingId(id);
+    setEditForm({
+      banner_name: banner.banner_name || "",
+      image_path: banner.image_path || "",
+      link_url: banner.link_url || "",
+      displayOrder: Number(banner.displayOrder || 0),
+      isActive: banner.isActive !== false,
+    });
   };
 
-  const handleInfo = (id) => {
-    // Add your info/view logic here
-    console.log("View banner info:", id);
+  const handleInfo = () => {};
+
+  const saveEdit = async () => {
+    if (!editingId) return;
+    const res = await fetch("/api/banner", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: editingId,
+        name: editForm.banner_name,
+        imageUrl: editForm.image_path,
+        linkUrl: editForm.link_url,
+        displayOrder: editForm.displayOrder,
+        isActive: editForm.isActive,
+      }),
+    });
+    const data = await res.json();
+    if (data?.success) {
+      setEditingId(null);
+      fetchBanners();
+    } else {
+      alert(data?.error || "Failed to update banner");
+    }
   };
 
   useEffect(() => {
@@ -81,8 +111,9 @@ export default function BannerList() {
                     {banner.banner_name}
                   </h3>
                   <p className="text-sm text-gray-500 mt-1">
-                    ID: {banner.id}
+                    ID: {banner.id} · Order: {banner.displayOrder || 0} · {banner.isActive ? "Active" : "Inactive"}
                   </p>
+                  {banner.link_url ? <p className="text-xs text-blue-600 break-all mt-1">{banner.link_url}</p> : null}
                 </div>
 
                 {/* Action Buttons */}
@@ -92,7 +123,7 @@ export default function BannerList() {
                     className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
                     title="View Info"
                   >
-                    Info
+                    View
                   </button>
                   <button
                     onClick={() => handleEdit(banner.id)}
@@ -114,6 +145,25 @@ export default function BannerList() {
           </div>
         )}
       </div>
+
+      {editingId ? (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl p-5 w-full max-w-2xl space-y-3">
+            <h3 className="text-xl font-semibold text-gray-900">Edit Banner</h3>
+            <input className="w-full border rounded-lg px-3 py-2 text-black" value={editForm.banner_name} onChange={(e) => setEditForm((p) => ({ ...p, banner_name: e.target.value }))} placeholder="Banner Name" />
+            <input className="w-full border rounded-lg px-3 py-2 text-black" value={editForm.image_path} onChange={(e) => setEditForm((p) => ({ ...p, image_path: e.target.value }))} placeholder="Image URL / base64" />
+            <input className="w-full border rounded-lg px-3 py-2 text-black" value={editForm.link_url} onChange={(e) => setEditForm((p) => ({ ...p, link_url: e.target.value }))} placeholder="Link URL" />
+            <div className="grid grid-cols-2 gap-3">
+              <input type="number" className="w-full border rounded-lg px-3 py-2 text-black" value={editForm.displayOrder} onChange={(e) => setEditForm((p) => ({ ...p, displayOrder: Number(e.target.value) || 0 }))} placeholder="Display Order" />
+              <label className="flex items-center gap-2 text-black"><input type="checkbox" checked={editForm.isActive} onChange={(e) => setEditForm((p) => ({ ...p, isActive: e.target.checked }))} />Active</label>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={saveEdit} className="px-4 py-2 rounded bg-blue-600 text-white">Save</button>
+              <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded border text-black">Cancel</button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
