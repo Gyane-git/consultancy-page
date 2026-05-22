@@ -347,33 +347,33 @@ export default function PTECourses() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Nunito:ital,opsz,wght@0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-          --bg: #f0f4ff;
+          --bg: #f8f9fc;
           --white: #ffffff;
-          --surface2: #e8edf8;
-          --border: #dde4f4;
-          --text: #0d1b3e;
-          --muted: #5a6a8a;
-          --blue: #1565c0;
-          --cyan: #00acc1;
-          --violet: #7b1fa2;
-          --amber: #f9a825;
-          --font-head: 'Syne', sans-serif;
-          --font-body: 'DM Sans', sans-serif;
-          --shadow-sm: 0 2px 8px rgba(21,101,192,0.07);
-          --shadow-md: 0 8px 24px rgba(21,101,192,0.12);
-          --shadow-lg: 0 20px 48px rgba(21,101,192,0.16);
+          --surface2: #f2f4f8;
+          --border: #e4e8f0;
+          --text: #1a1a2e;
+          --muted: #6b7280;
+          --blue: #29a8d4;
+          --cyan: #29a8d4;
+          --violet: #e53935;
+          --amber: #f4a01c;
+          --font-head: 'Bricolage Grotesque', sans-serif;
+          --font-body: 'Nunito', sans-serif;
+          --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+          --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
+          --shadow-lg: 0 20px 48px rgba(0,0,0,0.12);
         }
 
         body { background: var(--bg); color: var(--text); font-family: var(--font-body); }
 
         .hero {
           position: relative; min-height: 92vh; display: flex; align-items: center;
-          padding: 80px 6vw 60px; overflow: hidden; background: var(--text);
+          padding: 80px 6vw 60px; overflow: hidden; background: var(--white);
         }
         .hero-blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.18; }
         .hero-inner {
@@ -389,57 +389,57 @@ export default function PTECourses() {
           display: inline-flex; align-items: center; gap: 8px;
           padding: 6px 16px; border-radius: 100px; font-size: 11px;
           font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-          color: #00acc1; background: rgba(0,172,193,0.15);
-          border: 1px solid rgba(0,172,193,0.3); margin-bottom: 24px; width: fit-content;
+          color: var(--teal); background: #e8f6fb;
+          border: 1px solid rgba(41,168,212,0.25); margin-bottom: 24px; width: fit-content;
         }
-        .hero-badge span { width: 6px; height: 6px; background: #00acc1; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+        .hero-badge span { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.7); } }
         .hero-h1 {
           font-family: var(--font-head); font-size: clamp(2.8rem, 5vw, 5rem);
-          font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 22px; color: #fff;
+          font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 22px; color: var(--text);
         }
-        .w-cyan { color: #00acc1; }
-        .w-amber { color: #f9a825; }
-        .w-violet { color: #a78bfa; }
-        .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.55); line-height: 1.75; max-width: 440px; margin-bottom: 40px; }
+        .w-cyan { color: var(--teal); }
+        .w-amber { color: var(--orange); }
+        .w-violet { color: var(--red); }
+        .hero-sub { font-size: 1.05rem; color: var(--muted); line-height: 1.75; max-width: 440px; margin-bottom: 40px; }
         .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
         .btn-primary {
-          padding: 14px 30px; background: #00acc1; color: #fff;
+          padding: 14px 30px; background: var(--red); color: #fff;
           font-family: var(--font-head); font-weight: 700; font-size: 14px;
           letter-spacing: 0.04em; border-radius: 10px; border: none; cursor: pointer;
           text-decoration: none; display: inline-block;
           transition: transform 0.2s, box-shadow 0.2s;
-          box-shadow: 0 4px 16px rgba(0,172,193,0.4);
+          box-shadow: 0 4px 16px rgba(229,57,53,0.3);
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,172,193,0.5); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(229,57,53,0.4); }
         .btn-ghost {
-          padding: 14px 30px; background: transparent; color: rgba(255,255,255,0.8);
+          padding: 14px 30px; background: transparent; color: var(--text);
           font-family: var(--font-head); font-weight: 600; font-size: 14px;
           letter-spacing: 0.04em; border-radius: 10px;
-          border: 1.5px solid rgba(255,255,255,0.2); cursor: pointer;
+          border: 1.5px solid var(--border); cursor: pointer;
           text-decoration: none; display: inline-block;
           transition: border-color 0.2s, background 0.2s;
         }
-        .btn-ghost:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.06); }
+        .btn-ghost:hover { border-color: var(--teal); background: #e8f6fb; color: var(--teal); }
 
         .hero-visual { display: flex; align-items: center; justify-content: center; }
         .hero-visual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 380px; }
         .hero-vis-card {
-          background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.12);
+          background: var(--white); border: 1.5px solid var(--border);
           border-radius: 18px; padding: 22px 20px;
-          backdrop-filter: blur(10px);
+          backdrop-filter: none;
           transition: transform 0.3s, background 0.3s;
         }
-        .hero-vis-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.12); }
+        .hero-vis-card:hover { transform: translateY(-4px); background: var(--white); box-shadow: var(--shadow-md); }
         .hero-vis-card:nth-child(2) { margin-top: 24px; }
         .hero-vis-card:nth-child(4) { margin-top: -24px; }
         .vis-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 18px; }
-        .vis-label { font-size: 10px; color: rgba(255,255,255,0.45); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
-        .vis-value { font-family: var(--font-head); font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; color: #fff; }
+        .vis-label { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+        .vis-value { font-family: var(--font-head); font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text); }
 
-        .stats-strip { background: #1565c0; padding: 52px 6vw; display: flex; justify-content: center; flex-wrap: wrap; }
+        .stats-strip { background: var(--text); padding: 52px 6vw; display: flex; justify-content: center; flex-wrap: wrap; }
         .stat-box { flex: 1 1 180px; display: flex; flex-direction: column; align-items: center; padding: 16px 32px; position: relative; }
-        .stat-box:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; bottom: 20%; width: 1px; background: rgba(255,255,255,0.15); }
+        .stat-box:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; bottom: 20%; width: 1px; background: rgba(255,255,255,0.12); }
         .stat-num { font-family: var(--font-head); font-size: clamp(2.4rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
         .stat-label { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 8px; font-weight: 600; }
 
@@ -520,7 +520,7 @@ export default function PTECourses() {
 
         .calc-outer { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .calc-card { max-width: 780px; margin: 0 auto; }
-        .calc-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan); margin-bottom: 10px; }
+        .calc-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
         .calc-title { font-family: var(--font-head); font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 48px; }
         .calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 32px; }
         .calc-field { display: flex; flex-direction: column; gap: 8px; }
@@ -573,7 +573,7 @@ export default function PTECourses() {
                 Computer-based. AI-scored. Four focused courses from beginner to 79+. Master the high-weight tasks and get your target score fast.
               </p>
               <div className="hero-cta">
-                <a href="/contact" className="btn-primary">Book Free Trial</a>
+              
                 <a href="#courses" className="btn-ghost">View Courses ↓</a>
               </div>
             </div>

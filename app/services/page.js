@@ -212,55 +212,56 @@ export default function ServicesPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Nunito:wght@400;500;600;700&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         .sv-root {
-          font-family: 'DM Sans', sans-serif;
-          background: #0e0e0e;
-          color: #f0ead8;
+          font-family: 'Nunito', sans-serif;
+          background: #f8f8fc;
+          color: #151520;
           min-height: 100vh;
           overflow-x: hidden;
         }
 
         /* ── TOPBAR ── */
         .sv-topbar {
-          background: #111;
-          border-bottom: 1px solid rgba(255,255,255,0.07);
+          background: #ffffff;
+          border-bottom: 1px solid #e8e8f3;
           padding: 0 48px; height: 58px;
           display: flex; align-items: center; gap: 8px;
           position: sticky; top: 0; z-index: 100;
           backdrop-filter: blur(12px);
         }
         .sv-dot { width: 8px; height: 8px; border-radius: 50%; }
-        .sv-brand { font-family: 'Syne', sans-serif; font-size: 0.92rem; font-weight: 800; color: #fff; margin-left: 6px; letter-spacing: 0.02em; }
-        .sv-sep { width: 1px; height: 16px; background: rgba(255,255,255,0.12); margin: 0 12px; }
-        .sv-page-crumb { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+        .sv-brand { font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.92rem; font-weight: 800; color: #151520; margin-left: 6px; letter-spacing: 0.02em; }
+        .sv-sep { width: 1px; height: 16px; background: #ddddeb; margin: 0 12px; }
+        .sv-page-crumb { font-size: 0.75rem; color: #6d6e7f; }
         .sv-topbar-cta {
           margin-left: auto;
           background: #e8352a; color: #fff;
           border: none; border-radius: 6px;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Nunito', sans-serif;
           font-size: 0.75rem; font-weight: 500;
           padding: 8px 18px; cursor: pointer;
           text-decoration: none;
           transition: background 0.18s;
         }
-        .sv-topbar-cta:hover { background: #c8281e; }
+        .sv-topbar-cta:hover { background: #cd2f23; }
 
         /* ── HERO ── */
         .sv-hero {
           position: relative;
           padding: 100px 48px 80px;
           overflow: hidden;
-          border-bottom: 1px solid rgba(255,255,255,0.06);
+          border-bottom: 1px solid #ececf4;
+          background: #ffffff;
         }
         .sv-hero-grid-bg {
           position: absolute; inset: 0;
           background-image:
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            linear-gradient(rgba(31,35,56,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(31,35,56,0.03) 1px, transparent 1px);
           background-size: 60px 60px;
           pointer-events: none;
         }
@@ -299,28 +300,28 @@ export default function ServicesPage() {
           letter-spacing: 0.18em; text-transform: uppercase; color: #e8352a;
         }
         .sv-hero h1 {
-          font-family: 'Syne', sans-serif;
+          font-family: 'Bricolage Grotesque', sans-serif;
           font-size: clamp(2.8rem, 6vw, 5rem);
-          font-weight: 800; color: #fff;
+          font-weight: 800; color: #151520;
           line-height: 1.05; letter-spacing: -0.03em;
           margin-bottom: 20px;
         }
         .sv-hero h1 .sv-h1-line2 { color: #e8352a; display: block; }
         .sv-hero-sub {
-          font-size: 0.95rem; color: rgba(240,234,216,0.5);
+          font-size: 0.95rem; color: #5d6076;
           line-height: 1.8; max-width: 500px; font-weight: 300;
         }
         .sv-hero-disclaimer {
           margin-top: 28px;
           display: inline-flex; align-items: flex-start; gap: 10px;
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.08);
+          background: #f7f8ff;
+          border: 1px solid #e6e9f7;
           border-radius: 10px; padding: 14px 18px;
           max-width: 500px;
         }
         .sv-hero-disclaimer-icon { flex-shrink: 0; margin-top: 1px; opacity: 0.5; }
         .sv-hero-disclaimer-text {
-          font-size: 0.775rem; color: rgba(240,234,216,0.45);
+          font-size: 0.775rem; color: #606377;
           line-height: 1.65; font-weight: 300;
         }
 
@@ -329,8 +330,8 @@ export default function ServicesPage() {
           display: flex; flex-direction: column; gap: 16px;
         }
         .sv-hero-stat {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.07);
+          background: #ffffff;
+          border: 1px solid #e7e8f3;
           border-radius: 14px; padding: 20px 24px;
           text-align: center; min-width: 140px;
           transition: border-color 0.2s;
@@ -340,14 +341,14 @@ export default function ServicesPage() {
           content: '';
           position: absolute; top: 0; left: 0; right: 0; height: 2px;
         }
-        .sv-hero-stat:hover { border-color: rgba(255,255,255,0.15); }
+        .sv-hero-stat:hover { border-color: #cfd2e6; }
         .sv-hero-stat-val {
-          font-family: 'Syne', sans-serif;
+          font-family: 'Bricolage Grotesque', sans-serif;
           font-size: 1.8rem; font-weight: 800;
           line-height: 1; margin-bottom: 4px;
         }
         .sv-hero-stat-lbl {
-          font-size: 0.68rem; color: rgba(240,234,216,0.4);
+          font-size: 0.68rem; color: #73758a;
           text-transform: uppercase; letter-spacing: 0.1em; font-weight: 400;
         }
 
@@ -364,7 +365,7 @@ export default function ServicesPage() {
         .sv-section-label {
           font-size: 0.68rem; font-weight: 500;
           letter-spacing: 0.2em; text-transform: uppercase;
-          color: rgba(240,234,216,0.35); margin-bottom: 10px;
+          color: #7a7c90; margin-bottom: 10px;
           display: flex; align-items: center; gap: 10px;
         }
         .sv-section-label::before {
@@ -373,16 +374,16 @@ export default function ServicesPage() {
           background: #e8352a;
         }
         .sv-section-title {
-          font-family: 'Syne', sans-serif;
+          font-family: 'Bricolage Grotesque', sans-serif;
           font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-          font-weight: 800; color: #fff;
+          font-weight: 800; color: #151520;
           line-height: 1.15; letter-spacing: -0.025em;
         }
         .sv-count-badge {
-          background: rgba(255,255,255,0.05);
-          border: 1px solid rgba(255,255,255,0.1);
+          background: #ffffff;
+          border: 1px solid #e7e8f3;
           border-radius: 100px; padding: 6px 16px;
-          font-size: 0.75rem; color: rgba(240,234,216,0.45);
+          font-size: 0.75rem; color: #606377;
           font-weight: 400; white-space: nowrap; align-self: flex-start;
           margin-top: 8px;
         }
@@ -398,14 +399,14 @@ export default function ServicesPage() {
 
         /* ── CARD ── */
         .sv-card {
-          background: #161616;
-          border: 1px solid rgba(255,255,255,0.07);
+          background: #ffffff;
+          border: 1px solid #e7e8f3;
           border-radius: 16px;
           overflow: hidden;
           transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
           position: relative;
         }
-        .sv-card:hover { border-color: rgba(255,255,255,0.14); }
+        .sv-card:hover { border-color: #cfd2e6; }
         .sv-card-accent {
           height: 3px; width: 100%;
         }
@@ -415,7 +416,7 @@ export default function ServicesPage() {
           justify-content: space-between; margin-bottom: 18px;
         }
         .sv-card-num {
-          font-family: 'Syne', sans-serif;
+          font-family: 'Bricolage Grotesque', sans-serif;
           font-size: 0.75rem; font-weight: 800;
           letter-spacing: 0.1em;
           border: 1px solid; border-radius: 6px;
@@ -431,24 +432,24 @@ export default function ServicesPage() {
           margin-bottom: 6px;
         }
         .sv-card-title {
-          font-family: 'Syne', sans-serif;
+          font-family: 'Bricolage Grotesque', sans-serif;
           font-size: 1.15rem; font-weight: 700;
-          color: #fff; line-height: 1.25;
+          color: #151520; line-height: 1.25;
           margin-bottom: 12px; letter-spacing: -0.01em;
         }
         .sv-card-desc {
-          font-size: 0.825rem; color: rgba(240,234,216,0.45);
+          font-size: 0.825rem; color: #616379;
           line-height: 1.75; font-weight: 300; margin-bottom: 20px;
         }
         .sv-card-features {
           list-style: none; padding: 0; margin: 0 0 24px;
           display: flex; flex-direction: column; gap: 8px;
-          border-top: 1px solid rgba(255,255,255,0.06);
+          border-top: 1px solid #ececf4;
           padding-top: 18px;
         }
         .sv-card-feature {
           display: flex; align-items: center; gap: 10px;
-          font-size: 0.8rem; color: rgba(240,234,216,0.6);
+          font-size: 0.8rem; color: #4f5268;
           font-weight: 400;
         }
         .sv-feat-dot {
@@ -457,21 +458,21 @@ export default function ServicesPage() {
         .sv-card-footer {
           display: flex; align-items: center;
           justify-content: space-between; gap: 12px;
-          border-top: 1px solid rgba(255,255,255,0.06);
+          border-top: 1px solid #ececf4;
           padding-top: 20px;
         }
         .sv-card-stat {
-          font-family: 'Syne', sans-serif;
+          font-family: 'Bricolage Grotesque', sans-serif;
           font-size: 1.6rem; font-weight: 800; line-height: 1;
         }
         .sv-card-stat-label {
-          font-size: 0.68rem; color: rgba(240,234,216,0.35);
+          font-size: 0.68rem; color: #7b7d90;
           text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px;
         }
         .sv-card-cta {
           border: 1.5px solid;
           border-radius: 8px; padding: 9px 18px;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Nunito', sans-serif;
           font-size: 0.78rem; font-weight: 500;
           text-decoration: none; white-space: nowrap;
           transition: background 0.2s, color 0.2s;
@@ -483,8 +484,8 @@ export default function ServicesPage() {
           padding: 0 48px 48px;
         }
         .sv-disclaimer-inner {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.07);
+          background: #ffffff;
+          border: 1px solid #e7e8f3;
           border-radius: 14px; padding: 28px 32px;
           display: flex; gap: 20px; align-items: flex-start;
         }
@@ -495,12 +496,12 @@ export default function ServicesPage() {
           flex-shrink: 0; color: #e8352a;
         }
         .sv-disclaimer-title {
-          font-family: 'Syne', sans-serif;
+          font-family: 'Bricolage Grotesque', sans-serif;
           font-size: 0.95rem; font-weight: 700;
-          color: #fff; margin-bottom: 6px;
+          color: #151520; margin-bottom: 6px;
         }
         .sv-disclaimer-body {
-          font-size: 0.825rem; color: rgba(240,234,216,0.4);
+          font-size: 0.825rem; color: #5f6277;
           line-height: 1.75; font-weight: 300;
         }
 
@@ -510,8 +511,8 @@ export default function ServicesPage() {
           padding: 0 48px 80px;
         }
         .sv-cta-inner {
-          background: #161616;
-          border: 1px solid rgba(255,255,255,0.08);
+          background: #ffffff;
+          border: 1px solid #e7e8f3;
           border-radius: 20px; padding: 60px;
           display: flex; align-items: center;
           justify-content: space-between; gap: 40px;
@@ -532,14 +533,14 @@ export default function ServicesPage() {
           pointer-events: none;
         }
         .sv-cta-title {
-          font-family: 'Syne', sans-serif;
+          font-family: 'Bricolage Grotesque', sans-serif;
           font-size: clamp(1.6rem, 3vw, 2.2rem);
-          font-weight: 800; color: #fff;
+          font-weight: 800; color: #151520;
           line-height: 1.2; letter-spacing: -0.02em;
           margin-bottom: 10px; position: relative;
         }
         .sv-cta-sub {
-          font-size: 0.875rem; color: rgba(240,234,216,0.4);
+          font-size: 0.875rem; color: #5f6277;
           font-weight: 300; line-height: 1.7; position: relative;
         }
         .sv-cta-btns {
@@ -547,23 +548,23 @@ export default function ServicesPage() {
         }
         .sv-cta-btn-primary {
           background: #e8352a; color: #fff; border: none;
-          border-radius: 10px; font-family: 'DM Sans', sans-serif;
+          border-radius: 10px; font-family: 'Nunito', sans-serif;
           font-size: 0.875rem; font-weight: 500;
           padding: 15px 32px; cursor: pointer;
           text-decoration: none; display: inline-block;
           transition: background 0.18s, transform 0.15s;
         }
-        .sv-cta-btn-primary:hover { background: #c8281e; transform: translateY(-2px); }
+        .sv-cta-btn-primary:hover { background: #cd2f23; transform: translateY(-2px); }
         .sv-cta-btn-sec {
-          background: transparent; color: rgba(240,234,216,0.6);
-          border: 1px solid rgba(255,255,255,0.12);
-          border-radius: 10px; font-family: 'DM Sans', sans-serif;
+          background: transparent; color: #4f5268;
+          border: 1px solid #d8dbec;
+          border-radius: 10px; font-family: 'Nunito', sans-serif;
           font-size: 0.875rem; font-weight: 400;
           padding: 15px 32px; cursor: pointer;
           text-decoration: none; display: inline-block;
           transition: border-color 0.18s, color 0.18s;
         }
-        .sv-cta-btn-sec:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+        .sv-cta-btn-sec:hover { border-color: #aeb3d3; color: #151520; }
 
         /* DOTS */
         .sv-dots-strip {
@@ -653,7 +654,7 @@ export default function ServicesPage() {
               <div>
                 <div className="sv-section-label">{sectionData.subtitle}</div>
                 <h2 className="sv-section-title">{sectionData.title}</h2>
-                <p style={{ color: "rgba(240,234,216,0.75)", marginTop: 10, maxWidth: 560, lineHeight: 1.7 }}>
+                <p style={{ color: "#4f5268", marginTop: 10, maxWidth: 560, lineHeight: 1.7 }}>
                   {sectionData.description}
                 </p>
               </div>
