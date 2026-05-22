@@ -17,13 +17,65 @@ type VideoRow = RowDataPacket & {
   updatedAt: string;
 };
 
+function getYouTubeId(url: string) {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.includes("youtu.be")) {
+      return parsed.pathname.replace("/", "").trim();
+    }
+    if (parsed.hostname.includes("youtube.com")) {
+      return parsed.searchParams.get("v") || "";
+    }
+  } catch {
+    return "";
+  }
+  return "";
+}
+
+function getYoutubeThumbnail(url: string) {
+  const id = getYouTubeId(url);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : "";
+}
+
+function isSupportedVideoUrl(url: string) {
+  const normalized = String(url || "").trim().toLowerCase();
+  if (normalized.includes("facebook.com/share/") || normalized.includes("fb.watch/")) {
+    return true;
+  }
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    return (
+      host.includes("youtube.com") ||
+      host.includes("youtu.be") ||
+      host.includes("facebook.com") ||
+      host.includes("fb.watch") ||
+      host.includes("instagram.com")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function normalizeVideoUrl(value: unknown) {
+  const raw = String(value ?? "").trim();
+  if (!raw) return "";
+  const iframeSrcMatch = raw.match(/src\s*=\s*["']([^"']+)["']/i);
+  if (iframeSrcMatch?.[1]) {
+    return iframeSrcMatch[1].trim().replace(/&amp;/g, "&");
+  }
+  const match = raw.match(/https?:\/\/[^\s]+/i);
+  return (match ? match[0] : raw).trim();
+}
+
 function mapVideo(row: VideoRow) {
+  const fallbackThumb = row.thumbnail || getYoutubeThumbnail(row.videoUrl);
   return {
     id: row.id,
     name: row.name,
     role: row.role,
     caption: row.caption,
-    thumbnail: row.thumbnail,
+    thumbnail: fallbackThumb || null,
     videoUrl: row.videoUrl,
     tag: row.tag,
     displayOrder: row.displayOrder,
@@ -63,12 +115,15 @@ export async function POST(request: Request) {
     const role = String(payload?.role ?? "").trim();
     const caption = String(payload?.caption ?? "").trim();
     const thumbnail = String(payload?.thumbnail ?? "").trim();
-    const videoUrl = String(payload?.videoUrl ?? "").trim();
+    const videoUrl = normalizeVideoUrl(payload?.videoUrl);
     const tag = String(payload?.tag ?? "").trim();
     const displayOrder = Number(payload?.displayOrder ?? 0);
 
     if (!name || !videoUrl) {
       return NextResponse.json({ success: false, error: "name and videoUrl are required" }, { status: 400 });
+    }
+    if (!isSupportedVideoUrl(videoUrl)) {
+      return NextResponse.json({ success: false, error: "Only YouTube, Facebook, and Instagram video URLs are supported." }, { status: 400 });
     }
 
     const [result] = await pool.query<ResultSetHeader>(
@@ -96,7 +151,7 @@ export async function PUT(request: Request) {
     const role = String(payload?.role ?? "").trim();
     const caption = String(payload?.caption ?? "").trim();
     const thumbnail = String(payload?.thumbnail ?? "").trim();
-    const videoUrl = String(payload?.videoUrl ?? "").trim();
+    const videoUrl = normalizeVideoUrl(payload?.videoUrl);
     const tag = String(payload?.tag ?? "").trim();
     const displayOrder = Number(payload?.displayOrder ?? 0);
     const isActive = payload?.isActive !== false;
@@ -107,6 +162,9 @@ export async function PUT(request: Request) {
 
     if (!name || !videoUrl) {
       return NextResponse.json({ success: false, error: "name and videoUrl are required" }, { status: 400 });
+    }
+    if (!isSupportedVideoUrl(videoUrl)) {
+      return NextResponse.json({ success: false, error: "Only YouTube, Facebook, and Instagram video URLs are supported." }, { status: 400 });
     }
 
     await pool.query(

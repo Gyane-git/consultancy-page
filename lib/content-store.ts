@@ -270,6 +270,12 @@ export async function ensureContentTables() {
         )
       `);
 
+      await pool.query(`
+        DELETE v1 FROM VideoTestimonial v1
+        INNER JOIN VideoTestimonial v2
+          ON v1.videoUrl = v2.videoUrl AND v1.id > v2.id
+      `);
+
       await pool.query(
         `INSERT IGNORE INTO AboutCeo (singletonKey, ceoName, designation, message, profileImage, linkedinUrl)
          VALUES ('default', ?, ?, ?, ?, ?)`,
@@ -304,14 +310,8 @@ export async function ensureContentTables() {
         );
       }
 
-      for (let index = 0; index < defaultVideoTestimonials.length; index += 1) {
-        const video = defaultVideoTestimonials[index];
-        await pool.query(
-          `INSERT IGNORE INTO VideoTestimonial (name, role, caption, thumbnail, videoUrl, tag, displayOrder, isActive)
-           VALUES (?, ?, ?, ?, ?, ?, ?, true)`,
-          [video.name, video.role, video.caption, video.thumbnail, video.videoUrl, video.tag, index],
-        );
-      }
+      // Do not auto-seed video testimonials.
+      // Video testimonials should be managed fully from admin/database only.
     })();
   }
 

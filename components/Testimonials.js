@@ -2,17 +2,15 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-function toYoutubeEmbedUrl(url) {
+function getYoutubeId(url) {
   if (!url) return "";
   try {
     const parsed = new URL(url);
     if (parsed.hostname.includes("youtu.be")) {
-      const id = parsed.pathname.replace("/", "").trim();
-      return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : "";
+      return parsed.pathname.replace("/", "").trim();
     }
     if (parsed.hostname.includes("youtube.com")) {
-      const id = parsed.searchParams.get("v");
-      return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : "";
+      return parsed.searchParams.get("v") || "";
     }
     return "";
   } catch {
@@ -20,44 +18,40 @@ function toYoutubeEmbedUrl(url) {
   }
 }
 
-const fallbackVideoTestimonials = [
-  {
-    id: 1,
-    name: "Dipesh's Father",
-    role: "Parents Testimonial",
-    caption: "Watch what Dipesh's father has to say",
-    thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop",
-    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    tag: "Parent",
-  },
-  {
-    id: 2,
-    name: "Dipesh Rijal",
-    role: "Student",
-    caption: "Watch what Dipesh Rijal has to say",
-    thumbnail: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=500&fit=crop",
-    videoUrl: "https://www.youtube.com/watch?v=ysz5S6PUM-U",
-    tag: "Student",
-  },
-  {
-    id: 3,
-    name: "Prasis Kandel",
-    role: "Student",
-    caption: "Watch what Prasis Kandel has to say",
-    thumbnail: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop",
-    videoUrl: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
-    tag: "Student",
-  },
-  {
-    id: 4,
-    name: "Sita Sharma",
-    role: "Parent",
-    caption: "Watch what Sita Sharma has to say",
-    thumbnail: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop",
-    videoUrl: "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
-    tag: "Parent",
-  },
-];
+function toEmbedUrl(url, autoplay = false) {
+  if (!url) return "";
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    const auto = autoplay ? "1" : "0";
+
+    if (host.includes("youtu.be") || host.includes("youtube.com")) {
+      const id = getYoutubeId(url);
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=${auto}&rel=0` : "";
+    }
+    if (host.includes("facebook.com") || host.includes("fb.watch")) {
+      if (parsed.pathname.includes("/plugins/video.php")) {
+        return parsed.toString();
+      }
+      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&autoplay=${auto}`;
+    }
+    if (host.includes("instagram.com")) {
+      const pathParts = parsed.pathname.split("/").filter(Boolean);
+      if (pathParts.length >= 2 && (pathParts[0] === "reel" || pathParts[0] === "p" || pathParts[0] === "tv")) {
+        return `https://www.instagram.com/${pathParts[0]}/${pathParts[1]}/embed`;
+      }
+      return "";
+    }
+    return "";
+  } catch {
+    return "";
+  }
+}
+
+function getFallbackThumbnail(videoUrl) {
+  const id = getYoutubeId(videoUrl);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : "";
+}
 
 const reviewTestimonials = [
   {
@@ -142,7 +136,10 @@ function StarRating({ rating, max = 5 }) {
 function VideoCard({ testimonial, index }) {
   const [hovered, setHovered] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const embedUrl = toYoutubeEmbedUrl(testimonial.videoUrl);
+  const playEmbedUrl = toEmbedUrl(testimonial.videoUrl, true);
+  const previewEmbedUrl = toEmbedUrl(testimonial.videoUrl, false);
+  const thumbnailUrl = testimonial.thumbnail || getFallbackThumbnail(testimonial.videoUrl);
+  const hasThumbnail = Boolean(thumbnailUrl);
   return (
     <div
       className="video-card"
@@ -151,10 +148,10 @@ function VideoCard({ testimonial, index }) {
       onMouseLeave={() => setHovered(false)}
     >
       <div className="video-thumb-wrap">
-        {isPlaying && embedUrl ? (
+        {isPlaying && playEmbedUrl ? (
           <iframe
             className="video-iframe"
-            src={embedUrl}
+            src={playEmbedUrl}
             title={testimonial.name}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
@@ -162,18 +159,35 @@ function VideoCard({ testimonial, index }) {
           />
         ) : (
           <>
-            <Image src={testimonial.thumbnail} alt={testimonial.name} className="video-thumb" width={400} height={500} />
-            <div className={`video-overlay ${hovered ? "hovered" : ""}`} />
-            <button
-              className={`play-btn ${hovered ? "hovered" : ""}`}
-              aria-label="Play video"
-              onClick={() => setIsPlaying(true)}
-              type="button"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </button>
+            {hasThumbnail ? (
+              <>
+                <img src={thumbnailUrl} alt={testimonial.name} className="video-thumb" />
+                <div className={`video-overlay ${hovered ? "hovered" : ""}`} />
+                <button
+                  className={`play-btn ${hovered ? "hovered" : ""}`}
+                  aria-label="Play video"
+                  onClick={() => setIsPlaying(true)}
+                  type="button"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
+              </>
+            ) : previewEmbedUrl ? (
+              <iframe
+                className="video-iframe"
+                src={previewEmbedUrl}
+                title={`${testimonial.name} preview`}
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            ) : (
+              <div className="video-thumb" style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "#ece8ff", color: "#5c3bbd", fontWeight: 600 }}>
+                Video preview unavailable
+              </div>
+            )}
           </>
         )}
         <span className="video-tag">{testimonial.tag}</span>
@@ -209,7 +223,7 @@ function ReviewCard({ review, index }) {
 export default function Testimonials() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [reviewPage, setReviewPage] = useState(0);
-  const [videoTestimonials, setVideoTestimonials] = useState(fallbackVideoTestimonials);
+  const [videoTestimonials, setVideoTestimonials] = useState([]);
   const reviewsPerPage = 3;
 
   useEffect(() => {
@@ -220,7 +234,7 @@ export default function Testimonials() {
         const res = await fetch("/api/video-testimonials", { cache: "no-store" });
         const data = await res.json();
         if (!active) return;
-        if (res.ok && data?.success && Array.isArray(data.videos) && data.videos.length > 0) {
+        if (res.ok && data?.success && Array.isArray(data.videos)) {
           setVideoTestimonials(data.videos);
         }
       } catch (error) {
@@ -738,6 +752,11 @@ export default function Testimonials() {
             {filteredVideos.map((v, i) => (
               <VideoCard key={v.id} testimonial={v} index={i} />
             ))}
+            {!filteredVideos.length ? (
+              <div style={{ gridColumn: "1 / -1", textAlign: "center", color: "#7a7692", padding: "28px 8px" }}>
+                No video testimonials available right now.
+              </div>
+            ) : null}
           </div>
         </div>
 
