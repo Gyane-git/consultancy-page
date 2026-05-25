@@ -125,7 +125,7 @@ function Dropdown({ label, placeholder, options, value, onChange, icon }: Dropdo
         <div
           style={{
             position: "absolute",
-            top: "calc(100% + 10px)",
+            top: "calc(100% + 4px)",
             left: 0,
             right: 0,
             background: "#fff",
@@ -215,7 +215,7 @@ function Dropdown({ label, placeholder, options, value, onChange, icon }: Dropdo
           {/* Scrollable list */}
           <div
             style={{
-              maxHeight: 240,
+              maxHeight: 340,
               overflowY: "auto",
               overflowX: "hidden",
               scrollbarWidth: "thin",
@@ -233,7 +233,7 @@ function Dropdown({ label, placeholder, options, value, onChange, icon }: Dropdo
               .dd-item.selected { background: #fff0f2; color: #c8102e; font-weight: 600; }
             `}</style>
 
-            <div className="dd-list" style={{ maxHeight: 240, overflowY: "auto" }}>
+            <div className="dd-list" style={{ maxHeight: 340, overflowY: "auto" }}>
               {/* Clear option */}
               {value && (
                 <div
@@ -383,7 +383,7 @@ export default function FindUni() {
           position: relative; width: 100%;
           padding: 80px 24px 90px;
           background: linear-gradient(175deg, #f9f7ff 0%, #ffffff 45%, #fff5f6 100%);
-          overflow: hidden; font-family: 'DM Sans', sans-serif; text-align: center;
+          overflow: visible; font-family: 'DM Sans', sans-serif; text-align: center;
         }
         .find-blob1 { position:absolute; top:-80px; left:-60px; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle,rgba(200,16,46,.06) 0%,transparent 70%); animation:blobMove 9s ease-in-out infinite; pointer-events:none; }
         .find-blob2 { position:absolute; bottom:-80px; right:-60px; width:480px; height:480px; border-radius:50%; background:radial-gradient(circle,rgba(167,139,250,.06) 0%,transparent 70%); animation:blobMove 11s ease-in-out infinite reverse; pointer-events:none; }
