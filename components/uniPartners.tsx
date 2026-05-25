@@ -311,7 +311,7 @@ const UniPartners = () => {
       </div>
 
       {/* Scroll rows */}
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
         {/* Edge fades */}
         <div style={{
           pointerEvents: "none",
@@ -321,10 +321,10 @@ const UniPartners = () => {
           zIndex: 10,
         }} />
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "26px" }}>
           <LogoRow logos={safeRow1} direction="right" speed={45} colorOffset={0} />
           <LogoRow logos={safeRow2} direction="left"  speed={38} colorOffset={3} />
-          <LogoRow logos={safeRow3} direction="right" speed={50} colorOffset={5} />
+          {/* <LogoRow logos={safeRow3} direction="right" speed={50} colorOffset={5} /> */}
         </div>
       </div>
 

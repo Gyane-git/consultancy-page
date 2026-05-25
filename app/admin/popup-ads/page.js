@@ -4,6 +4,43 @@ import {  Plus, Edit2, Trash2, ImageIcon } from "lucide-react";
 
 const API_URL = "/api/popup-ads";
 
+async function toCompressedDataUrl(file) {
+  const sourceUrl = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+  const img = await new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = sourceUrl;
+  });
+
+  const MAX_EDGE = 1600;
+  const scale = Math.min(1, MAX_EDGE / Math.max(img.width, img.height));
+  const width = Math.max(1, Math.round(img.width * scale));
+  const height = Math.max(1, Math.round(img.height * scale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return sourceUrl;
+  ctx.drawImage(img, 0, 0, width, height);
+
+  let quality = 0.86;
+  let output = canvas.toDataURL("image/jpeg", quality);
+  const MAX_LENGTH = 1_600_000;
+  while (output.length > MAX_LENGTH && quality > 0.45) {
+    quality -= 0.1;
+    output = canvas.toDataURL("image/jpeg", quality);
+  }
+  return output;
+}
+
 export default function PopupAdsAdmin() {
   const [ads, setAds] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -50,6 +87,19 @@ export default function PopupAdsAdmin() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+  };
+
+  const handleImageFromGallery = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const dataUrl = await toCompressedDataUrl(file);
+      setFormData((prev) => ({ ...prev, imageUrl: dataUrl }));
+    } catch (error) {
+      console.error("Failed to process gallery image:", error);
+      alert("Failed to process selected image.");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -247,6 +297,19 @@ export default function PopupAdsAdmin() {
                   placeholder="Paste image URL or base64 data URL from gallery"
                   required
                 />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageFromGallery}
+                  className="w-full px-4 py-3 border rounded-lg text-sm mt-2 text-gray-900"
+                />
+                {formData.imageUrl ? (
+                  <img
+                    src={formData.imageUrl}
+                    alt="Popup preview"
+                    className="mt-3 h-24 w-40 object-cover rounded-lg border"
+                  />
+                ) : null}
               </div>
 
               
