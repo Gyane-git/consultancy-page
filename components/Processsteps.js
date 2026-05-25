@@ -486,7 +486,7 @@ export default function ProcessSteps() {
           {/* CTA */}
           <div className="ps-cta-wrap">
             <p className="ps-cta-text">Ready to start your journey? It's completely free.</p>
-            <Link href="/contact" className="ps-cta-btn">
+            <Link href="/free-consultant" className="ps-cta-btn">
               Book Free Consultation
               <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 12h12m0 0-4-4m4 4-4 4" />

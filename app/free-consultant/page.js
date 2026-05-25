@@ -60,6 +60,7 @@ export default function FreeConsultationPage() {
   });
 
   const totalSteps = 4;
+  const todayDate = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     let ignore = false;
@@ -339,15 +340,7 @@ export default function FreeConsultationPage() {
                         <FormInput label="Full Name" name="name" type="text" value={formData.name} onChange={handleChange} placeholder="Enter your full name" icon={Users} required />
                         <FormInput label="Email Address" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="Enter your email address" icon={Mail} required />
                         <FormInput label="Phone Number" name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="Enter your phone number" icon={Phone} required />
-                        <FormSelect
-                          label="Your Nationality"
-                          name="nationality"
-                          value={formData.nationality}
-                          onChange={handleChange}
-                          options={["Nepali", "Indian", "Sri Lankan", "Bangladeshi", "Pakistani", "Other"]}
-                          icon={Globe}
-                          required
-                        />
+                        <FormInput label="Country" name="country" type="text" value={formData.country} onChange={handleChange} placeholder="Enter your country" icon={Globe} required />
                       </div>
                     )}
 
@@ -465,7 +458,7 @@ export default function FreeConsultationPage() {
                         </div>
 
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                          <FormInput label="Preferred Date" name="preferredDate" type="date" value={formData.preferredDate} onChange={handleChange} icon={Calendar} required />
+                          <FormInput label="Preferred Date" name="preferredDate" type="date" value={formData.preferredDate} onChange={handleChange} icon={Calendar} min={todayDate} required />
                           <FormSelect
                             label="Preferred Time"
                             name="preferredTime"
@@ -607,7 +600,7 @@ function inputBase(hasIcon) {
   };
 }
 
-function FormInput({ label, name, type, value, onChange, placeholder, icon: Icon, required }) {
+function FormInput({ label, name, type, value, onChange, placeholder, icon: Icon, required, min }) {
   return (
     <div>
       <label style={{ display: "block", fontWeight: "700", fontSize: "13px", color: "#1a1464", marginBottom: "8px" }}>
@@ -615,7 +608,7 @@ function FormInput({ label, name, type, value, onChange, placeholder, icon: Icon
       </label>
       <div style={{ position: "relative" }}>
         {Icon && <Icon size={16} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#9ca3af" }} />}
-        <input type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} required={required} style={inputBase(!!Icon)} />
+        <input type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} required={required} min={min} style={inputBase(!!Icon)} />
       </div>
     </div>
   );
@@ -726,9 +719,7 @@ function SuccessMessage({ formData }) {
         <Link href="/" style={{ padding: "12px 20px", background: "#f3f4f6", color: "#374151", fontWeight: "600", fontSize: "14px", borderRadius: "10px", textDecoration: "none" }}>
           Back to Home
         </Link>
-        <Link href="/universities" style={{ display: "flex", alignItems: "center", gap: "6px", padding: "12px 20px", background: "#1a1464", color: "#ffffff", fontWeight: "600", fontSize: "14px", borderRadius: "10px", textDecoration: "none" }}>
-          Explore Universities <ArrowRight size={16} />
-        </Link>
+       
       </div>
     </div>
   );

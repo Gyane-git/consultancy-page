@@ -601,7 +601,7 @@ export default function ServicesPage() {
           <span className="sv-brand">Study Sync</span>
           <div className="sv-sep" />
           <span className="sv-page-crumb">Our Services</span>
-          <Link href="/contact" className="sv-topbar-cta">Book Free Consultation</Link>
+          <Link href="/free-consultant" className="sv-topbar-cta">Book Free Consultation</Link>
         </div>
 
         {/* ── HERO ── */}

@@ -54,7 +54,7 @@ export default function Hero({
           {/* CTA Buttons */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
             <a
-              href="/contact"
+              href="/free-consultant"
               className="bg-[#c0392b] text-white px-6 py-3 rounded-full font-semibold shadow hover:scale-105 transition"
             >
               Book Free Trial

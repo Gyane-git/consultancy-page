@@ -156,6 +156,9 @@ export async function ensureContentTables() {
     costScholarships LONGTEXT NULL,
     applicationProcess LONGTEXT NULL,
     afterReaching LONGTEXT NULL,
+    faqQuestion TEXT NULL,
+    faqDescription LONGTEXT NULL,
+    faqItems LONGTEXT NULL,
     isActive BOOLEAN NOT NULL DEFAULT TRUE,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -182,6 +185,9 @@ export async function ensureContentTables() {
         { field: "costScholarships", sql: "ALTER TABLE DestinationContent ADD COLUMN costScholarships LONGTEXT NULL" },
         { field: "applicationProcess", sql: "ALTER TABLE DestinationContent ADD COLUMN applicationProcess LONGTEXT NULL" },
         { field: "afterReaching", sql: "ALTER TABLE DestinationContent ADD COLUMN afterReaching LONGTEXT NULL" },
+        { field: "faqQuestion", sql: "ALTER TABLE DestinationContent ADD COLUMN faqQuestion TEXT NULL" },
+        { field: "faqDescription", sql: "ALTER TABLE DestinationContent ADD COLUMN faqDescription LONGTEXT NULL" },
+        { field: "faqItems", sql: "ALTER TABLE DestinationContent ADD COLUMN faqItems LONGTEXT NULL" },
       ];
       for (const col of destinationNewColumns) {
         if (!destinationColumns.some((c) => c.Field === col.field)) {

@@ -369,7 +369,7 @@ export default function TermsPage() {
             <div className="tc-cta-card">
               <div className="tc-cta-title">Book Free Consultation</div>
               <p className="tc-cta-sub">Start your study abroad journey with expert guidance.</p>
-              <Link href="/contact" className="tc-cta-btn">Book Now →</Link>
+              <Link href="/free-consultant" className="tc-cta-btn">Book Now →</Link>
             </div>
 
             {/* Privacy link */}

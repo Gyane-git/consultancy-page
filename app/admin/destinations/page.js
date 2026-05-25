@@ -16,6 +16,9 @@ const emptyForm = {
   costScholarships: "",
   applicationProcess: "",
   afterReaching: "",
+  faqQuestion: "",
+  faqDescription: "",
+  faqItems: [{ question: "", answer: "" }],
   isActive: true,
 };
 
@@ -55,6 +58,29 @@ export default function AdminDestinationsPage() {
     loadData();
   }
 
+  function updateFaqItem(index, key, value) {
+    setForm((prev) => {
+      const next = Array.isArray(prev.faqItems) ? [...prev.faqItems] : [];
+      if (!next[index]) next[index] = { question: "", answer: "" };
+      next[index] = { ...next[index], [key]: value };
+      return { ...prev, faqItems: next };
+    });
+  }
+
+  function addFaqItem() {
+    setForm((prev) => ({
+      ...prev,
+      faqItems: [...(Array.isArray(prev.faqItems) ? prev.faqItems : []), { question: "", answer: "" }],
+    }));
+  }
+
+  function removeFaqItem(index) {
+    setForm((prev) => {
+      const next = (Array.isArray(prev.faqItems) ? prev.faqItems : []).filter((_, i) => i !== index);
+      return { ...prev, faqItems: next.length ? next : [{ question: "", answer: "" }] };
+    });
+  }
+
   async function handleDelete(id) {
     if (!confirm("Delete this destination?")) return;
     const res = await fetch(`/api/destination?id=${id}`, { method: "DELETE" });
@@ -87,6 +113,29 @@ export default function AdminDestinationsPage() {
           <textarea className="w-full border rounded-lg px-3 py-2 min-h-28" placeholder="4. Cost & Scholarships" value={form.costScholarships} onChange={(e) => setForm({ ...form, costScholarships: e.target.value })} />
           <textarea className="w-full border rounded-lg px-3 py-2 min-h-28" placeholder="5. Application Process" value={form.applicationProcess} onChange={(e) => setForm({ ...form, applicationProcess: e.target.value })} />
           <textarea className="w-full border rounded-lg px-3 py-2 min-h-28" placeholder="6. After Reaching Country" value={form.afterReaching} onChange={(e) => setForm({ ...form, afterReaching: e.target.value })} />
+          <div className="border rounded-lg p-3 space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-gray-800">7. FAQ (Multiple Q/A)</p>
+              <button type="button" onClick={addFaqItem} className="px-3 py-1 rounded border text-sm">+ Add FAQ</button>
+            </div>
+            {(Array.isArray(form.faqItems) ? form.faqItems : []).map((item, index) => (
+              <div key={index} className="border rounded-lg p-3 space-y-2">
+                <input
+                  className="w-full border rounded-lg px-3 py-2"
+                  placeholder={`Question ${index + 1}`}
+                  value={item.question || ""}
+                  onChange={(e) => updateFaqItem(index, "question", e.target.value)}
+                />
+                <textarea
+                  className="w-full border rounded-lg px-3 py-2 min-h-20"
+                  placeholder={`Answer ${index + 1}`}
+                  value={item.answer || ""}
+                  onChange={(e) => updateFaqItem(index, "answer", e.target.value)}
+                />
+                <button type="button" onClick={() => removeFaqItem(index)} className="text-sm text-red-600">Remove</button>
+              </div>
+            ))}
+          </div>
 
           <label className="flex items-center gap-2 text-sm text-gray-700">
             <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} />
@@ -115,7 +164,20 @@ export default function AdminDestinationsPage() {
                   <p className="text-xs text-gray-500 mt-1">{item.bannerTitle || `Study in ${item.name}`}</p>
                 </div>
                 <div className="flex gap-2">
-                  <button className="text-sm text-blue-600" onClick={() => setForm({ ...item })}>Edit</button>
+                  <button
+                    className="text-sm text-blue-600"
+                    onClick={() =>
+                      setForm({
+                        ...item,
+                        faqItems:
+                          Array.isArray(item.faqItems) && item.faqItems.length
+                            ? item.faqItems
+                            : [{ question: item.faqQuestion || "", answer: item.faqDescription || "" }],
+                      })
+                    }
+                  >
+                    Edit
+                  </button>
                   <button className="text-sm text-red-600" onClick={() => handleDelete(item.id)}>Delete</button>
                 </div>
               </div>

@@ -334,7 +334,7 @@ const UniPartners = () => {
           Can&apos;t find your target university?
         </p>
         <button
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick= {() => window.location.href = "/contact"}
           style={{
             padding: "13px 32px",
             borderRadius: "50px",

@@ -272,7 +272,7 @@ function CourseCard({ c, visible }: { c: typeof FALLBACK_COURSES[0]; visible: bo
         </div>
       )}
 
-      <a href="/contact" className="course-link" style={{ color: c.accent, marginTop: 20 }}>Enroll Now →</a>
+      <a href="/free-consultant" className="course-link" style={{ color: c.accent, marginTop: 20 }}>Enroll Now →</a>
     </div>
   );
 }

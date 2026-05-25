@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 const fallbackImages = [
-  "https://brightedugroup.com/blog/wp-content/uploads/2024/10/Bright-Main-Banner-768x432-1.webp",
+  "/studysyncbanner.jpeg",
   "https://www.abroadfromnepal.com/wp-content/uploads/2026/02/Best-Consultancy-in-Nepal-for-France.jpg",
   "/image.png",
 ];
@@ -92,11 +92,7 @@ export default function HeroSlider() {
           {/* Glow Effect */}
           <div className="absolute -inset-1 bg-gradient-to-r from-red-500 via-pink-500 to-orange-500 rounded-full blur opacity-70"></div>
 
-          <button className="relative bg-red-600 px-4 py-2 sm:px-6 sm:py-3 rounded-full text-sm sm:text-base font-semibold text-white hover:bg-red-700 transition shadow-lg">
-            
-            Book Free Consultation
-
-          </button>
+         
         </div>
       </div>
 

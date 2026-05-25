@@ -15,6 +15,9 @@ type Destination = {
   costScholarships?: string | null;
   applicationProcess?: string | null;
   afterReaching?: string | null;
+  faqQuestion?: string | null;
+  faqDescription?: string | null;
+  faqItems?: Array<{ question?: string; answer?: string }>;
 };
 
 export default function DestinationDetailPage({ slug }: { slug: string }) {
@@ -112,6 +115,12 @@ export default function DestinationDetailPage({ slug }: { slug: string }) {
         label: "After Arrival",
         title: `After Reaching ${destinationName}`,
         body: destination?.afterReaching || "",
+      },
+      {
+        id: 7,
+        label: "FAQ",
+        title: "Frequently Asked Questions",
+        
       },
     ],
     [destination, destinationName]
@@ -377,8 +386,24 @@ export default function DestinationDetailPage({ slug }: { slug: string }) {
                 </div>
 
                 <div className="dest-copy">
-                  {current.body || "Content will be added soon."}
+                  {current.body || ""}
                 </div>
+                {activeTab === 7 ? (
+                  <div style={{ marginTop: 14, display: "grid", gap: 10 }}>
+                    {(Array.isArray(destination?.faqItems) ? destination.faqItems : [])
+                      .filter((item) => (item?.question || item?.answer))
+                      .map((item, index) => (
+                        <div key={index} style={{ border: "1px solid #ececf4", borderRadius: 12, padding: "14px 16px", background: "#fbfcff" }}>
+                          <p style={{ fontSize: 13, fontWeight: 700, color: "#1f2438", marginBottom: 6 }}>
+                            {item.question || `FAQ ${index + 1}`}
+                          </p>
+                          <p style={{ fontSize: 14, color: "#5d6076", lineHeight: 1.7 }}>
+                            {item.answer || "Answer will be added soon."}
+                          </p>
+                        </div>
+                      ))}
+                  </div>
+                ) : null}
 
                 <div className="dest-other">
                   <h3>Other Destinations</h3>
