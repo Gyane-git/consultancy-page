@@ -9,6 +9,14 @@ type DestinationDbRow = RowDataPacket & {
   name: string;
   shortText: string | null;
   long_description: string | null;
+  bannerTitle: string | null;
+  bodyImage: string | null;
+  whyStudy: string | null;
+  topUniversities: string | null;
+  eligibilityProcess: string | null;
+  costScholarships: string | null;
+  applicationProcess: string | null;
+  afterReaching: string | null;
   isActive: number | boolean;
   createdAt: string;
   updatedAt: string;
@@ -30,6 +38,14 @@ function mapDestinationRow(row: DestinationDbRow) {
     name: row.name,
     shortText: row.shortText,
     longText: row.long_description,
+    bannerTitle: row.bannerTitle,
+    bodyImage: row.bodyImage,
+    whyStudy: row.whyStudy,
+    topUniversities: row.topUniversities,
+    eligibilityProcess: row.eligibilityProcess,
+    costScholarships: row.costScholarships,
+    applicationProcess: row.applicationProcess,
+    afterReaching: row.afterReaching,
     isActive: Boolean(row.isActive),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
@@ -45,7 +61,9 @@ export async function GET(request: Request) {
 
     if (slug) {
       const [rows] = await pool.query<DestinationDbRow[]>(
-        "SELECT id, slug, name, shortText, long_description, isActive, createdAt, updatedAt FROM DestinationContent WHERE slug = ? LIMIT 1",
+        `SELECT id, slug, name, shortText, long_description, bannerTitle, bodyImage, whyStudy, topUniversities,
+                eligibilityProcess, costScholarships, applicationProcess, afterReaching, isActive, createdAt, updatedAt
+         FROM DestinationContent WHERE slug = ? LIMIT 1`,
         [slug],
       );
       const destination = rows[0] ? mapDestinationRow(rows[0]) : null;
@@ -53,7 +71,9 @@ export async function GET(request: Request) {
     }
 
     const [rows] = await pool.query<DestinationDbRow[]>(
-      "SELECT id, slug, name, shortText, long_description, isActive, createdAt, updatedAt FROM DestinationContent WHERE isActive = true ORDER BY name ASC",
+      `SELECT id, slug, name, shortText, long_description, bannerTitle, bodyImage, whyStudy, topUniversities,
+              eligibilityProcess, costScholarships, applicationProcess, afterReaching, isActive, createdAt, updatedAt
+       FROM DestinationContent WHERE isActive = true ORDER BY name ASC`,
     );
     return NextResponse.json({ success: true, destinations: rows.map(mapDestinationRow) });
   } catch (error) {
@@ -72,6 +92,14 @@ export async function POST(request: Request) {
     const name = String(payload?.name ?? "").trim();
     const shortText = String(payload?.shortText ?? "").trim();
     const longText = String(payload?.longText ?? "").trim();
+    const bannerTitle = String(payload?.bannerTitle ?? "").trim();
+    const bodyImage = String(payload?.bodyImage ?? "").trim();
+    const whyStudy = String(payload?.whyStudy ?? "").trim();
+    const topUniversities = String(payload?.topUniversities ?? "").trim();
+    const eligibilityProcess = String(payload?.eligibilityProcess ?? "").trim();
+    const costScholarships = String(payload?.costScholarships ?? "").trim();
+    const applicationProcess = String(payload?.applicationProcess ?? "").trim();
+    const afterReaching = String(payload?.afterReaching ?? "").trim();
 
     if (!slug || !name) {
       return NextResponse.json(
@@ -89,12 +117,29 @@ export async function POST(request: Request) {
     }
 
     const [result] = await pool.query<ResultSetHeader>(
-      "INSERT INTO DestinationContent (slug, name, shortText, long_description, isActive) VALUES (?, ?, ?, ?, true)",
-      [slug, name, shortText || null, longText || null],
+      `INSERT INTO DestinationContent
+       (slug, name, shortText, long_description, bannerTitle, bodyImage, whyStudy, topUniversities, eligibilityProcess, costScholarships, applicationProcess, afterReaching, isActive)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, true)`,
+      [
+        slug,
+        name,
+        shortText || null,
+        longText || null,
+        bannerTitle || `Study in ${name}`,
+        bodyImage || null,
+        whyStudy || null,
+        topUniversities || null,
+        eligibilityProcess || null,
+        costScholarships || null,
+        applicationProcess || null,
+        afterReaching || null,
+      ],
     );
 
     const [rows] = await pool.query<DestinationDbRow[]>(
-      "SELECT id, slug, name, shortText, long_description, isActive, createdAt, updatedAt FROM DestinationContent WHERE id = ?",
+      `SELECT id, slug, name, shortText, long_description, bannerTitle, bodyImage, whyStudy, topUniversities,
+              eligibilityProcess, costScholarships, applicationProcess, afterReaching, isActive, createdAt, updatedAt
+       FROM DestinationContent WHERE id = ?`,
       [result.insertId],
     );
     return NextResponse.json({ success: true, destination: rows[0] ? mapDestinationRow(rows[0]) : null });
@@ -118,6 +163,14 @@ export async function PUT(request: Request) {
     const name = String(payload?.name ?? "").trim();
     const shortText = String(payload?.shortText ?? "").trim();
     const longText = String(payload?.longText ?? "").trim();
+    const bannerTitle = String(payload?.bannerTitle ?? "").trim();
+    const bodyImage = String(payload?.bodyImage ?? "").trim();
+    const whyStudy = String(payload?.whyStudy ?? "").trim();
+    const topUniversities = String(payload?.topUniversities ?? "").trim();
+    const eligibilityProcess = String(payload?.eligibilityProcess ?? "").trim();
+    const costScholarships = String(payload?.costScholarships ?? "").trim();
+    const applicationProcess = String(payload?.applicationProcess ?? "").trim();
+    const afterReaching = String(payload?.afterReaching ?? "").trim();
     const isActive = payload?.isActive !== false;
 
     if (!Number.isFinite(id) || id <= 0) {
@@ -144,13 +197,31 @@ export async function PUT(request: Request) {
 
     await pool.query(
       `UPDATE DestinationContent
-       SET slug = ?, name = ?, shortText = ?, long_description = ?, isActive = ?
+       SET slug = ?, name = ?, shortText = ?, long_description = ?, bannerTitle = ?, bodyImage = ?, whyStudy = ?, topUniversities = ?,
+           eligibilityProcess = ?, costScholarships = ?, applicationProcess = ?, afterReaching = ?, isActive = ?
        WHERE id = ?`,
-      [slug, name, shortText || null, longText || null, isActive, id],
+      [
+        slug,
+        name,
+        shortText || null,
+        longText || null,
+        bannerTitle || `Study in ${name}`,
+        bodyImage || null,
+        whyStudy || null,
+        topUniversities || null,
+        eligibilityProcess || null,
+        costScholarships || null,
+        applicationProcess || null,
+        afterReaching || null,
+        isActive,
+        id,
+      ],
     );
 
     const [rows] = await pool.query<DestinationDbRow[]>(
-      "SELECT id, slug, name, shortText, long_description, isActive, createdAt, updatedAt FROM DestinationContent WHERE id = ?",
+      `SELECT id, slug, name, shortText, long_description, bannerTitle, bodyImage, whyStudy, topUniversities,
+              eligibilityProcess, costScholarships, applicationProcess, afterReaching, isActive, createdAt, updatedAt
+       FROM DestinationContent WHERE id = ?`,
       [id],
     );
     return NextResponse.json({ success: true, destination: rows[0] ? mapDestinationRow(rows[0]) : null });

@@ -4,16 +4,16 @@ import type { RowDataPacket } from "mysql2";
 let initPromise: Promise<void> | null = null;
 
 const defaultDestinations = [
-  { slug: "australia", name: "Australia", shortText: "Go8 universities & regional PR benefits.", longText: "Australia offers globally recognized universities, strong student support, and clear post-study pathways. We help you choose the right city, institution, and course based on your goals." },
-  { slug: "uk", name: "United Kingdom", shortText: "Short master's and Graduate Route opportunities.", longText: "The UK is known for high-quality education, one-year master's options, and strong career outcomes. We support your full journey from university shortlist to visa." },
-  { slug: "usa", name: "United States", shortText: "Top programs with STEM OPT pathways.", longText: "The USA provides diverse universities, flexible academics, and research-led programs. We guide you on profile building, admission strategy, and visa preparation." },
-  { slug: "canada", name: "Canada", shortText: "Quality education with PR-focused pathways.", longText: "Canada remains one of the most student-friendly destinations with excellent education and work opportunities. We help you select programs aligned with long-term plans." },
-  { slug: "ireland", name: "Ireland", shortText: "A growing tech hub for international students.", longText: "Ireland is a strong choice for IT, business, and health-related studies. We help you evaluate course outcomes, cost, and career potential." },
-  { slug: "malta", name: "Malta", shortText: "Affordable European option with English instruction.", longText: "Malta offers English-taught programs in a safe, welcoming environment. We help you compare options and build a practical application plan." },
-  { slug: "germany", name: "Germany", shortText: "Excellent technical education with low tuition options.", longText: "Germany is popular for engineering, technology, and research pathways. We help with admission, documentation, and visa guidance." },
-  { slug: "new-zealand", name: "New Zealand", shortText: "Balanced lifestyle and post-study opportunities.", longText: "New Zealand offers quality education and a supportive environment for international students. We help you choose suitable institutions and visa pathways." },
-  { slug: "dubai", name: "Dubai", shortText: "International campuses and modern student lifestyle.", longText: "Dubai provides global education options close to home, with strong industry exposure. We support your selection and documentation process end-to-end." },
-  { slug: "georgia", name: "Georgia", shortText: "Budget-friendly destination for selected programs.", longText: "Georgia is an emerging destination for cost-effective international study. We help you assess program quality, affordability, and future opportunities." },
+  { slug: "australia", name: "Australia", shortText: "Go8 universities & regional PR benefits." },
+  { slug: "uk", name: "United Kingdom", shortText: "Short master's and Graduate Route opportunities." },
+  { slug: "usa", name: "United States", shortText: "Top programs with STEM OPT pathways." },
+  { slug: "canada", name: "Canada", shortText: "Quality education with PR-focused pathways." },
+  { slug: "ireland", name: "Ireland", shortText: "A growing tech hub for international students." },
+  { slug: "malta", name: "Malta", shortText: "Affordable European option with English instruction." },
+  { slug: "germany", name: "Germany", shortText: "Excellent technical education with low tuition options." },
+  { slug: "new-zealand", name: "New Zealand", shortText: "Balanced lifestyle and post-study opportunities." },
+  { slug: "dubai", name: "Dubai", shortText: "International campuses and modern student lifestyle." },
+  { slug: "georgia", name: "Georgia", shortText: "Budget-friendly destination for selected programs." },
 ];
 
 const defaultBlogs = [
@@ -148,6 +148,14 @@ export async function ensureContentTables() {
     name VARCHAR(191) NOT NULL,
     shortText TEXT NULL,
     long_description LONGTEXT NULL,
+    bannerTitle VARCHAR(255) NULL,
+    bodyImage LONGTEXT NULL,
+    whyStudy LONGTEXT NULL,
+    topUniversities LONGTEXT NULL,
+    eligibilityProcess LONGTEXT NULL,
+    costScholarships LONGTEXT NULL,
+    applicationProcess LONGTEXT NULL,
+    afterReaching LONGTEXT NULL,
     isActive BOOLEAN NOT NULL DEFAULT TRUE,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -163,6 +171,22 @@ export async function ensureContentTables() {
 
       if (!hasLongDescription) {
         await pool.query("ALTER TABLE DestinationContent ADD COLUMN long_description LONGTEXT NULL");
+      }
+
+      const destinationNewColumns = [
+        { field: "bannerTitle", sql: "ALTER TABLE DestinationContent ADD COLUMN bannerTitle VARCHAR(255) NULL" },
+        { field: "bodyImage", sql: "ALTER TABLE DestinationContent ADD COLUMN bodyImage LONGTEXT NULL" },
+        { field: "whyStudy", sql: "ALTER TABLE DestinationContent ADD COLUMN whyStudy LONGTEXT NULL" },
+        { field: "topUniversities", sql: "ALTER TABLE DestinationContent ADD COLUMN topUniversities LONGTEXT NULL" },
+        { field: "eligibilityProcess", sql: "ALTER TABLE DestinationContent ADD COLUMN eligibilityProcess LONGTEXT NULL" },
+        { field: "costScholarships", sql: "ALTER TABLE DestinationContent ADD COLUMN costScholarships LONGTEXT NULL" },
+        { field: "applicationProcess", sql: "ALTER TABLE DestinationContent ADD COLUMN applicationProcess LONGTEXT NULL" },
+        { field: "afterReaching", sql: "ALTER TABLE DestinationContent ADD COLUMN afterReaching LONGTEXT NULL" },
+      ];
+      for (const col of destinationNewColumns) {
+        if (!destinationColumns.some((c) => c.Field === col.field)) {
+          await pool.query(col.sql);
+        }
       }
 
       if (hasLongText) {
@@ -282,7 +306,7 @@ export async function ensureContentTables() {
         [
           "Dinesh Dhakal",
           "CEO & Founder",
-          "At StudySync Educare, we believe every dream deserves the right direction. Our team is committed to helping students build a confident international education journey from planning to arrival.",
+          "At StudySync, we believe every dream deserves the right direction. Our team is committed to helping students build a confident international education journey from planning to arrival.",
           "",
           "",
         ],
@@ -296,9 +320,21 @@ export async function ensureContentTables() {
 
       for (const destination of defaultDestinations) {
         await pool.query(
-          `INSERT IGNORE INTO DestinationContent (slug, name, shortText, long_description, isActive)
-           VALUES (?, ?, ?, ?, true)`,
-          [destination.slug, destination.name, destination.shortText, destination.longText],
+          `INSERT IGNORE INTO DestinationContent
+           (slug, name, shortText, bannerTitle, whyStudy, topUniversities, eligibilityProcess, costScholarships, applicationProcess, afterReaching, isActive)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, true)`,
+          [
+            destination.slug,
+            destination.name,
+            destination.shortText,
+            `Study in ${destination.name}`,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+          ],
         );
       }
 

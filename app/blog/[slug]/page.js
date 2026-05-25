@@ -9,6 +9,11 @@ function getEmbedVideoUrl(rawUrl) {
   if (!input) return "";
 
   try {
+    if (input.includes("<iframe")) {
+      const srcMatch = input.match(/src\s*=\s*["']([^"']+)["']/i);
+      if (srcMatch?.[1]) return srcMatch[1].trim().replace(/&amp;/g, "&");
+    }
+
     const url = new URL(input);
 
     // YouTube formats -> embed URL
@@ -32,13 +37,46 @@ function getEmbedVideoUrl(rawUrl) {
       if (url.pathname.includes("/plugins/video.php")) {
         return url.toString();
       }
-      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(input)}&show_text=false&width=560`;
+      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(input)}&show_text=false`;
+    }
+
+    // Instagram embed URL support
+    if (url.hostname.includes("instagram.com")) {
+      if (url.pathname.includes("/embed")) return url.toString();
+      const parts = url.pathname.split("/").filter(Boolean);
+      if (parts.length >= 2 && (parts[0] === "reel" || parts[0] === "p" || parts[0] === "tv")) {
+        return `https://www.instagram.com/${parts[0]}/${parts[1]}/embed`;
+      }
     }
   } catch {
     return "";
   }
 
   return "";
+}
+
+function getEmbedAspectPadding(rawUrl, embedUrl) {
+  const raw = String(rawUrl || "").toLowerCase();
+  const src = String(embedUrl || "").toLowerCase();
+  const isVerticalHint =
+    raw.includes("/reel/") ||
+    raw.includes("instagram.com/reel") ||
+    src.includes("/reel/") ||
+    src.includes("instagram.com/reel");
+
+  try {
+    const parsed = new URL(String(embedUrl || ""));
+    const h = Number(parsed.searchParams.get("height"));
+    const w = Number(parsed.searchParams.get("width"));
+    if (Number.isFinite(h) && Number.isFinite(w) && h > 0 && w > 0) {
+      const percent = (h / w) * 100;
+      if (percent >= 80 && percent <= 220) return `${percent}%`;
+    }
+  } catch {
+    // fallback below
+  }
+
+  return isVerticalHint ? "177.78%" : "56.25%";
 }
 
 export default function BlogDetailPage() {
@@ -88,6 +126,7 @@ export default function BlogDetailPage() {
 
   const tags = Array.isArray(blog.tags) ? blog.tags : [];
   const embedVideoUrl = getEmbedVideoUrl(blog.videoUrl);
+  const embedPaddingTop = getEmbedAspectPadding(blog.videoUrl, embedVideoUrl);
 
   return (
     <main style={{ background: "#f7f8fa", minHeight: "100vh", padding: "28px 24px 60px" }}>
@@ -114,7 +153,7 @@ export default function BlogDetailPage() {
 
         {embedVideoUrl ? (
           <div style={{ marginBottom: 22 }}>
-            <div style={{ position: "relative", width: "100%", paddingTop: "56.25%", borderRadius: 12, overflow: "hidden", border: "1px solid #ececec" }}>
+            <div style={{ position: "relative", width: "100%", maxWidth: 760, margin: "0 auto", paddingTop: embedPaddingTop, borderRadius: 12, overflow: "hidden", border: "1px solid #ececec", background: "#000" }}>
               <iframe
                 src={embedVideoUrl}
                 title="Embedded Video"

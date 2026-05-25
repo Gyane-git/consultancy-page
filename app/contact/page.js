@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 const subjects = [
-  "Study in Australia",
+  "Admission Guidance",
   "Visa Assistance",
   "IELTS Preparation",
   "Scholarship Guidance",
@@ -22,7 +22,7 @@ const contactInfo = [
       </svg>
     ),
     label: "Our Office",
-    value: "Kathmandu, Bagmati Province, Nepal",
+    value: "3rd Floor, Singapore Airlines Building, Kamaladi, Kathmandu, Nepal",
   },
   {
     color: "#e8922a",
@@ -86,7 +86,7 @@ export default function ContactPage() {
 
   const embedMapUrl = useMemo(() => {
     const raw = String(mapUrl || "").trim();
-    if (!raw) return "https://www.google.com/maps?q=Bag+Bazar+Kathmandu+Nepal&output=embed";
+    if (!raw) return "https://www.google.com/maps?q=Study+Sync+Pvt+Ltd+Kathmandu+Nepal&output=embed";
     if (raw.includes("/maps/embed") || raw.includes("output=embed")) return raw;
     const match = raw.match(/@([-0-9.]+),([-0-9.]+)/);
     if (match?.[1] && match?.[2]) {

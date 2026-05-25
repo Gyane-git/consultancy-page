@@ -88,10 +88,10 @@ function FadeSection({
 
 export default function AboutPage() {
   const [ceo, setCeo] = useState({
-    ceoName: "Dinesh Dhakal",
+    ceoName: "Abiral Acharya",
     designation: "CEO & Founder",
     message:
-      "At StudySync Educare, we believe every dream deserves the right direction. Our dedicated team supports students through each step of the study abroad journey.",
+      "At StudySync, we believe every dream deserves the right direction. Our dedicated team supports students through each step of the study abroad journey.",
     profileImage: "",
     linkedinUrl: "",
   });
@@ -109,7 +109,7 @@ export default function AboutPage() {
             designation: data.ceo.designation || "CEO & Founder",
             message:
               data.ceo.message ||
-              "At StudySync Educare, we believe every dream deserves the right direction. Our dedicated team supports students through each step of the study abroad journey.",
+              "At StudySync, we believe every dream deserves the right direction. Our dedicated team supports students through each step of the study abroad journey.",
             profileImage: data.ceo.profileImage || "",
             linkedinUrl: data.ceo.linkedinUrl || "",
           });
@@ -572,7 +572,7 @@ export default function AboutPage() {
             </div>
             <h2 className="ab-section-title">Who We Are</h2>
             <p className="ab-section-sub">
-              StudySync Educare is more than a consultancy — we are partners in your success story. Our dedicated team works tirelessly to ensure every student gets the right opportunity and feels supported throughout their journey abroad.
+              StudySync  is more than a consultancy — we are partners in your success story. Our dedicated team works tirelessly to ensure every student gets the right opportunity and feels supported throughout their journey abroad.
             </p>
 
             {/* CEO CARD */}

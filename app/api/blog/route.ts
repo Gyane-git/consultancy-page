@@ -3,6 +3,16 @@ import getPool from "@/lib/db";
 import { ensureContentTables } from "@/lib/content-store";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 
+function normalizeVideoUrl(value: unknown) {
+  const raw = String(value ?? "").trim();
+  if (!raw) return "";
+  const iframeSrcMatch = raw.match(/src\s*=\s*["']([^"']+)["']/i);
+  if (iframeSrcMatch?.[1]) {
+    return iframeSrcMatch[1].trim().replace(/&amp;/g, "&");
+  }
+  return raw;
+}
+
 function normalizeTags(value: unknown) {
   if (Array.isArray(value)) return JSON.stringify(value.map((v) => String(v)));
   if (typeof value === "string") {
@@ -50,7 +60,7 @@ export async function POST(request: Request) {
     const category = String(payload?.category ?? "").trim();
     const readTime = String(payload?.readTime ?? "").trim();
     const thumbnail = String(payload?.thumbnail ?? "").trim();
-    const videoUrl = String(payload?.videoUrl ?? "").trim();
+    const videoUrl = normalizeVideoUrl(payload?.videoUrl);
     const isPublished = payload?.isPublished !== false;
     const tags = normalizeTags(payload?.tags);
 
@@ -101,7 +111,7 @@ export async function PUT(request: Request) {
     const category = String(payload?.category ?? "").trim();
     const readTime = String(payload?.readTime ?? "").trim();
     const thumbnail = String(payload?.thumbnail ?? "").trim();
-    const videoUrl = String(payload?.videoUrl ?? "").trim();
+    const videoUrl = normalizeVideoUrl(payload?.videoUrl);
     const isPublished = payload?.isPublished !== false;
     const tags = normalizeTags(payload?.tags);
 

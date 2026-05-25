@@ -6,11 +6,18 @@ function getYoutubeId(url) {
   if (!url) return "";
   try {
     const parsed = new URL(url);
-    if (parsed.hostname.includes("youtu.be")) {
-      return parsed.pathname.replace("/", "").trim();
+    const host = parsed.hostname.toLowerCase();
+    const parts = parsed.pathname.split("/").filter(Boolean);
+
+    if (host.includes("youtu.be")) {
+      return parts[0] || "";
     }
-    if (parsed.hostname.includes("youtube.com")) {
-      return parsed.searchParams.get("v") || "";
+    if (host.includes("youtube.com")) {
+      const watchId = parsed.searchParams.get("v");
+      if (watchId) return watchId;
+      if (parts[0] === "embed" && parts[1]) return parts[1];
+      if (parts[0] === "shorts" && parts[1]) return parts[1];
+      if (parts[0] === "live" && parts[1]) return parts[1];
     }
     return "";
   } catch {
@@ -24,16 +31,21 @@ function toEmbedUrl(url, autoplay = false) {
     const parsed = new URL(url);
     const host = parsed.hostname.toLowerCase();
     const auto = autoplay ? "1" : "0";
+    const loop = autoplay ? "1" : "0";
 
     if (host.includes("youtu.be") || host.includes("youtube.com")) {
       const id = getYoutubeId(url);
-      return id ? `https://www.youtube.com/embed/${id}?autoplay=${auto}&rel=0` : "";
+      return id
+        ? `https://www.youtube.com/embed/${id}?autoplay=${auto}&rel=0&playsinline=1&loop=${loop}&playlist=${id}`
+        : "";
     }
     if (host.includes("facebook.com") || host.includes("fb.watch")) {
       if (parsed.pathname.includes("/plugins/video.php")) {
+        parsed.searchParams.set("autoplay", auto);
+        parsed.searchParams.set("loop", loop);
         return parsed.toString();
       }
-      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&autoplay=${auto}`;
+      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&autoplay=${auto}&loop=${loop}`;
     }
     if (host.includes("instagram.com")) {
       const pathParts = parsed.pathname.split("/").filter(Boolean);

@@ -280,7 +280,7 @@ export default function AdminBlogPage() {
 
           <input
             className="w-full border rounded-lg px-3 py-2"
-            placeholder="Embedded Video URL (YouTube/Facebook)"
+            placeholder="Embedded Video URL or iframe code (YouTube/Facebook/Instagram)"
             value={form.videoUrl}
             onChange={(e) => setForm((prev) => ({ ...prev, videoUrl: e.target.value }))}
           />

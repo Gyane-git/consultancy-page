@@ -158,11 +158,16 @@ export default function StudySyncFooter() {
     }
   };
 
-  const navLinks = ["IELTS Prep", "Destinations", "Services", "Courses", "Universities", "Blog", "About", "Contact"];
+  const navLinks = [
+  { name: "IELTS Prep", href: "/eng-proficiency/ielts-prepare" },
+  { name: "Services", href: "/services" },
+  { name: "Blog", href: "/blog" },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contact" },
+];
   const quickLinks = ["Apply Now", "Scholarships", "Visa Guide", "Pre-Departure", "Partner Login", "Student Portal"];
   const mapEmbedUrl =
-    "https://www.google.com/maps?q=Bag+Bazar+Kathmandu+Nepal&output=embed";
-
+  "https://www.google.com/maps?q=Study+Sync+Pvt+Ltd+Kathmandu+Nepal&output=embed";
   return (
     <div style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
       <style>{`
@@ -341,13 +346,26 @@ export default function StudySyncFooter() {
 
               {/* Col 2 – Navigation Links */}
               <div>
-                <h3 style={{
-                  fontFamily: "'Nunito Sans', sans-serif", fontSize: 13, fontWeight: 900,
-                  color: "#1a0d00", marginBottom: 16, letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                }}>Navigation</h3>
-                {navLinks.map(l => <a key={l} href="#" className="rf-link">{l}</a>)}
-              </div>
+  <h3
+    style={{
+      fontFamily: "'Nunito Sans', sans-serif",
+      fontSize: 13,
+      fontWeight: 900,
+      color: "#1a0d00",
+      marginBottom: 16,
+      letterSpacing: "0.1em",
+      textTransform: "uppercase",
+    }}
+  >
+    Navigation
+  </h3>
+
+  {navLinks.map((link) => (
+    <a key={link.name} href={link.href} className="rf-link">
+      {link.name}
+    </a>
+  ))}
+</div>
 
               {/* Col 3 – Quick Links */}
               <div>
@@ -403,29 +421,30 @@ export default function StudySyncFooter() {
 
                 {/* Social row */}
                 <div className="rf-social-row" style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
-                  <SocialBtn href="#" label="Facebook">
+                  <SocialBtn href="https://www.facebook.com/StudySync7/" label="Facebook">
                     <svg width="20" height="20" viewBox="0 0 36 36" fill="currentColor">
                       <path d="M28 4H8a4 4 0 00-4 4v20a4 4 0 004 4h10V22h-4v-5h4v-3.5C18 10.1 20.4 8 23.6 8c1.5 0 3.1.3 3.1.3V12H24.7c-1.7 0-2.2 1.1-2.2 2.2V17h4.3l-.7 5H22.5v10H28a4 4 0 004-4V8a4 4 0 00-4-4z"/>
                     </svg>
                   </SocialBtn>
-                  <SocialBtn href="#" label="YouTube">
+                  <SocialBtn href="https://youtube.com/@study.sync9?si=V5uHr6sj36FDTpNi" label="YouTube">
                     <svg width="20" height="20" viewBox="0 0 36 36" fill="currentColor">
                       <path d="M32.5 10.2a4 4 0 00-2.8-2.8C27.5 7 18 7 18 7s-9.5 0-11.7.4a4 4 0 00-2.8 2.8C3 12.5 3 18 3 18s0 5.5.5 7.8a4 4 0 002.8 2.8C8.5 29 18 29 18 29s9.5 0 11.7-.4a4 4 0 002.8-2.8C33 23.5 33 18 33 18s0-5.5-.5-7.8zM15 22.5v-9l7.5 4.5-7.5 4.5z"/>
                     </svg>
                   </SocialBtn>
-                  <SocialBtn href="#" label="Instagram">
+                  <SocialBtn href="https://www.instagram.com/studysync8/" label="Instagram">
                     <svg width="20" height="20" viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="4" y="4" width="28" height="28" rx="7"/>
                       <circle cx="18" cy="18" r="7"/>
                       <circle cx="25.5" cy="10.5" r="1.5" fill="currentColor" stroke="none"/>
                     </svg>
                   </SocialBtn>
-                  <SocialBtn href="#" label="TikTok">
+                  <SocialBtn href="https://www.tiktok.com/@study.sync7?_r=1&_t=ZS-95zb4h9
+MXhd" label="TikTok">
                     <svg width="20" height="20" viewBox="0 0 36 36" fill="currentColor">
                       <path d="M28 4h-4.5v18.5a4.5 4.5 0 01-4.5 4.5 4.5 4.5 0 01-4.5-4.5 4.5 4.5 0 014.5-4.5c.4 0 .8.06 1.2.16V13.5a9 9 0 00-1.2-.08A9 9 0 0010 22.5 9 9 0 0019 31.5a9 9 0 009-9V15a12.2 12.2 0 007 2.2v-4.5A7.7 7.7 0 0128 4z"/>
                     </svg>
                   </SocialBtn>
-                  <SocialBtn href="#" label="WhatsApp">
+                  <SocialBtn href="https://wa.me/9810724525" label="WhatsApp">
                     <svg width="20" height="20" viewBox="0 0 36 36" fill="currentColor">
                       <path d="M18 3C9.7 3 3 9.7 3 18c0 2.7.7 5.3 2 7.5L3 33l7.7-2c2.1 1.2 4.5 1.9 7.3 1.9 8.3 0 15-6.7 15-15S26.3 3 18 3zm7.5 20.3c-.3.8-1.6 1.5-2.3 1.6-.6.1-1.4.1-2.2-.1-.5-.1-1.1-.3-1.9-.6-3.3-1.4-5.5-4.7-5.6-4.9-.2-.2-1.3-1.7-1.3-3.3 0-1.6.8-2.3 1.1-2.7.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.5.8 1.9.9 2 .1.2.1.4 0 .6-.1.2-.2.4-.4.5-.2.2-.4.4-.5.5-.2.2-.4.4-.2.7.2.4.9 1.4 1.9 2.3 1.3 1.1 2.3 1.5 2.7 1.6.4.2.6.1.8-.1.2-.2.9-1 1.1-1.4.2-.4.5-.3.8-.2.3.1 2 .9 2.3 1.1.3.2.5.3.6.4.1.4-.2 1.4-.5 2.3z"/>
                     </svg>

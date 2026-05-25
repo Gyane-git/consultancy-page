@@ -147,10 +147,10 @@ export default function AdminServicesPage() {
               <input className="w-full border rounded-lg px-3 py-2" placeholder="Stat value" value={cardForm.stat} onChange={(e) => setCardForm({ ...cardForm, stat: e.target.value })} required />
               <input className="w-full border rounded-lg px-3 py-2" placeholder="Stat label" value={cardForm.statLabel} onChange={(e) => setCardForm({ ...cardForm, statLabel: e.target.value })} required />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            {/* <div className="grid grid-cols-2 gap-3">
               <input className="w-full border rounded-lg px-3 py-2" placeholder="Color (#hex)" value={cardForm.color} onChange={(e) => setCardForm({ ...cardForm, color: e.target.value })} />
               <input className="w-full border rounded-lg px-3 py-2" placeholder="Background (#hex)" value={cardForm.bg} onChange={(e) => setCardForm({ ...cardForm, bg: e.target.value })} />
-            </div>
+            </div> */}
             <label className="flex items-center gap-2 text-sm text-gray-700">
               <input type="checkbox" checked={cardForm.isActive} onChange={(e) => setCardForm({ ...cardForm, isActive: e.target.checked })} />
               Active

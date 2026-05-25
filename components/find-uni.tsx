@@ -1,21 +1,13 @@
 "use client";
-import { useState } from "react";
-
-const subjects = [
-  "Computer Science","Business & Management","Medicine & Health",
-  "Engineering","Law","Arts & Design","Psychology",
-  "Architecture","Economics","Education",
-];
-const courseTypes = [
-  "Undergraduate (Bachelor's)","Postgraduate (Master's)","PhD / Doctorate",
-  "Foundation Year","Diploma / Certificate","Online / Distance Learning","Part-time",
-];
-const locations = [
-  "United Kingdom","United States","Australia","Canada","Germany",
-  "Netherlands","New Zealand","Ireland","Singapore","UAE",
-];
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Tab = "COURSES" | "UNIVERSITIES";
+type UniversityItem = {
+  name?: string | null;
+  country?: string | null;
+  courseName?: string | null;
+};
 
 interface DropdownProps {
   label: string;
@@ -67,10 +59,66 @@ function Dropdown({ label, placeholder, options, value, onChange }: DropdownProp
 }
 
 export default function FindUni() {
+  const router = useRouter();
   const [tab, setTab] = useState<Tab>("COURSES");
   const [subject, setSubject] = useState("");
   const [courseType, setCourseType] = useState("");
   const [location, setLocation] = useState("");
+  const [universities, setUniversities] = useState<UniversityItem[]>([]);
+
+  useEffect(() => {
+    let ignore = false;
+    async function loadUniversities() {
+      try {
+        const res = await fetch("/api/university", { cache: "no-store" });
+        const data = await res.json();
+        if (!ignore && res.ok && data?.success && Array.isArray(data.universities)) {
+          setUniversities(data.universities);
+        }
+      } catch (error) {
+        console.error("Failed to load university filter options", error);
+      }
+    }
+    loadUniversities();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  const universityOptions = useMemo(
+    () =>
+      Array.from(new Set(universities.map((u) => String(u.name || "").trim()).filter(Boolean))).sort(),
+    [universities],
+  );
+
+  const courseOptions = useMemo(
+    () =>
+      Array.from(new Set(universities.map((u) => String(u.courseName || "").trim()).filter(Boolean))).sort(),
+    [universities],
+  );
+
+  const locationOptions = useMemo(
+    () =>
+      Array.from(new Set(universities.map((u) => String(u.country || "").trim()).filter(Boolean))).sort(),
+    [universities],
+  );
+
+  const firstOptions = tab === "COURSES" ? courseOptions : universityOptions;
+  const secondOptions = tab === "COURSES" ? universityOptions : courseOptions;
+  const thirdOptions = locationOptions;
+
+  function handleSearch() {
+    const params = new URLSearchParams();
+    if (tab === "COURSES") {
+      if (subject) params.set("course", subject);
+      if (courseType) params.set("university", courseType);
+    } else {
+      if (subject) params.set("university", subject);
+      if (courseType) params.set("course", courseType);
+    }
+    if (location) params.set("country", location);
+    router.push(`/universities/search?${params.toString()}`);
+  }
 
   const stats = [
     { value: "250+", label: "Partner Universities" },
@@ -200,19 +248,40 @@ export default function FindUni() {
 
           <div className="find-tab-row">
             {(["COURSES", "UNIVERSITIES"] as Tab[]).map((t) => (
-              <button key={t} className={`find-tab-btn ${tab === t ? "active" : ""}`} onClick={() => setTab(t)}>
+              <button
+                key={t}
+                className={`find-tab-btn ${tab === t ? "active" : ""}`}
+                onClick={() => {
+                  setTab(t);
+                  setSubject("");
+                  setCourseType("");
+                  setLocation("");
+                }}
+              >
                 {t.charAt(0) + t.slice(1).toLowerCase()}
               </button>
             ))}
           </div>
 
           <div className="find-search">
-            <Dropdown label="I'm looking for:" placeholder="Enter subject or course" options={subjects} value={subject} onChange={setSubject} />
+            <Dropdown
+              label={tab === "COURSES" ? "Course:" : "University:"}
+              placeholder={tab === "COURSES" ? "Select course from API" : "Select university from API"}
+              options={firstOptions}
+              value={subject}
+              onChange={setSubject}
+            />
             <div className="find-divider" />
-            <Dropdown label="I'm planning to study:" placeholder="Select course type" options={courseTypes} value={courseType} onChange={setCourseType} />
+            <Dropdown
+              label={tab === "COURSES" ? "University:" : "Course:"}
+              placeholder={tab === "COURSES" ? "Select university from API" : "Select course from API"}
+              options={secondOptions}
+              value={courseType}
+              onChange={setCourseType}
+            />
             <div className="find-divider" />
-            <Dropdown label="I want to study in:" placeholder="Select location" options={locations} value={location} onChange={setLocation} />
-            <button className="find-search-btn" aria-label="Search">
+            <Dropdown label="Country:" placeholder="Select country from API" options={thirdOptions} value={location} onChange={setLocation} />
+            <button className="find-search-btn" aria-label="Search" onClick={handleSearch} type="button">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <circle cx="11" cy="11" r="7" />
                 <path d="M21 21l-4.35-4.35" />

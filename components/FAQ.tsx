@@ -595,7 +595,7 @@ export default function ContactFAQPage() {
       <div className="page-wrap">
         {/* Hero */}
         <div className="hero">
-          <div className="hero-eyebrow">StudySync Educare · Study Abroad</div>
+          <div className="hero-eyebrow">StudySync · Study Abroad</div>
           <h1>
             Your journey <em>abroad</em>
             <br />starts with a question.

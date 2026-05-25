@@ -219,7 +219,7 @@ export default function PopupAdsAdmin() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
             <form onSubmit={handleSubmit} className="p-8 space-y-6">
               <div>
@@ -249,18 +249,7 @@ export default function PopupAdsAdmin() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-900">
-                  Color *
-                </label>
-                <input
-                  type="color"
-                  name="color"
-                  value={formData.color}
-                  onChange={handleInputChange}
-                  className="w-16 h-10 border rounded cursor-pointer"
-                />
-              </div>
+              
 
               <div>
                 <label className="block text-sm font-semibold mb-2 text-gray-900">

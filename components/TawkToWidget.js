@@ -25,7 +25,7 @@ export default function TawkToWidget() {
           aria-label="Contact us on WhatsApp"
         >
           <img
-            src="/images/whatsapp.avif"
+            src="/images/whatsapp-logo.avif"
             alt="WhatsApp"
             className="w-20 h-20 pointer-events-none -mb-2"
           />

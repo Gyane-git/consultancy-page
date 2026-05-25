@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Staff = {
   id: number;
@@ -13,6 +13,7 @@ type Staff = {
 export default function StaffTeam() {
   const [staff, setStaff] = useState<Staff[]>([]);
   const [loading, setLoading] = useState(true);
+  const sliderRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     let ignore = false;
@@ -45,7 +46,17 @@ export default function StaffTeam() {
     return <div style={{ padding: "24px 48px", textAlign: "center", color: "#777" }}>No staff profiles available right now.</div>;
   }
 
-  const loopedStaff = [...staff, ...staff];
+  function handleSlide(direction: "left" | "right") {
+    const el = sliderRef.current;
+    if (!el) return;
+    const cardWidth = 266;
+    const gap = 18;
+    const step = cardWidth + gap;
+    el.scrollBy({
+      left: direction === "left" ? -step : step,
+      behavior: "smooth",
+    });
+  }
 
   return (
     <section style={{ maxWidth: 1140, margin: "0 auto", padding: "40px 24px 20px" }}>
@@ -71,14 +82,39 @@ export default function StaffTeam() {
         .st-track {
           display: flex;
           gap: 18px;
-          width: max-content;
-          animation: st-marquee 45s linear infinite;
+          overflow-x: auto;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
           padding: 6px 2px 10px;
+          scroll-snap-type: x mandatory;
         }
-        .st-wrap:hover .st-track { animation-play-state: paused; }
-        @keyframes st-marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
+        .st-track::-webkit-scrollbar {
+          display: none;
+        }
+        .st-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 5;
+          width: 40px;
+          height: 40px;
+          border-radius: 999px;
+          border: 1px solid #e1e5f1;
+          background: rgba(255,255,255,0.96);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          color: #2b2d8e;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        .st-arrow-left { left: 8px; }
+        .st-arrow-right { right: 8px; }
+        .st-arrow:hover {
+          border-color: #cfd8f5;
+          background: #f6f8ff;
+          transform: translateY(calc(-50% - 1px));
         }
         .st-card {
           width: 248px;
@@ -89,6 +125,7 @@ export default function StaffTeam() {
           box-shadow: 0 8px 30px rgba(0,0,0,0.06);
           transition: transform 0.22s ease, box-shadow 0.22s ease;
           flex-shrink: 0;
+          scroll-snap-align: start;
         }
         .st-card:hover {
           transform: translateY(-4px);
@@ -155,7 +192,10 @@ export default function StaffTeam() {
         @media (max-width: 640px) {
           .st-card { width: 220px; }
           .st-wrap::before, .st-wrap::after { width: 34px; }
-          .st-track { animation-duration: 34s; }
+          .st-arrow {
+            width: 36px;
+            height: 36px;
+          }
         }
       `}</style>
 
@@ -165,9 +205,19 @@ export default function StaffTeam() {
       </div>
 
       <div className="st-wrap">
-        <div className="st-track">
-          {loopedStaff.map((member, idx) => (
-            <article key={`${member.id}-${idx}`} className="st-card">
+        <button type="button" className="st-arrow st-arrow-left" onClick={() => handleSlide("left")} aria-label="Slide left">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <button type="button" className="st-arrow st-arrow-right" onClick={() => handleSlide("right")} aria-label="Slide right">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+        <div className="st-track" ref={sliderRef}>
+          {staff.map((member) => (
+            <article key={member.id} className="st-card">
               <div className="st-photo">
                 {member.image ? (
                   <img src={member.image} alt={member.name} />
