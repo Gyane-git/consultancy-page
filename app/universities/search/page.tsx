@@ -14,7 +14,7 @@ type University = {
   videoUrl?: string | null;
 };
 
-function toEmbedUrl(input?: string | null) {
+function toEmbedUrl(input?: string | null): string {
   const value = String(input || "").trim();
   if (!value) return "";
 
@@ -30,13 +30,18 @@ function toEmbedUrl(input?: string | null) {
     if (host.includes("youtube.com") || host.includes("youtu.be")) {
       const id = host.includes("youtu.be")
         ? parsed.pathname.split("/").filter(Boolean)[0]
-        : parsed.searchParams.get("v") || parsed.pathname.split("/").filter(Boolean)[1] || "";
+        : parsed.searchParams.get("v") ||
+          parsed.pathname.split("/").filter(Boolean)[1] ||
+          "";
       return id ? `https://www.youtube.com/embed/${id}` : "";
     }
 
     if (host.includes("facebook.com") || host.includes("fb.watch")) {
-      if (parsed.pathname.includes("/plugins/video.php")) return parsed.toString();
-      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(value)}&show_text=false`;
+      if (parsed.pathname.includes("/plugins/video.php"))
+        return parsed.toString();
+      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
+        value
+      )}&show_text=false`;
     }
 
     return "";
@@ -45,6 +50,140 @@ function toEmbedUrl(input?: string | null) {
   }
 }
 
+/* ── Flag emoji helper ── */
+function countryFlag(country?: string | null): string {
+  if (!country) return "";
+  const map: Record<string, string> = {
+    australia: "🇦🇺",
+    "united states": "🇺🇸",
+    usa: "🇺🇸",
+    uk: "🇬🇧",
+    "united kingdom": "🇬🇧",
+    canada: "🇨🇦",
+    germany: "🇩🇪",
+    france: "🇫🇷",
+    japan: "🇯🇵",
+    india: "🇮🇳",
+    china: "🇨🇳",
+    nepal: "🇳🇵",
+    singapore: "🇸🇬",
+    malaysia: "🇲🇾",
+    newzealand: "🇳🇿",
+    "new zealand": "🇳🇿",
+  };
+  return map[country.toLowerCase()] ?? "🌐";
+}
+
+/* ── Initials avatar ── */
+function Initials({ name }: { name: string }) {
+  const parts = name.trim().split(/\s+/);
+  const letters =
+    parts.length >= 2
+      ? parts[0][0] + parts[parts.length - 1][0]
+      : name.slice(0, 2);
+  return (
+    <span style={{ textTransform: "uppercase", fontWeight: 600 }}>
+      {letters}
+    </span>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   CARD COMPONENT
+────────────────────────────────────────────── */
+function UniCard({ item }: { item: University }) {
+  const embedUrl = toEmbedUrl(item.videoUrl);
+  const hasImage = Boolean(item.supportImage);
+  const hasVideo = Boolean(embedUrl);
+  const hasMedia = hasImage || hasVideo;
+
+  return (
+    <article className="uni-card">
+      {/* Top gradient stripe */}
+      <div className="card-stripe" />
+
+      <div className="card-body">
+        {/* ── University header ── */}
+        <div className="uni-header">
+          <div className="logo-wrap">
+            {item.logo ? (
+              <img
+                src={item.logo}
+                alt={item.name}
+                className="logo-img"
+              />
+            ) : (
+              <div className="logo-fallback">
+                <Initials name={item.name} />
+              </div>
+            )}
+          </div>
+
+          <div className="uni-title-block">
+            <h2 className="uni-name">{item.name}</h2>
+            <span className="country-pill">
+              {countryFlag(item.country)}&nbsp;&nbsp;
+              {item.country || "Country not specified"}
+            </span>
+          </div>
+        </div>
+
+        {/* ── Course info ── */}
+        <div className="course-box">
+          <p className="course-eyebrow">Course offered</p>
+          <p className="course-title">
+            {item.courseName || "Course not specified"}
+          </p>
+          {item.courseDescription && (
+            <p className="course-desc">{item.courseDescription}</p>
+          )}
+        </div>
+
+        {/* ── Media section — only rendered when at least one media exists ── */}
+        {hasMedia && (
+          <div className={`media-grid ${hasImage && hasVideo ? "two-col" : "one-col"}`}>
+            {hasImage && (
+              <div className="media-item">
+                <p className="media-label">
+                  <span className="media-icon">📸</span> Campus highlights
+                </p>
+                <div className="media-frame">
+                  <img
+                    src={item.supportImage!}
+                    alt={`${item.name} campus`}
+                    className="media-img"
+                  />
+                </div>
+              </div>
+            )}
+
+            {hasVideo && (
+              <div className="media-item">
+                <p className="media-label">
+                  <span className="media-icon">▶</span> Program overview
+                </p>
+                <div className="media-frame">
+                  <iframe
+                    src={embedUrl}
+                    title={`${item.name} video`}
+                    className="media-iframe"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   MAIN CONTENT
+────────────────────────────────────────────── */
 function UniversitySearchContent() {
   const searchParams = useSearchParams();
   const [items, setItems] = useState<University[]>([]);
@@ -57,141 +196,468 @@ function UniversitySearchContent() {
 
   useEffect(() => {
     let ignore = false;
-
     async function load() {
       try {
         const res = await fetch("/api/university", { cache: "no-store" });
         const data = await res.json();
         if (!ignore && res.ok && data?.success) {
-          setItems(Array.isArray(data.universities) ? data.universities : []);
+          setItems(
+            Array.isArray(data.universities) ? data.universities : []
+          );
         }
-      } catch (error) {
-        console.error("Failed to load universities", error);
+      } catch (err) {
+        console.error("Failed to load universities", err);
       } finally {
         if (!ignore) setLoading(false);
       }
     }
-
     load();
-    return () => {
-      ignore = true;
-    };
+    return () => { ignore = true; };
   }, []);
 
   const filtered = useMemo(() => {
     return items
-      .filter((item) => (university ? item.name === university : true))
-      .filter((item) => (course ? item.courseName === course : true))
-      .filter((item) => (country ? (item.country || "").toLowerCase() === country.toLowerCase() : true))
-      .filter((item) => {
+      .filter((i) => (university ? i.name === university : true))
+      .filter((i) => (course ? i.courseName === course : true))
+      .filter((i) =>
+        country
+          ? (i.country || "").toLowerCase() === country.toLowerCase()
+          : true
+      )
+      .filter((i) => {
         if (!q) return true;
-        const text = `${item.name || ""} ${item.country || ""} ${item.courseName || ""} ${item.courseDescription || ""}`.toLowerCase();
+        const text = `${i.name} ${i.country} ${i.courseName} ${i.courseDescription}`.toLowerCase();
         return text.includes(q.toLowerCase());
       });
   }, [items, q, university, course, country]);
 
+  const activeFilters = [
+    university && { label: "University", value: university },
+    course && { label: "Course", value: course },
+    country && { label: "Country", value: country },
+    q && { label: "Keyword", value: q },
+  ].filter(Boolean) as { label: string; value: string }[];
+
   return (
-    <main className="min-h-screen bg-[#f7f9ff] text-gray-700">
-      <section className="max-w-7xl mx-auto px-4 py-10">
-        <div className="rounded-3xl border border-[#e8ebf8] bg-white shadow-[0_14px_44px_rgba(28,34,56,0.08)] overflow-hidden">
-          <div className="px-6 py-8 md:px-10 md:py-10 bg-gradient-to-r from-[#1f2438] to-[#2b2d8e] text-white">
-            <p className="text-xs uppercase tracking-[0.16em] text-white/70 font-semibold">Search Results</p>
-            <h1 className="mt-2 text-2xl md:text-4xl font-extrabold">Universities & Courses</h1>
-            <p className="mt-3 text-sm md:text-base text-white/80">Showing matched data from your university API based on selected filter.</p>
+    <>
+      {/* ── Styles ── */}
+      <style>{`
+        /* Reset */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-            <div className="mt-4 flex flex-wrap gap-2 text-xs">
-              {university ? <span className="px-3 py-1 rounded-full bg-white/15">University: {university}</span> : null}
-              {course ? <span className="px-3 py-1 rounded-full bg-white/15">Course: {course}</span> : null}
-              {country ? <span className="px-3 py-1 rounded-full bg-white/15">Country: {country}</span> : null}
-              {q ? <span className="px-3 py-1 rounded-full bg-white/15">Keyword: {q}</span> : null}
-              {!university && !course && !country && !q ? <span className="px-3 py-1 rounded-full bg-white/15">All Records</span> : null}
+        /* Page */
+        .search-page {
+          min-height: 100vh;
+          background: #f5f7ff;
+          font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
+          color: #1a1e3c;
+        }
+
+        /* ── HERO ── */
+        .hero {
+          background: #ffffff;
+          border-bottom: 1px solid #e4e8f5;
+          padding: 44px 32px 36px;
+        }
+        .hero-inner {
+          max-width: 900px;
+          margin: 0 auto;
+        }
+        .hero-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #2940d3;
+          margin-bottom: 12px;
+        }
+        .hero-eyebrow-dot {
+          width: 6px; height: 6px;
+          border-radius: 50%;
+          background: #2940d3;
+        }
+        .hero h1 {
+          font-size: clamp(24px, 4vw, 38px);
+          font-weight: 700;
+          color: #0f1120;
+          line-height: 1.15;
+          letter-spacing: -0.025em;
+        }
+        .hero-sub {
+          margin-top: 8px;
+          font-size: 14px;
+          color: #6b7499;
+          line-height: 1.6;
+        }
+
+        /* Filter pills */
+        .filter-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 20px;
+        }
+        .filter-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 5px 12px;
+          border-radius: 100px;
+          font-size: 12px;
+          font-weight: 500;
+          background: #eef1ff;
+          color: #2940d3;
+          border: 1px solid #cdd5fb;
+        }
+        .filter-pill-label {
+          color: #8a90c8;
+          font-weight: 400;
+        }
+
+        /* Result count badge */
+        .result-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          margin-top: 18px;
+          padding: 6px 14px;
+          border-radius: 100px;
+          background: #f0f3ff;
+          border: 1px solid #dde3fc;
+          font-size: 12.5px;
+          font-weight: 600;
+          color: #2940d3;
+        }
+        .result-badge-dot {
+          width: 7px; height: 7px;
+          border-radius: 50%;
+          background: #22c55e;
+          box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+          animation: pulse 2.2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+          0%,100% { box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
+          50%      { box-shadow: 0 0 0 6px rgba(34,197,94,0.08); }
+        }
+
+        /* ── CONTENT AREA ── */
+        .content {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 32px 24px 64px;
+        }
+
+        /* ── CARD ── */
+        .uni-card {
+          background: #ffffff;
+          border: 1px solid #e2e8f5;
+          border-radius: 16px;
+          overflow: hidden;
+          margin-bottom: 20px;
+          transition: box-shadow 0.22s ease, transform 0.22s ease;
+          animation: slideUp 0.35s ease both;
+        }
+        .uni-card:nth-child(2) { animation-delay: 0.07s; }
+        .uni-card:nth-child(3) { animation-delay: 0.14s; }
+        .uni-card:nth-child(4) { animation-delay: 0.21s; }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .uni-card:hover {
+          box-shadow: 0 8px 32px rgba(41,64,211,0.10);
+          transform: translateY(-2px);
+        }
+
+        /* Top stripe */
+        .card-stripe {
+          height: 3px;
+          background: linear-gradient(90deg, #2940d3 0%, #6b87f8 50%, #f4a944 100%);
+        }
+
+        .card-body {
+          padding: 24px 26px 22px;
+        }
+
+        /* University header */
+        .uni-header {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          margin-bottom: 18px;
+        }
+        .logo-wrap {
+          width: 54px; height: 54px;
+          border-radius: 12px;
+          border: 1px solid #e4e8f5;
+          background: #f8faff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+        .logo-img {
+          width: 100%; height: 100%;
+          object-fit: contain;
+          padding: 6px;
+        }
+        .logo-fallback {
+          width: 100%; height: 100%;
+          background: #eef1ff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          font-weight: 700;
+          color: #2940d3;
+          letter-spacing: 0.04em;
+        }
+        .uni-title-block {
+          flex: 1;
+          min-width: 0;
+        }
+        .uni-name {
+          font-size: 19px;
+          font-weight: 700;
+          color: #0f1120;
+          line-height: 1.25;
+          margin-bottom: 6px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .country-pill {
+          display: inline-flex;
+          align-items: center;
+          padding: 3px 11px;
+          border-radius: 100px;
+          background: #f0f3ff;
+          border: 1px solid #dde3fc;
+          font-size: 12px;
+          font-weight: 500;
+          color: #2940d3;
+        }
+
+        /* Course box */
+        .course-box {
+          background: #f8faff;
+          border: 1px solid #e4ebfb;
+          border-radius: 12px;
+          padding: 16px 18px;
+          margin-bottom: 20px;
+        }
+        .course-eyebrow {
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #8a91c0;
+          margin-bottom: 6px;
+        }
+        .course-title {
+          font-size: 15.5px;
+          font-weight: 600;
+          color: #2940d3;
+          margin-bottom: 8px;
+          line-height: 1.3;
+        }
+        .course-desc {
+          font-size: 13.5px;
+          color: #525a82;
+          line-height: 1.65;
+          font-weight: 400;
+        }
+
+        /* Media grid */
+        .media-grid {
+          display: grid;
+          gap: 14px;
+        }
+        .media-grid.two-col {
+          grid-template-columns: 1fr 1fr;
+        }
+        .media-grid.one-col {
+          grid-template-columns: 1fr;
+        }
+        .media-item {}
+        .media-label {
+          font-size: 10.5px;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #8a91c0;
+          margin-bottom: 8px;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+        .media-icon { font-size: 12px; }
+        .media-frame {
+          border-radius: 10px;
+          overflow: hidden;
+          border: 1px solid #e4e8f5;
+          background: #f5f7ff;
+        }
+        .media-img {
+          width: 100%;
+          height: 200px;
+          object-fit: cover;
+          display: block;
+        }
+        .media-iframe {
+          width: 100%;
+          height: 200px;
+          border: none;
+          display: block;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+          text-align: center;
+          padding: 64px 32px;
+          background: #ffffff;
+          border: 1.5px dashed #dde3fb;
+          border-radius: 16px;
+        }
+        .empty-icon {
+          font-size: 42px;
+          margin-bottom: 12px;
+        }
+        .empty-state h3 {
+          font-size: 18px;
+          font-weight: 700;
+          color: #0f1120;
+          margin-bottom: 6px;
+        }
+        .empty-state p {
+          font-size: 13.5px;
+          color: #6b7499;
+        }
+
+        /* Skeleton */
+        .skeleton-wrap {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+        .skeleton-card {
+          background: #fff;
+          border: 1px solid #e4e8f5;
+          border-radius: 16px;
+          padding: 24px 26px;
+          overflow: hidden;
+        }
+        .skeleton-line {
+          background: linear-gradient(90deg, #f0f2fa 25%, #e5e9f8 50%, #f0f2fa 75%);
+          background-size: 200% 100%;
+          animation: shimmer 1.5s infinite;
+          border-radius: 6px;
+          height: 14px;
+          margin-bottom: 10px;
+        }
+        @keyframes shimmer {
+          0%   { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+          .hero { padding: 32px 18px 26px; }
+          .card-body { padding: 18px 16px 16px; }
+          .media-grid.two-col { grid-template-columns: 1fr; }
+          .uni-name { font-size: 16px; }
+        }
+      `}</style>
+
+      <div className="search-page">
+        {/* ── HERO ── */}
+        <header className="hero">
+          <div className="hero-inner">
+            <div className="hero-eyebrow">
+              <span className="hero-eyebrow-dot" />
+              Search Results
             </div>
+            <h1>Universities &amp; Courses</h1>
+            <p className="hero-sub">
+              Matched programs from your university database based on selected filters.
+            </p>
 
-            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold">
-              <span className="w-2 h-2 rounded-full bg-[#22c55e]" />
-              {loading ? "Searching..." : `${filtered.length} programs found`}
-            </div>
-          </div>
-
-          <div className="p-6 md:p-8 bg-gradient-to-b from-[#fcfdff] to-[#f5f8ff]">
-            {loading ? (
-              <p className="text-sm text-gray-500">Loading results...</p>
-            ) : !filtered.length ? (
-              <div className="rounded-2xl border border-[#e6e9f7] bg-white p-8 text-center">
-                <p className="text-base font-semibold text-[#1f2438]">No match found</p>
-                <p className="text-sm text-[#68708a] mt-1">Try another course, university, or keyword.</p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {filtered.map((item) => {
-                  const embedUrl = toEmbedUrl(item.videoUrl);
-                  return (
-                    <article key={item.id} className="rounded-2xl border border-[#e3e8f8] bg-white p-4 md:p-6 shadow-[0_8px_24px_rgba(31,36,56,0.06)]">
-                      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
-                        <div className="xl:col-span-5">
-                          <div className="flex items-start gap-3">
-                            {item.logo ? (
-                              <img src={item.logo} alt={item.name} className="w-14 h-14 object-contain rounded-lg border border-[#f0f2fa] p-1 bg-white" />
-                            ) : (
-                              <div className="w-14 h-14 rounded-lg bg-[#f2f4fd]" />
-                            )}
-                            <div>
-                              <h2 className="text-xl font-bold text-[#1f2438] leading-6">{item.name}</h2>
-                              <div className="mt-1 inline-flex items-center rounded-full bg-[#eff3ff] px-3 py-1 text-xs font-semibold text-[#2b2d8e]">
-                                {item.country || "Country not specified"}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="mt-4 rounded-xl border border-[#edf0fb] bg-[#fbfcff] p-4">
-                            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#7b7d90]">Course</p>
-                            <p className="text-base font-semibold text-[#2b2d8e] mt-1">{item.courseName || "Course not specified"}</p>
-                            <p className="text-sm text-[#5d6076] mt-2 leading-6">{item.courseDescription || "No description available yet."}</p>
-                          </div>
-                        </div>
-
-                        <div className="xl:col-span-7 space-y-4">
-                          {item.supportImage ? (
-                            <img src={item.supportImage} alt={`${item.name} support`} className="w-full h-56 object-cover rounded-xl border border-[#eceef8]" />
-                          ) : (
-                            <div className="w-full h-56 rounded-xl border border-dashed border-[#dce1f3] bg-[#f8faff] flex items-center justify-center text-sm text-[#8a90a8]">
-                              Support image not available
-                            </div>
-                          )}
-
-                          {embedUrl ? (
-                            <div className="rounded-xl overflow-hidden border border-[#eceef8] bg-black">
-                              <iframe
-                                src={embedUrl}
-                                title={`${item.name} video`}
-                                className="w-full h-56"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                referrerPolicy="strict-origin-when-cross-origin"
-                                allowFullScreen
-                              />
-                            </div>
-                          ) : (
-                            <div className="w-full h-56 rounded-xl border border-dashed border-[#dce1f3] bg-[#f8faff] flex items-center justify-center text-sm text-[#8a90a8]">
-                              Video not available
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
+            {/* Active filters */}
+            {activeFilters.length > 0 && (
+              <div className="filter-row">
+                {activeFilters.map((f) => (
+                  <span key={f.label} className="filter-pill">
+                    <span className="filter-pill-label">{f.label}:</span>
+                    {f.value}
+                  </span>
+                ))}
               </div>
             )}
+
+            {/* Result count */}
+            <div className="result-badge">
+              <span className="result-badge-dot" />
+              {loading ? "Searching…" : `${filtered.length} program${filtered.length !== 1 ? "s" : ""} found`}
+            </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </header>
+
+        {/* ── RESULTS ── */}
+        <main className="content">
+          {loading ? (
+            <div className="skeleton-wrap">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="skeleton-card">
+                  <div className="skeleton-line" style={{ width: "40%", height: 18 }} />
+                  <div className="skeleton-line" style={{ width: "25%", height: 12 }} />
+                  <div className="skeleton-line" style={{ width: "70%", height: 14, marginTop: 16 }} />
+                  <div className="skeleton-line" style={{ width: "90%", height: 12 }} />
+                  <div className="skeleton-line" style={{ width: "60%", height: 12 }} />
+                </div>
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon">🎓</div>
+              <h3>No programs found</h3>
+              <p>Try adjusting your filters or search with a different keyword.</p>
+            </div>
+          ) : (
+            filtered.map((item) => <UniCard key={item.id} item={item} />)
+          )}
+        </main>
+      </div>
+    </>
   );
 }
 
+/* ──────────────────────────────────────────────
+   PAGE EXPORT
+────────────────────────────────────────────── */
 export default function UniversitySearchPage() {
   return (
-    <Suspense fallback={<main className="min-h-screen bg-[#f7f9ff] p-6 text-sm text-gray-500">Loading search...</main>}>
+    <Suspense
+      fallback={
+        <main
+          style={{
+            minHeight: "100vh",
+            background: "#f5f7ff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontFamily: "system-ui, sans-serif",
+            fontSize: 14,
+            color: "#6b7499",
+          }}
+        >
+          Loading search…
+        </main>
+      }
+    >
       <UniversitySearchContent />
     </Suspense>
   );

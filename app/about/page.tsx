@@ -687,8 +687,9 @@ export default function AboutPage() {
               <div className="ab-cta-title">Ready to Begin Your Journey?</div>
               <p className="ab-cta-sub">Join thousands of Nepali students who have already shaped their futures with our guidance.</p>
               <div className="ab-cta-btns">
-                <button className="ab-cta-btn-primary">Book a Free Consultation</button>
-                <button className="ab-cta-btn-sec">Contact Us →</button>
+                <button onClick={() => window.location.href = "/free-consultant"}
+                className="ab-cta-btn-primary">Book a Free Consultation</button>
+                <button onClick={() => window.location.href = "/contact"} className="ab-cta-btn-sec">Contact Us →</button>
               </div>
             </div>
           </div>
