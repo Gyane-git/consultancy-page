@@ -44,28 +44,7 @@ export default function Home() {
       <UniPartners />
       <FAQ />
 
-      {/* {showSplash && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/65">
-          <div className="relative rounded-2xl bg-transparent p-2 mx-4 sm:mx-8 md:mx-0">
-            <button
-              onClick={() => setShowSplash(false)}
-              className="absolute -top-3 -right-3 flex h-8 w-8 items-center justify-center rounded-full bg-black text-lg text-white transition hover:scale-110"
-              aria-label="Close popup"
-            >
-              ✕
-            </button>
-
-            <Image
-              src="/images/image.png"
-              width={1000}
-              height={600}
-              priority
-              className="w-full h-auto"
-              alt="Offer image"
-            />
-          </div>
-        </div>
-      )} */}
+      
     </div>
   );
 }

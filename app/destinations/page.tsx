@@ -1,6 +1,8 @@
 "use client";
 
+import ContactFAQPage from "@/components/FAQ";
 import { useEffect, useState } from "react";
+
 
 type Destination = {
   id: number;
@@ -70,6 +72,7 @@ export default function DestinationsPage() {
             </div>
           )}
         </div>
+      
       </section>
     </main>
   );
