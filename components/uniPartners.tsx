@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 type LogoItem = {
+  id?: number;
   name: string;
   logo?: string;
   country?: string;
@@ -163,16 +164,25 @@ const UniPartners = () => {
 
     async function loadUniversities() {
       try {
-        const res = await fetch("/api/university", { cache: "no-store" });
+        const res = await fetch("/api/university?all=1", { cache: "no-store" });
         const data = await res.json();
         if (!ignore && res.ok && data?.success && Array.isArray(data.universities)) {
-          const nextLogos = data.universities
-            .filter((u: { logo?: string | null; name?: string }) => Boolean(u?.logo))
-            .map((u: { logo?: string | null; name?: string }) => ({
+          const nextLogos: LogoItem[] = data.universities
+            .map((u: { id?: number; logo?: string | null; name?: string; country?: string | null }) => ({
+              id: u.id,
               name: String(u.name || "University"),
-              logo: String(u.logo || ""),
+              logo: String(u.logo || "").trim(),
+              country: String(u.country || "").trim(),
             }));
-          if (nextLogos.length > 0) setLogos(nextLogos);
+          const uniqueLogos = Array.from(
+            new Map(
+              nextLogos.map((item) => [
+                `${item.name.trim().toLowerCase()}-${String(item.logo || "").trim().toLowerCase()}`,
+                item,
+              ]),
+            ).values(),
+          );
+          if (uniqueLogos.length > 0) setLogos(uniqueLogos);
         }
       } catch (error) {
         console.error("Failed to load universities", error);
@@ -185,13 +195,11 @@ const UniPartners = () => {
     };
   }, []);
 
-  const chunkSize = Math.max(1, Math.ceil(logos.length / 3));
+  const chunkSize = Math.max(1, Math.ceil(logos.length / 2));
   const row1 = logos.slice(0, chunkSize);
-  const row2 = logos.slice(chunkSize, chunkSize * 2);
-  const row3 = logos.slice(chunkSize * 2);
+  const row2 = logos.slice(chunkSize);
   const safeRow1 = row1.length ? row1 : logos;
   const safeRow2 = row2.length ? row2 : logos;
-  const safeRow3 = row3.length ? row3 : logos;
 
   const stats = [
     { value: "250+", label: "Partner Universities" },
@@ -324,7 +332,6 @@ const UniPartners = () => {
         <div style={{ display: "flex", flexDirection: "column", gap: "26px" }}>
           <LogoRow logos={safeRow1} direction="right" speed={45} colorOffset={0} />
           <LogoRow logos={safeRow2} direction="left"  speed={38} colorOffset={3} />
-          {/* <LogoRow logos={safeRow3} direction="right" speed={50} colorOffset={5} /> */}
         </div>
       </div>
 
