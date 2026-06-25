@@ -21,6 +21,10 @@ type Course = {
   tabTwoTitle: string;
   tabTwoDescription: string;
   tabTwoDetails: DetailItem[];
+  tabThreeTitle: string;
+  tabThreeDescription: string;
+  tabThreeDetails: DetailItem[];
+  tabThreeScope: string[];
 };
 
 export default function DynamicCoursePage() {
@@ -63,6 +67,8 @@ export default function DynamicCoursePage() {
   const introLines = String(course.introText || "").split("\n").map((x) => x.trim()).filter(Boolean);
   const diplomaDetails = Array.isArray(course.tabOneDetails) ? course.tabOneDetails : [];
   const ugDetails = Array.isArray(course.tabTwoDetails) ? course.tabTwoDetails : [];
+  const pgDetails = Array.isArray(course.tabThreeDetails) ? course.tabThreeDetails : [];
+  const pgScope = Array.isArray(course.tabThreeScope) ? course.tabThreeScope : [];
 
   return (
     <>
@@ -183,6 +189,9 @@ export default function DynamicCoursePage() {
             <button className={`tab-btn ${activeTab === "ug" ? "active" : ""}`} onClick={() => setActiveTab("ug")}>
               {course.tabTwoTitle || "Undergraduate Study"}
             </button>
+            <button className={`tab-btn ${activeTab === "pg" ? "active" : ""}`} onClick={() => setActiveTab("pg")}>
+              {course.tabThreeTitle || "Post Graduation"}
+            </button>
           </div>
 
           {activeTab === "diploma" ? (
@@ -206,7 +215,7 @@ export default function DynamicCoursePage() {
                 </>
               ) : null}
             </div>
-          ) : (
+          ) : activeTab === "ug" ? (
             <div>
               <h3 className="sub-heading">Course Description</h3>
               {String(course.tabTwoDescription || "").split("\n").map((line, i) => line.trim() ? <p key={`${line}-${i}`}>{line}</p> : null)}
@@ -218,6 +227,27 @@ export default function DynamicCoursePage() {
                   </div>
                 ))}
               </div>
+            </div>
+          ) : (
+            <div>
+              <h3 className="sub-heading">Course Description</h3>
+              {String(course.tabThreeDescription || "").split("\n").map((line, i) => line.trim() ? <p key={`${line}-${i}`}>{line}</p> : null)}
+              <div className="detail-grid">
+                {pgDetails.map((item, i) => (
+                  <div className="detail-card" key={`${item.label}-${i}`}>
+                    <div className="detail-label">{item.label}</div>
+                    <div className="detail-value highlight">{item.value}</div>
+                  </div>
+                ))}
+              </div>
+              {pgScope.length ? (
+                <>
+                  <h3 className="sub-heading">Career Scope</h3>
+                  <div className="scope-list">
+                    {pgScope.map((role, i) => <span className="scope-tag" key={`${role}-${i}`}>{role}</span>)}
+                  </div>
+                </>
+              ) : null}
             </div>
           )}
         </section>

@@ -20,6 +20,10 @@ type CourseRow = RowDataPacket & {
   tabTwoTitle: string | null;
   tabTwoDescription: string | null;
   tabTwoDetails: string | null;
+  tabThreeTitle: string | null;
+  tabThreeDescription: string | null;
+  tabThreeDetails: string | null;
+  tabThreeScope: string | null;
   thumbnail: string | null;
   isActive: number;
   displayOrder: number;
@@ -54,6 +58,10 @@ function mapCourse(row: CourseRow) {
     tabTwoTitle: row.tabTwoTitle || "Undergraduate Study",
     tabTwoDescription: row.tabTwoDescription || "",
     tabTwoDetails: parseJsonArray(row.tabTwoDetails),
+    tabThreeTitle: row.tabThreeTitle || "Post Graduation",
+    tabThreeDescription: row.tabThreeDescription || "",
+    tabThreeDetails: parseJsonArray(row.tabThreeDetails),
+    tabThreeScope: parseJsonArray(row.tabThreeScope),
     thumbnail: row.thumbnail || "",
     isActive: Boolean(row.isActive),
     displayOrder: row.displayOrder || 0,
@@ -81,6 +89,10 @@ async function ensureTable() {
       tabTwoTitle VARCHAR(255) NULL,
       tabTwoDescription LONGTEXT NULL,
       tabTwoDetails LONGTEXT NULL,
+      tabThreeTitle VARCHAR(255) NULL,
+      tabThreeDescription LONGTEXT NULL,
+      tabThreeDetails LONGTEXT NULL,
+      tabThreeScope LONGTEXT NULL,
       thumbnail LONGTEXT NULL,
       isActive TINYINT(1) NOT NULL DEFAULT 1,
       displayOrder INT NOT NULL DEFAULT 0,
@@ -91,14 +103,22 @@ async function ensureTable() {
     )
   `);
 
+  await pool.query(`
+    ALTER TABLE PopularCourse
+      ADD COLUMN IF NOT EXISTS tabThreeTitle VARCHAR(255) NULL,
+      ADD COLUMN IF NOT EXISTS tabThreeDescription LONGTEXT NULL,
+      ADD COLUMN IF NOT EXISTS tabThreeDetails LONGTEXT NULL,
+      ADD COLUMN IF NOT EXISTS tabThreeScope LONGTEXT NULL
+  `);
+
   const [countRows] = await pool.query<RowDataPacket[]>("SELECT COUNT(*) AS total FROM PopularCourse");
   const total = Number(countRows?.[0]?.total || 0);
   if (total > 0) return;
 
   await pool.query(
     `INSERT INTO PopularCourse
-      (slug, name, heroTitle, introText, whyTitle, whyDescription, whyPoints, ieltsNote, ieltsRows, tabOneTitle, tabOneDescription, tabOneDetails, tabOneScope, tabTwoTitle, tabTwoDescription, tabTwoDetails, thumbnail, isActive, displayOrder)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)`,
+      (slug, name, heroTitle, introText, whyTitle, whyDescription, whyPoints, ieltsNote, ieltsRows, tabOneTitle, tabOneDescription, tabOneDetails, tabOneScope, tabTwoTitle, tabTwoDescription, tabTwoDetails, tabThreeTitle, tabThreeDescription, tabThreeDetails, tabThreeScope, thumbnail, isActive, displayOrder)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)`,
     [
       "study-it-in-australia",
       "Study IT in Australia",
@@ -133,6 +153,14 @@ async function ensureTable() {
         { label: "Course Duration", value: "3 Years" },
         { label: "IELTS Required", value: "6.0+" },
       ]),
+      "Post Graduation",
+      "A postgraduate pathway helps students specialize, move into leadership roles, and build stronger global career outcomes.",
+      JSON.stringify([
+        { label: "Entry Requirement", value: "Bachelor Degree" },
+        { label: "Course Duration", value: "1-2 Years" },
+        { label: "IELTS Required", value: "6.5+" },
+      ]),
+      JSON.stringify(["IT Consultant", "Project Manager", "Data Analyst", "Systems Architect"]),
       "",
     ]
   );
@@ -184,8 +212,8 @@ export async function POST(request: Request) {
     }
     const [result] = await pool.query<ResultSetHeader>(
       `INSERT INTO PopularCourse
-       (slug, name, heroTitle, introText, whyTitle, whyDescription, whyPoints, ieltsNote, ieltsRows, tabOneTitle, tabOneDescription, tabOneDetails, tabOneScope, tabTwoTitle, tabTwoDescription, tabTwoDetails, thumbnail, isActive, displayOrder)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       (slug, name, heroTitle, introText, whyTitle, whyDescription, whyPoints, ieltsNote, ieltsRows, tabOneTitle, tabOneDescription, tabOneDetails, tabOneScope, tabTwoTitle, tabTwoDescription, tabTwoDetails, tabThreeTitle, tabThreeDescription, tabThreeDetails, tabThreeScope, thumbnail, isActive, displayOrder)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         slug,
         name,
@@ -203,6 +231,10 @@ export async function POST(request: Request) {
         String(payload?.tabTwoTitle || "Undergraduate Study").trim() || null,
         String(payload?.tabTwoDescription || "").trim() || null,
         JSON.stringify(Array.isArray(payload?.tabTwoDetails) ? payload.tabTwoDetails : []),
+        String(payload?.tabThreeTitle || "Post Graduation").trim() || null,
+        String(payload?.tabThreeDescription || "").trim() || null,
+        JSON.stringify(Array.isArray(payload?.tabThreeDetails) ? payload.tabThreeDetails : []),
+        JSON.stringify(Array.isArray(payload?.tabThreeScope) ? payload.tabThreeScope : []),
         String(payload?.thumbnail || "").trim() || null,
         payload?.isActive === false ? 0 : 1,
         Number(payload?.displayOrder || 0),
@@ -242,7 +274,7 @@ export async function PUT(request: Request) {
       `UPDATE PopularCourse SET
         slug = ?, name = ?, heroTitle = ?, introText = ?, whyTitle = ?, whyDescription = ?, whyPoints = ?, ieltsNote = ?, ieltsRows = ?,
         tabOneTitle = ?, tabOneDescription = ?, tabOneDetails = ?, tabOneScope = ?, tabTwoTitle = ?, tabTwoDescription = ?, tabTwoDetails = ?,
-        thumbnail = ?, isActive = ?, displayOrder = ?
+        tabThreeTitle = ?, tabThreeDescription = ?, tabThreeDetails = ?, tabThreeScope = ?, thumbnail = ?, isActive = ?, displayOrder = ?
        WHERE id = ?`,
       [
         slug,
@@ -261,6 +293,10 @@ export async function PUT(request: Request) {
         String(payload?.tabTwoTitle || "Undergraduate Study").trim() || null,
         String(payload?.tabTwoDescription || "").trim() || null,
         JSON.stringify(Array.isArray(payload?.tabTwoDetails) ? payload.tabTwoDetails : []),
+        String(payload?.tabThreeTitle || "Post Graduation").trim() || null,
+        String(payload?.tabThreeDescription || "").trim() || null,
+        JSON.stringify(Array.isArray(payload?.tabThreeDetails) ? payload.tabThreeDetails : []),
+        JSON.stringify(Array.isArray(payload?.tabThreeScope) ? payload.tabThreeScope : []),
         String(payload?.thumbnail || "").trim() || null,
         payload?.isActive === false ? 0 : 1,
         Number(payload?.displayOrder || 0),

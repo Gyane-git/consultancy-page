@@ -133,10 +133,185 @@ export default function FreeConsultationPage() {
   const progressPercentage = (step / totalSteps) * 100;
 
   return (
-    <div className="min-h-screen" style={{ background: "#f5f4f2", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
+    <div className="min-h-screen fc-page" style={{ background: "#f5f4f2", fontFamily: "'Helvetica Neue', Arial, sans-serif" }}>
+      <style jsx global>{`
+        .fc-page {
+          overflow-x: hidden;
+        }
+
+        .fc-form-control {
+          min-height: 48px;
+        }
+
+        @media (max-width: 980px) {
+          .fc-main-grid {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+          }
+
+          .fc-sidebar {
+            position: static !important;
+          }
+
+          .fc-sidebar-card {
+            padding: 24px !important;
+          }
+
+          .fc-testimonial-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .fc-page {
+            background: #f7f6f4 !important;
+          }
+
+          .fc-hero {
+            padding: 52px 16px 48px !important;
+          }
+
+          .fc-hero-inner {
+            max-width: 100% !important;
+          }
+
+          .fc-badge {
+            width: 100% !important;
+            justify-content: center !important;
+            padding: 9px 12px !important;
+            font-size: 11px !important;
+            line-height: 1.35 !important;
+            white-space: normal !important;
+          }
+
+          .fc-hero-title {
+            font-size: 34px !important;
+            line-height: 1.1 !important;
+            margin-bottom: 16px !important;
+          }
+
+          .fc-hero-copy {
+            font-size: 14px !important;
+            line-height: 1.65 !important;
+            margin-bottom: 28px !important;
+          }
+
+          .fc-value-props {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
+            margin-bottom: 26px !important;
+          }
+
+          .fc-value-pill {
+            justify-content: center !important;
+            padding: 11px 14px !important;
+          }
+
+          .fc-trust {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
+            justify-items: center !important;
+          }
+
+          .fc-main-section,
+          .fc-testimonials,
+          .fc-faq {
+            padding: 36px 14px !important;
+          }
+
+          .fc-sidebar-card {
+            border-radius: 16px !important;
+            padding: 20px !important;
+          }
+
+          .fc-form-card {
+            border-radius: 16px !important;
+          }
+
+          .fc-step-header {
+            padding: 22px 18px !important;
+          }
+
+          .fc-step-top {
+            align-items: center !important;
+            gap: 12px !important;
+          }
+
+          .fc-step-title {
+            font-size: 20px !important;
+          }
+
+          .fc-step-count {
+            font-size: 24px !important;
+          }
+
+          .fc-form-body {
+            padding: 22px 18px !important;
+          }
+
+          .fc-goals-grid,
+          .fc-meeting-grid,
+          .fc-date-grid {
+            grid-template-columns: 1fr !important;
+          }
+
+          .fc-goal-option {
+            align-items: flex-start !important;
+            font-size: 12px !important;
+            line-height: 1.45 !important;
+          }
+
+          .fc-meeting-option {
+            flex-direction: row !important;
+            justify-content: flex-start !important;
+            padding: 15px !important;
+          }
+
+          .fc-nav {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+            margin-top: 26px !important;
+          }
+
+          .fc-nav-spacer {
+            display: none !important;
+          }
+
+          .fc-nav button {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+
+          .fc-testimonials-title,
+          .fc-faq-title {
+            font-size: 24px !important;
+            margin-bottom: 28px !important;
+          }
+
+          .fc-testimonial-card {
+            padding: 22px !important;
+          }
+
+          .fc-success-card {
+            padding: 36px 18px !important;
+            border-radius: 16px !important;
+          }
+
+          .fc-success-card h2 {
+            font-size: 26px !important;
+          }
+
+          .fc-success-details {
+            padding: 20px !important;
+          }
+        }
+      `}</style>
 
       {/* Hero Section */}
-      <section style={{
+      <section className="fc-hero" style={{
         position: "relative",
         overflow: "hidden",
         background: "#29a8d4",
@@ -159,9 +334,9 @@ export default function FreeConsultationPage() {
           </svg>
         </div>
 
-        <div style={{ maxWidth: "900px", margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
+        <div className="fc-hero-inner" style={{ maxWidth: "900px", margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
           {/* Badge */}
-          <div style={{
+          <div className="fc-badge" style={{
             display: "inline-flex", alignItems: "center", gap: "8px",
             padding: "10px 20px", background: "rgba(232,38,90,0.15)",
             border: "1px solid rgba(232,38,90,0.4)", borderRadius: "9999px",
@@ -172,7 +347,7 @@ export default function FreeConsultationPage() {
             100% Free · No Obligation · Expert Guidance
           </div>
 
-          <h1 style={{
+          <h1 className="fc-hero-title" style={{
             fontFamily: "Georgia, serif",
             fontSize: "clamp(32px, 5vw, 58px)",
             fontWeight: "700",
@@ -186,7 +361,7 @@ export default function FreeConsultationPage() {
             <span style={{ color: "#e8265a" }}>Study Abroad Consultation</span>
           </h1>
 
-          <p style={{
+          <p className="fc-hero-copy" style={{
             fontSize: "clamp(15px, 1.5vw, 18px)",
             color: "rgba(255,255,255,0.78)",
             lineHeight: "1.7",
@@ -198,13 +373,13 @@ export default function FreeConsultationPage() {
           </p>
 
           {/* Value props */}
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "12px", marginBottom: "36px" }}>
+          <div className="fc-value-props" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "12px", marginBottom: "36px" }}>
             {[
               { icon: Clock, text: "30-min session" },
               { icon: Users, text: "Senior counsellor" },
               { icon: Globe, text: "50+ destinations" },
             ].map((item, i) => (
-              <div key={i} style={{
+              <div key={i} className="fc-value-pill" style={{
                 display: "flex", alignItems: "center", gap: "8px",
                 background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
                 borderRadius: "12px", padding: "12px 20px", color: "#ffffff", fontSize: "14px", fontWeight: "500"
@@ -216,7 +391,7 @@ export default function FreeConsultationPage() {
           </div>
 
           {/* Trust signals */}
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "24px", color: "rgba(255,255,255,0.65)", fontSize: "13px" }}>
+          <div className="fc-trust" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "24px", color: "rgba(255,255,255,0.65)", fontSize: "13px" }}>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <CheckCircle size={14} style={{ color: "#4ade80" }} /> 2,000+ students placed
             </span>
@@ -231,13 +406,13 @@ export default function FreeConsultationPage() {
       </section>
 
       {/* Main Content */}
-      <section style={{ padding: "64px 24px" }}>
+      <section className="fc-main-section" style={{ padding: "64px 24px" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "40px", alignItems: "start" }}>
+          <div className="fc-main-grid" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "40px", alignItems: "start" }}>
 
             {/* Sidebar */}
-            <div style={{ position: "sticky", top: "24px" }}>
-              <div style={{
+            <div className="fc-sidebar" style={{ position: "sticky", top: "24px" }}>
+              <div className="fc-sidebar-card" style={{
                 background: "#ffffff", borderRadius: "20px",
                 border: "1px solid rgba(26,20,100,0.08)",
                 padding: "32px", boxShadow: "0 4px 24px rgba(26,20,100,0.07)"
@@ -288,7 +463,7 @@ export default function FreeConsultationPage() {
             {/* Form */}
             <div>
               {!isSubmitted ? (
-                <div style={{
+                <div className="fc-form-card" style={{
                   background: "#ffffff", borderRadius: "20px",
                   border: "1px solid rgba(26,20,100,0.08)",
                   boxShadow: "0 8px 40px rgba(26,20,100,0.08)", overflow: "hidden"
@@ -303,20 +478,20 @@ export default function FreeConsultationPage() {
                   </div>
 
                   {/* Step header */}
-                  <div style={{ background: "#f9f8ff", padding: "28px 36px", borderBottom: "1px solid rgba(26,20,100,0.07)" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
+                  <div className="fc-step-header" style={{ background: "#f9f8ff", padding: "28px 36px", borderBottom: "1px solid rgba(26,20,100,0.07)" }}>
+                    <div className="fc-step-top" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
                       <div>
                         <div style={{ fontSize: "12px", fontWeight: "700", color: "#e8265a", letterSpacing: "0.08em", marginBottom: "6px", textTransform: "uppercase" }}>
                           Step {step} of {totalSteps}
                         </div>
-                        <h2 style={{ fontFamily: "Georgia, serif", fontSize: "22px", fontWeight: "700", color: "#1a1464", margin: 0 }}>
+                        <h2 className="fc-step-title" style={{ fontFamily: "Georgia, serif", fontSize: "22px", fontWeight: "700", color: "#1a1464", margin: 0 }}>
                           {step === 1 && "Your Personal Details"}
                           {step === 2 && "Study Preferences"}
                           {step === 3 && "Goals & Concerns"}
                           {step === 4 && "Schedule Your Session"}
                         </h2>
                       </div>
-                      <div style={{ fontSize: "32px", fontWeight: "800", color: "rgba(26,20,100,0.12)", fontFamily: "Georgia, serif" }}>
+                      <div className="fc-step-count" style={{ fontSize: "32px", fontWeight: "800", color: "rgba(26,20,100,0.12)", fontFamily: "Georgia, serif" }}>
                         {step}/4
                       </div>
                     </div>
@@ -332,7 +507,7 @@ export default function FreeConsultationPage() {
                   </div>
 
                   {/* Form body */}
-                  <form onSubmit={handleSubmit} style={{ padding: "36px" }}>
+                  <form className="fc-form-body" onSubmit={handleSubmit} style={{ padding: "36px" }}>
 
                     {/* Step 1 */}
                     {step === 1 && (
@@ -384,7 +559,7 @@ export default function FreeConsultationPage() {
                           <label style={{ display: "block", fontWeight: "700", fontSize: "14px", color: "#1a1464", marginBottom: "14px" }}>
                             What are your main goals? <span style={{ color: "#9ca3af", fontWeight: "400" }}>(select all that apply)</span>
                           </label>
-                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                          <div className="fc-goals-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                             {[
                               "Get into a top-ranked university",
                               "Find scholarship opportunities",
@@ -395,7 +570,7 @@ export default function FreeConsultationPage() {
                               "English language improvement",
                               "Family / partner visa options",
                             ].map((goal) => (
-                              <label key={goal} style={{
+                              <label key={goal} className="fc-goal-option" style={{
                                 display: "flex", alignItems: "center", gap: "10px",
                                 padding: "12px 14px",
                                 border: `2px solid ${formData.goals.includes(goal) ? "#1a1464" : "#e5e7eb"}`,
@@ -434,13 +609,13 @@ export default function FreeConsultationPage() {
                           <label style={{ display: "block", fontWeight: "700", fontSize: "14px", color: "#1a1464", marginBottom: "14px" }}>
                             How would you like to meet?
                           </label>
-                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
+                          <div className="fc-meeting-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
                             {[
                               { value: "video", label: "Video Call", icon: Video },
                               { value: "phone", label: "Phone Call", icon: Phone },
                               { value: "chat", label: "Live Chat", icon: MessageSquare },
                             ].map((type) => (
-                              <label key={type.value} style={{
+                              <label key={type.value} className="fc-meeting-option" style={{
                                 display: "flex", flexDirection: "column", alignItems: "center", gap: "8px",
                                 padding: "20px 12px",
                                 border: `2px solid ${formData.consultationType === type.value ? "#1a1464" : "#e5e7eb"}`,
@@ -457,7 +632,7 @@ export default function FreeConsultationPage() {
                           </div>
                         </div>
 
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                        <div className="fc-date-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                           <FormInput label="Preferred Date" name="preferredDate" type="date" value={formData.preferredDate} onChange={handleChange} icon={Calendar} min={todayDate} required />
                           <FormSelect
                             label="Preferred Time"
@@ -483,7 +658,7 @@ export default function FreeConsultationPage() {
                     )}
 
                     {/* Navigation */}
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "32px", paddingTop: "24px", borderTop: "1px solid rgba(26,20,100,0.08)" }}>
+                    <div className="fc-nav" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "32px", paddingTop: "24px", borderTop: "1px solid rgba(26,20,100,0.08)" }}>
                       {step > 1 ? (
                         <button type="button" onClick={handlePrev} style={{
                           display: "flex", alignItems: "center", gap: "6px",
@@ -493,7 +668,7 @@ export default function FreeConsultationPage() {
                         }}>
                           <ArrowLeft size={16} /> Back
                         </button>
-                      ) : <div />}
+                      ) : <div className="fc-nav-spacer" />}
 
                       {step < totalSteps ? (
                         <button type="button" onClick={handleNext} style={{
@@ -530,18 +705,18 @@ export default function FreeConsultationPage() {
       </section>
 
       {/* Testimonials */}
-      <section style={{ padding: "64px 24px", background: "#ffffff" }}>
+      <section className="fc-testimonials" style={{ padding: "64px 24px", background: "#ffffff" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <h3 style={{ fontFamily: "Georgia, serif", fontSize: "28px", fontWeight: "700", color: "#1a1464", textAlign: "center", marginBottom: "48px" }}>
+          <h3 className="fc-testimonials-title" style={{ fontFamily: "Georgia, serif", fontSize: "28px", fontWeight: "700", color: "#1a1464", textAlign: "center", marginBottom: "48px" }}>
             Students who trusted StudySync
           </h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
+          <div className="fc-testimonial-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
             {[
               { quote: "My counsellor helped me secure admission to the University of Melbourne with a partial scholarship. The process was so smooth!", author: "Priya Shrestha", from: "Kathmandu → Australia", rating: 5 },
               { quote: "StudySync guided me through every step — from shortlisting universities to my visa approval. Couldn't have done it without them.", author: "Rohan Joshi", from: "Delhi → Canada", rating: 5 },
               { quote: "I was confused about which country to choose. After one consultation, I had a clear plan. Now I'm studying in the UK!", author: "Sita Tamang", from: "Pokhara → United Kingdom", rating: 5 },
             ].map((t, i) => (
-              <div key={i} style={{
+              <div key={i} className="fc-testimonial-card" style={{
                 background: "#f9f8ff", borderRadius: "16px",
                 border: "1px solid rgba(26,20,100,0.08)", padding: "28px"
               }}>
@@ -560,9 +735,9 @@ export default function FreeConsultationPage() {
       </section>
 
       {/* FAQ */}
-      <section style={{ padding: "64px 24px", background: "#f5f4f2" }}>
+      <section className="fc-faq" style={{ padding: "64px 24px", background: "#f5f4f2" }}>
         <div style={{ maxWidth: "760px", margin: "0 auto" }}>
-          <h3 style={{ fontFamily: "Georgia, serif", fontSize: "28px", fontWeight: "700", color: "#1a1464", textAlign: "center", marginBottom: "40px" }}>
+          <h3 className="fc-faq-title" style={{ fontFamily: "Georgia, serif", fontSize: "28px", fontWeight: "700", color: "#1a1464", textAlign: "center", marginBottom: "40px" }}>
             Common questions
           </h3>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -608,7 +783,7 @@ function FormInput({ label, name, type, value, onChange, placeholder, icon: Icon
       </label>
       <div style={{ position: "relative" }}>
         {Icon && <Icon size={16} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#9ca3af" }} />}
-        <input type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} required={required} min={min} style={inputBase(!!Icon)} />
+        <input className="fc-form-control" type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} required={required} min={min} style={inputBase(!!Icon)} />
       </div>
     </div>
   );
@@ -622,7 +797,7 @@ function FormSelect({ label, name, value, onChange, options, icon: Icon, require
       </label>
       <div style={{ position: "relative" }}>
         {Icon && <Icon size={16} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#9ca3af", zIndex: 1 }} />}
-        <select name={name} value={value} onChange={onChange} required={required} style={{ ...inputBase(!!Icon), appearance: "none", cursor: "pointer" }}>
+        <select className="fc-form-control" name={name} value={value} onChange={onChange} required={required} style={{ ...inputBase(!!Icon), appearance: "none", cursor: "pointer" }}>
           <option value="">Select an option</option>
           {options.map((o, i) => <option key={i} value={o}>{o}</option>)}
         </select>
@@ -640,7 +815,7 @@ function FormTextarea({ label, name, value, onChange, placeholder, rows, icon: I
       </label>
       <div style={{ position: "relative" }}>
         {Icon && <Icon size={16} style={{ position: "absolute", left: "14px", top: "14px", color: "#9ca3af" }} />}
-        <textarea name={name} value={value} onChange={onChange} placeholder={placeholder} rows={rows} required={required}
+        <textarea className="fc-form-control" name={name} value={value} onChange={onChange} placeholder={placeholder} rows={rows} required={required}
           style={{ ...inputBase(!!Icon), resize: "none", lineHeight: "1.6" }} />
       </div>
     </div>
@@ -678,7 +853,7 @@ function FAQItem({ question, answer }) {
 
 function SuccessMessage({ formData }) {
   return (
-    <div style={{
+    <div className="fc-success-card" style={{
       background: "#ffffff", borderRadius: "20px",
       border: "1px solid rgba(26,20,100,0.08)",
       boxShadow: "0 8px 40px rgba(26,20,100,0.08)",
@@ -700,7 +875,7 @@ function SuccessMessage({ formData }) {
         and will send confirmation to <strong style={{ color: "#1a1464" }}>{formData.email}</strong> within 24 hours.
       </p>
 
-      <div style={{ background: "#f9f8ff", borderRadius: "16px", padding: "28px", marginBottom: "32px", textAlign: "left", maxWidth: "480px", margin: "0 auto 32px" }}>
+      <div className="fc-success-details" style={{ background: "#f9f8ff", borderRadius: "16px", padding: "28px", marginBottom: "32px", textAlign: "left", maxWidth: "480px", margin: "0 auto 32px" }}>
         <h3 style={{ fontWeight: "700", fontSize: "15px", color: "#1a1464", marginBottom: "18px" }}>What happens next?</h3>
         {[
           "We review your profile and prepare personalised recommendations",

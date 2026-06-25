@@ -21,6 +21,10 @@ const emptyForm = {
   tabTwoTitle: "Undergraduate Study",
   tabTwoDescription: "",
   tabTwoDetailsText: "",
+  tabThreeTitle: "Post Graduation",
+  tabThreeDescription: "",
+  tabThreeDetailsText: "",
+  tabThreeScopeText: "",
   thumbnail: "",
   isActive: true,
   displayOrder: 0,
@@ -87,6 +91,8 @@ export default function AdminPopularCoursesPage() {
       tabOneDetails: parseDetailRows(form.tabOneDetailsText),
       tabOneScope: parseLineItems(form.tabOneScopeText),
       tabTwoDetails: parseDetailRows(form.tabTwoDetailsText),
+      tabThreeDetails: parseDetailRows(form.tabThreeDetailsText),
+      tabThreeScope: parseLineItems(form.tabThreeScopeText),
     };
 
     try {
@@ -137,6 +143,10 @@ export default function AdminPopularCoursesPage() {
       tabTwoTitle: item.tabTwoTitle || "",
       tabTwoDescription: item.tabTwoDescription || "",
       tabTwoDetailsText: Array.isArray(item.tabTwoDetails) ? item.tabTwoDetails.map((x) => `${x.label} | ${x.value}`).join("\n") : "",
+      tabThreeTitle: item.tabThreeTitle || "Post Graduation",
+      tabThreeDescription: item.tabThreeDescription || "",
+      tabThreeDetailsText: Array.isArray(item.tabThreeDetails) ? item.tabThreeDetails.map((x) => `${x.label} | ${x.value}`).join("\n") : "",
+      tabThreeScopeText: Array.isArray(item.tabThreeScope) ? item.tabThreeScope.join("\n") : "",
       thumbnail: item.thumbnail || "",
       isActive: item.isActive !== false,
       displayOrder: Number(item.displayOrder || 0),
@@ -167,6 +177,16 @@ export default function AdminPopularCoursesPage() {
           <input className="w-full border rounded-lg px-3 py-2" placeholder="Tab 2 Title" value={form.tabTwoTitle} onChange={(e) => setForm((p) => ({ ...p, tabTwoTitle: e.target.value }))} />
           <textarea className="w-full border rounded-lg px-3 py-2 min-h-20" placeholder="Tab 2 Description" value={form.tabTwoDescription} onChange={(e) => setForm((p) => ({ ...p, tabTwoDescription: e.target.value }))} />
           <textarea className="w-full border rounded-lg px-3 py-2 min-h-20" placeholder="Tab 2 Detail cards (Label | Value per line)" value={form.tabTwoDetailsText} onChange={(e) => setForm((p) => ({ ...p, tabTwoDetailsText: e.target.value }))} />
+          <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-4 space-y-3">
+            <div>
+              <h3 className="text-sm font-semibold text-emerald-900">Tab 3 · Post Graduation</h3>
+              <p className="text-xs text-emerald-700">Add postgraduate content using the same detail card and scope format as Tab 1.</p>
+            </div>
+            <input className="w-full border rounded-lg px-3 py-2" placeholder="Tab 3 Title" value={form.tabThreeTitle} onChange={(e) => setForm((p) => ({ ...p, tabThreeTitle: e.target.value }))} />
+            <textarea className="w-full border rounded-lg px-3 py-2 min-h-20" placeholder="Tab 3 Description" value={form.tabThreeDescription} onChange={(e) => setForm((p) => ({ ...p, tabThreeDescription: e.target.value }))} />
+            <textarea className="w-full border rounded-lg px-3 py-2 min-h-20" placeholder="Tab 3 Detail cards (Label | Value per line)" value={form.tabThreeDetailsText} onChange={(e) => setForm((p) => ({ ...p, tabThreeDetailsText: e.target.value }))} />
+            <textarea className="w-full border rounded-lg px-3 py-2 min-h-20" placeholder="Tab 3 Scope tags (one per line)" value={form.tabThreeScopeText} onChange={(e) => setForm((p) => ({ ...p, tabThreeScopeText: e.target.value }))} />
+          </div>
           <input className="w-full border rounded-lg px-3 py-2" placeholder="Thumbnail URL" value={form.thumbnail} onChange={(e) => setForm((p) => ({ ...p, thumbnail: e.target.value }))} />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <input className="w-full border rounded-lg px-3 py-2" type="number" placeholder="Display Order" value={form.displayOrder} onChange={(e) => setForm((p) => ({ ...p, displayOrder: Number(e.target.value) || 0 }))} />
